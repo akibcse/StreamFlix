@@ -1,0 +1,355 @@
+<div class="admin-page">
+  <div class="admin-container">
+    <!-- Top Bar -->
+    <header class="admin-header">
+      <div>
+        <span class="admin-tag">Master Control Portal</span>
+        <h1 class="admin-title">StreamFlix Administration</h1>
+      </div>
+      <div class="live-status">
+        <span class="pulse-dot"></span>
+        <span class="live-text">Realtime Telemetry Active</span>
+      </div>
+    </header>
+
+    <!-- Notification Banner -->
+    <div class="notice-banner" *ngIf="actionMessage()">
+      ✓ {{ actionMessage() }}
+    </div>
+
+    <!-- Statistics Overview Cards -->
+    <section class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon visits-icon">📈</div>
+        <div class="stat-info">
+          <span class="stat-label">Total Visits</span>
+          <span class="stat-value">{{ (stats$ | async)?.totalVisits || 0 }}</span>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon visitors-icon">🌐</div>
+        <div class="stat-info">
+          <span class="stat-label">Unique Visitors</span>
+          <span class="stat-value">{{ (stats$ | async)?.uniqueVisitors || 0 }}</span>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon users-icon">👥</div>
+        <div class="stat-info">
+          <span class="stat-label">Registered Users</span>
+          <span class="stat-value">{{ (allUsers$ | async)?.length || 0 }}</span>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon admin-icon">🛡️</div>
+        <div class="stat-info">
+          <span class="stat-label">Active Admins</span>
+          <span class="stat-value">{{ (adminCount$ | async) || 0 }}</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Navigation Tabs -->
+    <div class="tab-bar">
+      <button
+        type="button"
+        class="tab-btn"
+        [class.active]="activeTab() === 'logs'"
+        (click)="setTab('logs')"
+      >
+        📋 Visitor Tracking Logs
+      </button>
+      <button
+        type="button"
+        class="tab-btn"
+        [class.active]="activeTab() === 'users'"
+        (click)="setTab('users')"
+      >
+        👥 User Management ({{ (allUsers$ | async)?.length || 0 }})
+      </button>
+      <button
+        type="button"
+        class="tab-btn"
+        [class.active]="activeTab() === 'servers'"
+        (click)="setTab('servers')"
+      >
+        🎬 Streaming Servers ({{ servers().length }})
+      </button>
+      <button
+        type="button"
+        class="tab-btn"
+        [class.active]="activeTab() === 'reports'"
+        (click)="setTab('reports')"
+      >
+        ⚠️ Broken Stream Reports ({{ (brokenReports$ | async)?.length || 0 }})
+      </button>
+      <button
+        type="button"
+        class="tab-btn"
+        [class.active]="activeTab() === 'system'"
+        (click)="setTab('system')"
+      >
+        ⚙️ System & API Config
+      </button>
+    </div>
+
+    <!-- TAB 1: VISITOR LOGS -->
+    <section class="tab-panel" *ngIf="activeTab() === 'logs'">
+      <div class="panel-toolbar">
+        <div class="search-box">
+          <input
+            type="text"
+            placeholder="Search by IP, country, page path, user..."
+            [value]="searchQuery()"
+            (input)="onSearchChange($event)"
+            class="search-input"
+          />
+        </div>
+        <button
+          type="button"
+          class="btn-danger"
+          (click)="clearAllLogs()"
+          [disabled]="isClearing()"
+        >
+          🗑️ Clear All Logs
+        </button>
+      </div>
+
+      <div class="table-card">
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Date & Time</th>
+                <th>IP & Geolocation</th>
+                <th>Page Path</th>
+                <th>Device & OS</th>
+                <th>User / Guest</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let log of filteredLogs$ | async">
+                <td class="cell-time">
+                  {{ log.dateStr || formatDate(log.timestamp) }}
+                </td>
+                <td>
+                  <div class="ip-cell">
+                    <span class="ip-addr">{{ log.ip }}</span>
+                    <span class="geo-location" *ngIf="log.country || log.city">
+                      📍 {{ log.city ? log.city + ', ' : '' }}{{ log.country }}
+                    </span>
+                  </div>
+                </td>
+                <td>
+                  <a [routerLink]="log.path" class="path-link" target="_blank">
+                    {{ log.path }}
+                  </a>
+                </td>
+                <td>
+                  <div class="device-cell">
+                    <span class="device-badge">{{ log.device }}</span>
+                    <span class="os-text">{{ log.os }} • {{ log.browser }}</span>
+                  </div>
+                </td>
+                <td>
+                  <span
+                    class="user-tag"
+                    [class.user-logged-in]="log.userId"
+                  >
+                    {{ log.userEmail || 'Anonymous' }}
+                  </span>
+                </td>
+              </tr>
+              <tr *ngIf="(filteredLogs$ | async)?.length === 0">
+                <td colspan="5" class="empty-state">
+                  No visitor telemetry recorded yet.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 2: USER MANAGEMENT -->
+    <section class="tab-panel" *ngIf="activeTab() === 'users'">
+      <div class="table-card">
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>User</th>
+                <th>Role</th>
+                <th>Joined</th>
+                <th>Last Active</th>
+                <th>Manage Role</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let user of allUsers$ | async">
+                <td>
+                  <div class="user-cell">
+                    <div class="user-avatar-circle">
+                      {{ (user.displayName || user.email || 'U').charAt(0).toUpperCase() }}
+                    </div>
+                    <div>
+                      <div class="user-name">{{ user.displayName || 'No Name' }}</div>
+                      <div class="user-email">{{ user.email }}</div>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <span
+                    class="role-badge"
+                    [class.role-admin]="user.role === 'admin'"
+                    [class.role-user]="user.role !== 'admin'"
+                  >
+                    {{ user.role === 'admin' ? '🛡️ Administrator' : '👤 User' }}
+                  </span>
+                </td>
+                <td class="cell-time">
+                  {{ formatDate(user.createdAt) }}
+                </td>
+                <td class="cell-time">
+                  {{ formatDate(user.lastLoginAt) }}
+                </td>
+                <td>
+                  <button
+                    type="button"
+                    class="btn-action"
+                    [class.btn-demote]="user.role === 'admin'"
+                    [class.btn-promote]="user.role !== 'admin'"
+                    (click)="toggleRole(user)"
+                  >
+                    {{ user.role === 'admin' ? 'Demote to User' : 'Make Admin' }}
+                  </button>
+                </td>
+              </tr>
+              <tr *ngIf="(allUsers$ | async)?.length === 0">
+                <td colspan="5" class="empty-state">
+                  No registered users in the database yet.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 3: STREAMING SERVERS -->
+    <section class="tab-panel" *ngIf="activeTab() === 'servers'">
+      <div class="table-card">
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Server Name</th>
+                <th>Provider ID</th>
+                <th>Health Status</th>
+                <th>Priority</th>
+                <th>Toggle Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let s of servers()">
+                <td><strong>{{ s.name }}</strong></td>
+                <td><code>{{ s.id }}</code></td>
+                <td>
+                  <span class="health-badge online">● ONLINE</span>
+                </td>
+                <td>#{{ s.priority }}</td>
+                <td>
+                  <button
+                    type="button"
+                    class="btn-toggle"
+                    [class.disabled]="!s.enabled"
+                    (click)="toggleServer(s.id)"
+                  >
+                    {{ s.enabled ? 'Enabled' : 'Disabled' }}
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 4: BROKEN STREAM REPORTS -->
+    <section class="tab-panel" *ngIf="activeTab() === 'reports'">
+      <div class="table-card">
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Title / Media</th>
+                <th>Reported Reason</th>
+                <th>Server</th>
+                <th>Episode / Season</th>
+                <th>Reported At</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let r of brokenReports$ | async">
+                <td><strong>{{ r.title }}</strong></td>
+                <td><span class="reason-tag">{{ r.reason }}</span></td>
+                <td><code>{{ r.server }}</code></td>
+                <td>{{ r.season ? 'S' + r.season + ' E' + r.episode : 'Full Movie' }}</td>
+                <td class="cell-time">{{ r.dateStr }}</td>
+                <td>
+                  <button class="btn-resolve" (click)="deleteReport(r.id)">
+                    ✓ Mark Resolved
+                  </button>
+                </td>
+              </tr>
+              <tr *ngIf="(brokenReports$ | async)?.length === 0">
+                <td colspan="6" class="empty-state">
+                  🎉 No broken stream reports! All streams are reported healthy.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 5: SYSTEM CONFIG -->
+    <section class="tab-panel" *ngIf="activeTab() === 'system'">
+      <div class="config-grid">
+        <div class="info-card">
+          <h2 class="card-heading">Firebase Project Credentials</h2>
+          <div class="config-row">
+            <span class="config-label">Project ID:</span>
+            <span class="config-val">streamflixbdd</span>
+          </div>
+          <div class="config-row">
+            <span class="config-label">Auth Domain:</span>
+            <span class="config-val">streamflixbdd.firebaseapp.com</span>
+          </div>
+          <div class="config-row">
+            <span class="config-label">Realtime Database:</span>
+            <span class="config-val">https://streamflixbdd-default-rtdb.firebaseio.com</span>
+          </div>
+          <div class="config-row">
+            <span class="config-label">Storage Bucket:</span>
+            <span class="config-val">streamflixbdd.firebasestorage.app</span>
+          </div>
+        </div>
+
+        <div class="info-card">
+          <h2 class="card-heading">Quick Admin Passcode</h2>
+          <p class="card-desc">
+            Use this secret key on the <a routerLink="/admin/login">Admin Login</a> portal to grant administrator status to any account:
+          </p>
+          <div class="passcode-display">
+            <code>streamflix-admin-2026</code>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>

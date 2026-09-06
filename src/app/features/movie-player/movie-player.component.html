@@ -1,81 +1,346 @@
-<div class="player-page" *ngIf="state$ | async as state">
+<div class="player-page" *ngIf="mediaDetails$ | async as media; else loadingTpl">
   <div class="container">
-    <button class="back-btn" (click)="goBack()">
-      ← Back to Movies
-    </button>
+    <!-- Top Navigation & Actions Bar -->
+    <div class="player-topbar">
+      <button class="btn-back" (click)="goBack()">
+        ← Back to Browse
+      </button>
 
-    <!-- Loading State -->
-    <div class="status-box" *ngIf="state.loading">
-      <div class="spinner"></div>
-      <p>Loading stream player & details...</p>
+      <div class="quick-actions">
+        <button
+          type="button"
+          class="btn-icon-action"
+          [class.active]="isWatchlisted(media.id)"
+          (click)="toggleWatchlist(media)"
+          title="Watchlist"
+        >
+          {{ isWatchlisted(media.id) ? '✓ In Watchlist' : '+ Watchlist' }}
+        </button>
+
+        <button
+          type="button"
+          class="btn-icon-action"
+          [class.active]="isFavorite(media.id)"
+          (click)="toggleFavorite(media)"
+          title="Favorite"
+        >
+          {{ isFavorite(media.id) ? '❤️ Favorited' : '🤍 Favorite' }}
+        </button>
+
+        <button
+          type="button"
+          class="btn-icon-action"
+          (click)="showTrailerModal.set(true)"
+          *ngIf="getTrailerUrl(media)"
+        >
+          🎬 Official Trailer
+        </button>
+
+        <button type="button" class="btn-icon-action" (click)="copyShareLink()">
+          🔗 Share
+        </button>
+
+        <button
+          type="button"
+          class="btn-report"
+          (click)="showReportModal.set(true)"
+        >
+          ⚠️ Report Broken
+        </button>
+      </div>
     </div>
 
-    <!-- Error State -->
-    <div class="status-box error" *ngIf="state.error">
-      <p class="error-msg">{{ state.error }}</p>
-      <button class="retry-btn" (click)="retry()">Retry</button>
+    <!-- Alert / Toast Banner -->
+    <div class="toast-banner" *ngIf="copyNotice()">
+      {{ copyNotice() }}
     </div>
 
-    <!-- Player & Details Content -->
-    <main class="content-wrapper" *ngIf="!state.loading && state.movie">
-      <!-- Server Switcher -->
-      <div class="server-bar">
-        <span class="server-label">Switch Server:</span>
-        <div class="server-buttons">
-          <button
-            *ngFor="let server of servers"
-            type="button"
-            class="server-chip"
-            [class.active]="server.id === state.selectedServer"
-            (click)="selectServer(server.id)"
+    <!-- Server Selector Bar -->
+    <div class="server-bar">
+      <span class="server-label">Streaming Server:</span>
+      <div class="server-buttons">
+        <button
+          *ngFor="let s of servers"
+          type="button"
+          class="server-chip"
+          [class.active]="s.id === selectedServer()"
+          (click)="selectServer(s.id)"
+        >
+          {{ s.name }}
+        </button>
+      </div>
+    </div>
+
+    <!-- Video Player Frame -->
+    <section class="player-container">
+      <iframe
+        [src]="getEmbedUrl(media)"
+        class="video-frame"
+        allowfullscreen
+        referrerpolicy="origin"
+        title="StreamFlix Player"
+      ></iframe>
+    </section>
+
+    <!-- TV Series Season & Episode Selector -->
+    <section class="series-controls" *ngIf="media.seasons?.length">
+      <div class="series-controls-header">
+        <div class="season-picker">
+          <label class="season-label">Season:</label>
+          <select
+            [ngModel]="selectedSeason()"
+            (ngModelChange)="selectSeason($event)"
+            class="season-select"
           >
-            {{ server.name }}
+            <option
+              *ngFor="let s of media.seasons"
+              [value]="s.season_number"
+              [disabled]="s.episode_count === 0"
+            >
+              {{ s.name }} ({{ s.episode_count }} Episodes)
+            </option>
+          </select>
+        </div>
+
+        <div class="episode-nav-buttons" *ngIf="currentSeasonDetails$ | async as seasonDetails">
+          <button
+            type="button"
+            class="btn-ep-nav"
+            (click)="prevEpisode()"
+            [disabled]="selectedEpisode() <= 1"
+          >
+            ◀ Previous Episode
+          </button>
+          <span class="current-ep-indicator">
+            Season {{ selectedSeason() }} • Episode {{ selectedEpisode() }}
+          </span>
+          <button
+            type="button"
+            class="btn-ep-nav"
+            (click)="nextEpisode(seasonDetails.episodes.length)"
+            [disabled]="selectedEpisode() >= seasonDetails.episodes.length"
+          >
+            Next Episode ▶
           </button>
         </div>
       </div>
 
-      <!-- Video Player Section -->
-      <section class="player-container">
-        <iframe
-          *ngIf="state.embedUrl"
-          [src]="state.embedUrl"
-          class="video-frame"
-          allowfullscreen
-          referrerpolicy="origin"
-          title="Movie Player"
-        ></iframe>
-      </section>
-
-      <!-- Movie Details Section -->
-      <section class="details-card">
-        <div class="header-row">
-          <h1 class="movie-title">{{ state.movie.title }}</h1>
-          <span class="rating-badge" *ngIf="state.movie.vote_average">
-            ⭐ {{ state.movie.vote_average | number:'1.1-1' }}
-          </span>
-        </div>
-
-        <p class="tagline" *ngIf="state.movie.tagline">"{{ state.movie.tagline }}"</p>
-
-        <div class="meta-row">
-          <span class="meta-item" *ngIf="state.movie.release_date">
-            📅 {{ state.movie.release_date | date:'yyyy' }}
-          </span>
-          <span class="meta-item" *ngIf="state.movie.runtime">
-            ⏱️ {{ state.movie.runtime }} min
-          </span>
-          <div class="genre-list" *ngIf="state.movie.genres?.length">
-            <span class="genre-chip" *ngFor="let genre of state.movie.genres">
-              {{ genre.name }}
-            </span>
+      <!-- Episodes Grid -->
+      <div class="episodes-wrapper" *ngIf="currentSeasonDetails$ | async as seasonDetails">
+        <h3 class="episodes-title">Episodes ({{ seasonDetails.episodes.length }})</h3>
+        <div class="episodes-grid">
+          <div
+            *ngFor="let ep of seasonDetails.episodes"
+            class="episode-card"
+            [class.active]="ep.episode_number === selectedEpisode()"
+            (click)="selectEpisode(ep.episode_number)"
+          >
+            <div class="ep-thumbnail-box">
+              <img
+                [src]="getImageUrl(ep.still_path, 'w300')"
+                [alt]="ep.name"
+                class="ep-thumb"
+                loading="lazy"
+              />
+              <span class="ep-number">EP {{ ep.episode_number }}</span>
+            </div>
+            <div class="ep-info">
+              <h4 class="ep-title">{{ ep.episode_number }}. {{ ep.name }}</h4>
+              <p class="ep-overview">{{ ep.overview || 'No synopsis available.' }}</p>
+            </div>
           </div>
         </div>
+      </div>
+    </section>
 
-        <div class="overview-section">
-          <h2 class="section-subtitle">Overview</h2>
-          <p class="overview-text">{{ state.movie.overview || 'No overview available.' }}</p>
+    <!-- Media Details Card -->
+    <section class="details-card">
+      <div class="header-row">
+        <div>
+          <h1 class="media-title">{{ media.title || media.name }}</h1>
+          <p class="tagline" *ngIf="media.tagline">"{{ media.tagline }}"</p>
         </div>
-      </section>
-    </main>
+        <div class="rating-badge" *ngIf="media.vote_average">
+          ⭐ {{ media.vote_average | number:'1.1-1' }}
+          <span class="vote-count">({{ media.vote_count }} votes)</span>
+        </div>
+      </div>
+
+      <div class="meta-row">
+        <span class="meta-item" *ngIf="media.release_date || media.first_air_date">
+          📅 {{ (media.release_date || media.first_air_date) | date:'yyyy' }}
+        </span>
+        <span class="meta-item" *ngIf="media.runtime">
+          ⏱️ {{ media.runtime }} min
+        </span>
+        <span class="meta-item" *ngIf="media.number_of_seasons">
+          📺 {{ media.number_of_seasons }} Season{{ media.number_of_seasons > 1 ? 's' : '' }}
+        </span>
+        <span class="meta-item" *ngIf="media.status">
+          🏷️ {{ media.status }}
+        </span>
+        <div class="genre-list">
+          <span class="genre-chip" *ngFor="let g of media.genres">
+            {{ g.name }}
+          </span>
+        </div>
+      </div>
+
+      <div class="overview-section">
+        <h2 class="section-subtitle">Synopsis</h2>
+        <p class="overview-text">{{ media.overview || 'No description available.' }}</p>
+      </div>
+
+      <!-- Cast & Crew -->
+      <div class="cast-section" *ngIf="media.credits?.cast?.length">
+        <h2 class="section-subtitle">Top Cast</h2>
+        <div class="cast-scroll">
+          <div class="cast-card" *ngFor="let actor of media.credits?.cast?.slice(0, 10)">
+            <img
+              [src]="getImageUrl(actor.profile_path, 'w300')"
+              [alt]="actor.name"
+              class="cast-photo"
+              loading="lazy"
+            />
+            <span class="actor-name">{{ actor.name }}</span>
+            <span class="actor-role">{{ actor.character }}</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- User Reviews & Community Section -->
+    <section class="reviews-section">
+      <h2 class="section-subtitle">User Reviews & Ratings</h2>
+
+      <!-- Submit Review Box -->
+      <div class="review-box">
+        <div class="review-box-header">
+          <span class="review-box-title">Share Your Thoughts</span>
+          <div class="rating-select">
+            <span>Rating:</span>
+            <select [ngModel]="newReviewRating()" (ngModelChange)="newReviewRating.set($event)">
+              <option *ngFor="let r of [10, 9, 8, 7, 6, 5, 4, 3, 2, 1]" [value]="r">
+                ⭐ {{ r }}/10
+              </option>
+            </select>
+          </div>
+        </div>
+        <textarea
+          [(ngModel)]="newReviewText"
+          placeholder="Write what you liked or disliked about this title..."
+          class="review-textarea"
+          rows="3"
+        ></textarea>
+        <div class="review-box-footer">
+          <button
+            type="button"
+            class="btn-submit-review"
+            (click)="submitReview(media)"
+            [disabled]="isSubmittingReview() || !newReviewText().trim()"
+          >
+            {{ isSubmittingReview() ? 'Posting...' : 'Post Review' }}
+          </button>
+        </div>
+      </div>
+
+      <!-- Reviews List -->
+      <div class="reviews-list">
+        <div class="review-item" *ngFor="let rev of reviews$ | async">
+          <div class="review-header">
+            <div class="reviewer-info">
+              <span class="reviewer-avatar">
+                {{ rev.userName.charAt(0).toUpperCase() }}
+              </span>
+              <div>
+                <strong class="reviewer-name">{{ rev.userName }}</strong>
+                <span class="review-date">{{ rev.createdAt | date:'mediumDate' }}</span>
+              </div>
+            </div>
+            <div class="review-score">⭐ {{ rev.rating }}/10</div>
+          </div>
+          <p class="review-content">{{ rev.content }}</p>
+        </div>
+        <div class="no-reviews" *ngIf="(reviews$ | async)?.length === 0">
+          No reviews yet. Be the first to leave a review!
+        </div>
+      </div>
+    </section>
+
+    <!-- Recommended & Similar Media -->
+    <section class="similar-section" *ngIf="media.recommendations?.results?.length || media.similar?.results?.length">
+      <h2 class="section-subtitle">More Like This</h2>
+      <div class="similar-grid">
+        <article
+          *ngFor="let item of (media.recommendations?.results || media.similar?.results)?.slice(0, 8)"
+          class="mini-card"
+          [routerLink]="['/' + (item.media_type || (media.seasons ? 'tv' : 'movie')), item.id]"
+        >
+          <img
+            [src]="getImageUrl(item.poster_path, 'w300')"
+            [alt]="item.title || item.name"
+            class="mini-poster"
+            loading="lazy"
+          />
+          <div class="mini-info">
+            <span class="mini-title">{{ item.title || item.name }}</span>
+            <span class="mini-rating">⭐ {{ item.vote_average | number:'1.1-1' }}</span>
+          </div>
+        </article>
+      </div>
+    </section>
+  </div>
+
+  <!-- Trailer Modal -->
+  <div class="modal-backdrop" *ngIf="showTrailerModal()" (click)="showTrailerModal.set(false)">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3>Official Trailer - {{ media.title || media.name }}</h3>
+        <button class="modal-close" (click)="showTrailerModal.set(false)">✕</button>
+      </div>
+      <div class="modal-body">
+        <iframe
+          *ngIf="getTrailerUrl(media)"
+          [src]="getTrailerUrl(media)"
+          class="trailer-frame"
+          allowfullscreen
+          allow="autoplay"
+        ></iframe>
+      </div>
+    </div>
+  </div>
+
+  <!-- Report Modal -->
+  <div class="modal-backdrop" *ngIf="showReportModal()" (click)="showReportModal.set(false)">
+    <div class="modal-content modal-sm" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3>Report Playback Issue</h3>
+        <button class="modal-close" (click)="showReportModal.set(false)">✕</button>
+      </div>
+      <div class="modal-body report-body">
+        <label>Issue Description:</label>
+        <select [(ngModel)]="reportReason" class="report-select">
+          <option value="Video buffering or not playing">Video buffering or not playing</option>
+          <option value="Audio out of sync">Audio out of sync</option>
+          <option value="Wrong movie or episode">Wrong movie or episode</option>
+          <option value="Subtitles missing or broken">Subtitles missing or broken</option>
+          <option value="Other streaming error">Other streaming error</option>
+        </select>
+        <button
+          type="button"
+          class="btn-primary"
+          (click)="submitBrokenReport(media)"
+        >
+          Send Report
+        </button>
+      </div>
+    </div>
   </div>
 </div>
+
+<ng-template #loadingTpl>
+  <div class="loading-box">
+    <div class="spinner"></div>
+    <p>Loading media stream & details...</p>
+  </div>
+</ng-template>

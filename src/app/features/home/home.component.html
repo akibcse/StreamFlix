@@ -1,46 +1,308 @@
-<div class="container" *ngIf="state$ | async as state">
-  <header class="section-header">
-    <h1 class="title">Trending Movies</h1>
-    <p class="subtitle">Discover the most popular movies this week</p>
+<div class="home-page" *ngIf="catalog$ | async as catalog; else loadingTpl">
+  <!-- HERO SPOTLIGHT BILLBOARD -->
+  <header class="hero-billboard" *ngIf="catalog.featured as feat">
+    <div class="hero-backdrop-wrapper">
+      <img
+        [src]="getBackdropUrl(feat.backdrop_path)"
+        [alt]="feat.title || feat.name"
+        class="hero-backdrop-img"
+      />
+      <div class="hero-gradient-left"></div>
+      <div class="hero-gradient-bottom"></div>
+    </div>
+
+    <div class="hero-content">
+      <div class="hero-badge">
+        <span class="pulse-icon">🔥</span> #1 TRENDING TODAY
+      </div>
+
+      <h1 class="hero-title">{{ feat.title || feat.name }}</h1>
+
+      <div class="hero-meta">
+        <span class="rating-chip">⭐ {{ feat.vote_average | number:'1.1-1' }}</span>
+        <span class="meta-separator">•</span>
+        <span>{{ getReleaseYear(feat.release_date || feat.first_air_date) }}</span>
+        <span class="meta-separator">•</span>
+        <span class="hd-badge">4K ULTRA HD</span>
+      </div>
+
+      <p class="hero-overview">
+        {{ feat.overview }}
+      </p>
+
+      <div class="hero-actions">
+        <button
+          type="button"
+          class="btn-hero-play"
+          (click)="navigateToMedia(feat)"
+        >
+          <span class="play-icon">▶</span> Watch Now
+        </button>
+        <button
+          type="button"
+          class="btn-hero-info"
+          (click)="navigateToMedia(feat)"
+        >
+          ℹ️ Details & Episodes
+        </button>
+      </div>
+    </div>
   </header>
 
-  <!-- Loading State -->
-  <div class="status-box" *ngIf="state.loading">
-    <div class="spinner"></div>
-    <p>Loading trending movies...</p>
-  </div>
+  <div class="main-content">
+    <!-- GENRE CHIPS BAR -->
+    <section class="genre-bar">
+      <span class="genre-bar-label">Explore Genres:</span>
+      <div class="genre-chips-scroll">
+        <button
+          type="button"
+          class="genre-chip"
+          (click)="filterByGenre(null)"
+          [class.active]="selectedGenre() === null"
+        >
+          All
+        </button>
+        <button
+          *ngFor="let g of popularGenres"
+          type="button"
+          class="genre-chip"
+          (click)="filterByGenre(g.id)"
+          [class.active]="selectedGenre() === g.id"
+        >
+          {{ g.name }}
+        </button>
+      </div>
+    </section>
 
-  <!-- Error State -->
-  <div class="status-box error" *ngIf="state.error">
-    <p class="error-msg">{{ state.error }}</p>
-    <button class="retry-btn" (click)="ngOnInit()">Retry</button>
-  </div>
+    <!-- ROW 1: TRENDING MOVIES -->
+    <section class="media-row-section" *ngIf="catalog.trendingMovies.length">
+      <div class="row-header">
+        <div>
+          <h2 class="row-title">🔥 Trending Movies</h2>
+          <span class="row-subtitle">The hottest movies right now</span>
+        </div>
+        <a routerLink="/movies" class="see-all-link">See All →</a>
+      </div>
 
-  <!-- Movie Grid -->
-  <div class="movie-grid" *ngIf="!state.loading && !state.error">
-    <article
-      *ngFor="let movie of state.movies"
-      class="movie-card"
-      (click)="navigateToMovie(movie.id)"
-      tabindex="0"
-      (keydown.enter)="navigateToMovie(movie.id)"
-      [attr.aria-label]="movie.title"
-    >
-      <div class="poster-wrapper">
-        <img
-          [src]="getPosterUrl(movie.poster_path)"
-          [alt]="movie.title"
-          loading="lazy"
-          class="poster-img"
-        />
-        <div class="badge-rating">
-          ⭐ {{ movie.vote_average | number:'1.1-1' }}
+      <div class="carousel-container">
+        <button class="scroll-btn left" (click)="scrollRow(rowTrendingM, 'left')">‹</button>
+        <div class="carousel-track" #rowTrendingM>
+          <article
+            *ngFor="let m of catalog.trendingMovies"
+            class="media-card"
+            (click)="navigateToMedia(m)"
+          >
+            <div class="card-poster-box">
+              <img [src]="getPosterUrl(m.poster_path)" [alt]="m.title || m.name" loading="lazy" />
+              <div class="card-overlay">
+                <span class="play-bubble">▶</span>
+              </div>
+              <span class="card-rating">⭐ {{ m.vote_average | number:'1.1-1' }}</span>
+            </div>
+            <div class="card-info">
+              <h3 class="card-title">{{ m.title || m.name }}</h3>
+              <div class="card-sub">
+                <span>{{ getReleaseYear(m.release_date || m.first_air_date) }}</span>
+                <span class="type-badge">Movie</span>
+              </div>
+            </div>
+          </article>
+        </div>
+        <button class="scroll-btn right" (click)="scrollRow(rowTrendingM, 'right')">›</button>
+      </div>
+    </section>
+
+    <!-- ROW 2: TRENDING TV SERIES -->
+    <section class="media-row-section" *ngIf="catalog.trendingTv.length">
+      <div class="row-header">
+        <div>
+          <h2 class="row-title">📺 Popular & Trending TV Shows</h2>
+          <span class="row-subtitle">Binge-worthy series with all seasons & episodes</span>
+        </div>
+        <a routerLink="/tv" class="see-all-link">See All Shows →</a>
+      </div>
+
+      <div class="carousel-container">
+        <button class="scroll-btn left" (click)="scrollRow(rowTrendingTv, 'left')">‹</button>
+        <div class="carousel-track" #rowTrendingTv>
+          <article
+            *ngFor="let s of catalog.trendingTv"
+            class="media-card"
+            (click)="navigateToMedia(s)"
+          >
+            <div class="card-poster-box">
+              <img [src]="getPosterUrl(s.poster_path)" [alt]="s.name" loading="lazy" />
+              <div class="card-overlay">
+                <span class="play-bubble">▶</span>
+              </div>
+              <span class="card-rating">⭐ {{ s.vote_average | number:'1.1-1' }}</span>
+            </div>
+            <div class="card-info">
+              <h3 class="card-title">{{ s.name }}</h3>
+              <div class="card-sub">
+                <span>{{ getReleaseYear(s.first_air_date) }}</span>
+                <span class="type-badge tv">Series</span>
+              </div>
+            </div>
+          </article>
+        </div>
+        <button class="scroll-btn right" (click)="scrollRow(rowTrendingTv, 'right')">›</button>
+      </div>
+    </section>
+
+    <!-- ROW 3: TOP RATED CINEMA -->
+    <section class="media-row-section" *ngIf="catalog.topRatedMovies.length">
+      <div class="row-header">
+        <div>
+          <h2 class="row-title">⭐ Top Rated Masterpieces</h2>
+          <span class="row-subtitle">Critically acclaimed cinema rated by fans</span>
         </div>
       </div>
-      <div class="movie-info">
-        <h2 class="movie-title" [title]="movie.title">{{ movie.title }}</h2>
-        <span class="movie-year">{{ getReleaseYear(movie.release_date) }}</span>
+
+      <div class="carousel-container">
+        <button class="scroll-btn left" (click)="scrollRow(rowTopRated, 'left')">‹</button>
+        <div class="carousel-track" #rowTopRated>
+          <article
+            *ngFor="let m of catalog.topRatedMovies"
+            class="media-card"
+            (click)="navigateToMedia(m)"
+          >
+            <div class="card-poster-box">
+              <img [src]="getPosterUrl(m.poster_path)" [alt]="m.title" loading="lazy" />
+              <div class="card-overlay">
+                <span class="play-bubble">▶</span>
+              </div>
+              <span class="card-rating">⭐ {{ m.vote_average | number:'1.1-1' }}</span>
+            </div>
+            <div class="card-info">
+              <h3 class="card-title">{{ m.title }}</h3>
+              <div class="card-sub">
+                <span>{{ getReleaseYear(m.release_date) }}</span>
+                <span class="type-badge">Movie</span>
+              </div>
+            </div>
+          </article>
+        </div>
+        <button class="scroll-btn right" (click)="scrollRow(rowTopRated, 'right')">›</button>
       </div>
-    </article>
+    </section>
+
+    <!-- ROW 4: POPULAR BLOCKBUSTERS -->
+    <section class="media-row-section" *ngIf="catalog.popularMovies.length">
+      <div class="row-header">
+        <div>
+          <h2 class="row-title">🍿 Most Watched Blockbusters</h2>
+          <span class="row-subtitle">Crowd favorites trending globally</span>
+        </div>
+      </div>
+
+      <div class="carousel-container">
+        <button class="scroll-btn left" (click)="scrollRow(rowPopular, 'left')">‹</button>
+        <div class="carousel-track" #rowPopular>
+          <article
+            *ngFor="let m of catalog.popularMovies"
+            class="media-card"
+            (click)="navigateToMedia(m)"
+          >
+            <div class="card-poster-box">
+              <img [src]="getPosterUrl(m.poster_path)" [alt]="m.title" loading="lazy" />
+              <div class="card-overlay">
+                <span class="play-bubble">▶</span>
+              </div>
+              <span class="card-rating">⭐ {{ m.vote_average | number:'1.1-1' }}</span>
+            </div>
+            <div class="card-info">
+              <h3 class="card-title">{{ m.title }}</h3>
+              <div class="card-sub">
+                <span>{{ getReleaseYear(m.release_date) }}</span>
+                <span class="type-badge">Movie</span>
+              </div>
+            </div>
+          </article>
+        </div>
+        <button class="scroll-btn right" (click)="scrollRow(rowPopular, 'right')">›</button>
+      </div>
+    </section>
+
+    <!-- ROW 5: NOW PLAYING IN THEATRES -->
+    <section class="media-row-section" *ngIf="catalog.nowPlayingMovies.length">
+      <div class="row-header">
+        <div>
+          <h2 class="row-title">🎬 In Theatres Now</h2>
+          <span class="row-subtitle">Currently showing in movie theatres</span>
+        </div>
+      </div>
+
+      <div class="carousel-container">
+        <button class="scroll-btn left" (click)="scrollRow(rowNowPlaying, 'left')">‹</button>
+        <div class="carousel-track" #rowNowPlaying>
+          <article
+            *ngFor="let m of catalog.nowPlayingMovies"
+            class="media-card"
+            (click)="navigateToMedia(m)"
+          >
+            <div class="card-poster-box">
+              <img [src]="getPosterUrl(m.poster_path)" [alt]="m.title" loading="lazy" />
+              <div class="card-overlay">
+                <span class="play-bubble">▶</span>
+              </div>
+              <span class="card-rating">⭐ {{ m.vote_average | number:'1.1-1' }}</span>
+            </div>
+            <div class="card-info">
+              <h3 class="card-title">{{ m.title }}</h3>
+              <div class="card-sub">
+                <span>{{ getReleaseYear(m.release_date) }}</span>
+                <span class="type-badge">Movie</span>
+              </div>
+            </div>
+          </article>
+        </div>
+        <button class="scroll-btn right" (click)="scrollRow(rowNowPlaying, 'right')">›</button>
+      </div>
+    </section>
+
+    <!-- ROW 6: UPCOMING RELEASES -->
+    <section class="media-row-section" *ngIf="catalog.upcomingMovies.length">
+      <div class="row-header">
+        <div>
+          <h2 class="row-title">📅 Upcoming Anticipated Titles</h2>
+          <span class="row-subtitle">Coming soon to cinemas & streaming</span>
+        </div>
+      </div>
+
+      <div class="carousel-container">
+        <button class="scroll-btn left" (click)="scrollRow(rowUpcoming, 'left')">‹</button>
+        <div class="carousel-track" #rowUpcoming>
+          <article
+            *ngFor="let m of catalog.upcomingMovies"
+            class="media-card"
+            (click)="navigateToMedia(m)"
+          >
+            <div class="card-poster-box">
+              <img [src]="getPosterUrl(m.poster_path)" [alt]="m.title" loading="lazy" />
+              <div class="card-overlay">
+                <span class="play-bubble">▶</span>
+              </div>
+              <span class="card-rating">⭐ {{ m.vote_average | number:'1.1-1' }}</span>
+            </div>
+            <div class="card-info">
+              <h3 class="card-title">{{ m.title }}</h3>
+              <div class="card-sub">
+                <span>{{ getReleaseYear(m.release_date) }}</span>
+                <span class="type-badge">Movie</span>
+              </div>
+            </div>
+          </article>
+        </div>
+        <button class="scroll-btn right" (click)="scrollRow(rowUpcoming, 'right')">›</button>
+      </div>
+    </section>
   </div>
 </div>
+
+<ng-template #loadingTpl>
+  <div class="home-loading">
+    <div class="spinner"></div>
+    <p>Curating the latest movies and TV shows...</p>
+  </div>
+</ng-template>

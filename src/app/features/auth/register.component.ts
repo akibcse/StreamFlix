@@ -1,0 +1,80 @@
+import { Component, ChangeDetectionStrategy, inject, signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Router, RouterModule } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
+
+@Component({
+  selector: 'app-register',
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule, RouterModule],
+  templateUrl: './register.component.html',
+  styleUrls: ['./auth.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
+})
+export class RegisterComponent {
+  private readonly fb = inject(FormBuilder);
+  private readonly auth = inject(AuthService);
+  private readonly router = inject(Router);
+
+  readonly registerForm = this.fb.group({
+    displayName: ['', [Validators.required, Validators.minLength(2)]],
+    email: ['', [Validators.required, Validators.email]],
+    password: ['', [Validators.required, Validators.minLength(6)]],
+    confirmPassword: ['', [Validators.required]]
+  });
+
+  readonly loading = signal(false);
+  readonly errorMessage = signal<string | null>(null);
+
+  async onSubmit(): Promise<void> {
+    if (this.registerForm.invalid) {
+      this.registerForm.markAllAsTouched();
+      return;
+    }
+
+    const { displayName, email, password, confirmPassword } = this.registerForm.getRawValue();
+
+    if (password !== confirmPassword) {
+      this.errorMessage.set('Passwords do not match.');
+      return;
+    }
+
+    this.loading.set(true);
+    this.errorMessage.set(null);
+
+    try {
+      await this.auth.register(email!, password!, displayName!);
+      this.router.navigate(['/']);
+    } catch (err: any) {
+      this.errorMessage.set(this.formatAuthError(err));
+    } finally {
+      this.loading.set(false);
+    }
+  }
+
+  async onGoogleSignIn(): Promise<void> {
+    this.loading.set(true);
+    this.errorMessage.set(null);
+
+    try {
+      await this.auth.loginWithGoogle();
+      this.router.navigate(['/']);
+    } catch (err: any) {
+      this.errorMessage.set(this.formatAuthError(err));
+    } finally {
+      this.loading.set(false);
+    }
+  }
+
+  private formatAuthError(err: any): string {
+    const code = err?.code || '';
+    if (code === 'auth/email-already-in-use') {
+      return 'An account with this email already exists. Try logging in.';
+    }
+    if (code === 'auth/weak-password') {
+      return 'Password should be at least 6 characters long.';
+    }
+    return err?.message || 'Failed to create account. Please try again.';
+  }
+}
