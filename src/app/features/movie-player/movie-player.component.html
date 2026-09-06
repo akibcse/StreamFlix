@@ -13,11 +13,27 @@
     <!-- Error State -->
     <div class="status-box error" *ngIf="state.error">
       <p class="error-msg">{{ state.error }}</p>
-      <button class="retry-btn" (click)="ngOnInit()">Retry</button>
+      <button class="retry-btn" (click)="retry()">Retry</button>
     </div>
 
     <!-- Player & Details Content -->
     <main class="content-wrapper" *ngIf="!state.loading && state.movie">
+      <!-- Server Switcher -->
+      <div class="server-bar">
+        <span class="server-label">Switch Server:</span>
+        <div class="server-buttons">
+          <button
+            *ngFor="let server of servers"
+            type="button"
+            class="server-chip"
+            [class.active]="server.id === state.selectedServer"
+            (click)="selectServer(server.id)"
+          >
+            {{ server.name }}
+          </button>
+        </div>
+      </div>
+
       <!-- Video Player Section -->
       <section class="player-container">
         <iframe

@@ -1,17 +1,23 @@
-import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { Observable, catchError, map, of, switchMap } from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest, catchError, map, of, startWith, switchMap } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MovieService } from '../../services/movie.service';
 import { MovieDetails } from '../../models/movie.model';
+
+export interface StreamServer {
+  id: string;
+  name: string;
+}
 
 interface MoviePlayerState {
   loading: boolean;
   error: string | null;
   movie: MovieDetails | null;
   embedUrl: SafeResourceUrl | null;
+  selectedServer: string;
 }
 
 @Component({
@@ -22,54 +28,105 @@ interface MoviePlayerState {
   styleUrls: ['./movie-player.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class MoviePlayerComponent implements OnInit {
+export class MoviePlayerComponent {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly movieService = inject(MovieService);
   private readonly sanitizer = inject(DomSanitizer);
 
-  state$!: Observable<MoviePlayerState>;
+  readonly servers: StreamServer[] = [
+    { id: 'vidsrc-me', name: 'VidSrc (Server 1)' },
+    { id: 'vidsrc-cc', name: 'VidSrc CC (Server 2)' },
+    { id: 'multiembed', name: 'MultiEmbed (Server 3)' },
+    { id: 'autoembed', name: 'AutoEmbed (Server 4)' }
+  ];
 
-  ngOnInit(): void {
-    this.state$ = this.route.paramMap.pipe(
-      takeUntilDestroyed(),
-      map((params: any) => params.get('id') as string | null),
-      switchMap((id: string | null) => {
-        if (!id) {
-          return of({
-            loading: false,
-            error: 'Invalid movie ID.',
-            movie: null,
-            embedUrl: null
-          });
-        }
+  private readonly selectedServerSubject = new BehaviorSubject<string>('vidsrc-me');
+  private readonly retrySubject = new BehaviorSubject<void>(undefined);
 
-        return this.movieService.getMovieDetails(id).pipe(
-          map((movie: MovieDetails) => {
-            const imdbId = movie.external_ids?.imdb_id;
-            const rawUrl = imdbId
-              ? `https://vidsrc.me/embed/movie?imdb=${imdbId}`
-              : `https://vidsrc.me/embed/movie?tmdb=${movie.id}`;
-            const embedUrl = this.sanitizer.bypassSecurityTrustResourceUrl(rawUrl);
+  readonly selectedServer$ = this.selectedServerSubject.asObservable();
 
-            return {
+  readonly state$: Observable<MoviePlayerState> = combineLatest([
+    this.route.paramMap.pipe(
+      map(params => params.get('id'))
+    ),
+    this.retrySubject
+  ]).pipe(
+    takeUntilDestroyed(),
+    switchMap(([id]) => {
+      if (!id) {
+        return of({
+          loading: false,
+          error: 'Invalid movie ID.',
+          movie: null,
+          embedUrl: null,
+          selectedServer: this.selectedServerSubject.value
+        });
+      }
+
+      return this.movieService.getMovieDetails(id).pipe(
+        switchMap((movie: MovieDetails) =>
+          this.selectedServer$.pipe(
+            map(serverId => ({
               loading: false,
               error: null,
               movie,
-              embedUrl
-            };
-          }),
-          catchError((err: { message?: string }) =>
-            of({
-              loading: false,
-              error: err?.message || 'Failed to load movie stream.',
-              movie: null,
-              embedUrl: null
-            })
+              embedUrl: this.getEmbedUrl(movie, serverId),
+              selectedServer: serverId
+            }))
           )
-        );
-      })
-    );
+        ),
+        startWith({
+          loading: true,
+          error: null,
+          movie: null,
+          embedUrl: null,
+          selectedServer: this.selectedServerSubject.value
+        }),
+        catchError((err: { message?: string }) =>
+          of({
+            loading: false,
+            error: err?.message || 'Failed to load movie stream.',
+            movie: null,
+            embedUrl: null,
+            selectedServer: this.selectedServerSubject.value
+          })
+        )
+      );
+    })
+  );
+
+  selectServer(serverId: string): void {
+    this.selectedServerSubject.next(serverId);
+  }
+
+  retry(): void {
+    this.retrySubject.next();
+  }
+
+  private getEmbedUrl(movie: MovieDetails, serverId: string): SafeResourceUrl {
+    const imdbId = movie.external_ids?.imdb_id;
+    let rawUrl = '';
+
+    switch (serverId) {
+      case 'vidsrc-cc':
+        rawUrl = `https://vidsrc.cc/v2/embed/movie/${movie.id}`;
+        break;
+      case 'multiembed':
+        rawUrl = `https://multiembed.mov/?video_id=${movie.id}&tmdb=1`;
+        break;
+      case 'autoembed':
+        rawUrl = `https://player.autoembed.cc/embed/movie/${movie.id}`;
+        break;
+      case 'vidsrc-me':
+      default:
+        rawUrl = imdbId
+          ? `https://vidsrc.me/embed/movie?imdb=${imdbId}`
+          : `https://vidsrc.me/embed/movie?tmdb=${movie.id}`;
+        break;
+    }
+
+    return this.sanitizer.bypassSecurityTrustResourceUrl(rawUrl);
   }
 
   getBackdropUrl(path: string | null): string {
