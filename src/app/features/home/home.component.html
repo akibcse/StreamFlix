@@ -1,0 +1,46 @@
+<div class="container" *ngIf="state$ | async as state">
+  <header class="section-header">
+    <h1 class="title">Trending Movies</h1>
+    <p class="subtitle">Discover the most popular movies this week</p>
+  </header>
+
+  <!-- Loading State -->
+  <div class="status-box" *ngIf="state.loading">
+    <div class="spinner"></div>
+    <p>Loading trending movies...</p>
+  </div>
+
+  <!-- Error State -->
+  <div class="status-box error" *ngIf="state.error">
+    <p class="error-msg">{{ state.error }}</p>
+    <button class="retry-btn" (click)="ngOnInit()">Retry</button>
+  </div>
+
+  <!-- Movie Grid -->
+  <div class="movie-grid" *ngIf="!state.loading && !state.error">
+    <article
+      *ngFor="let movie of state.movies"
+      class="movie-card"
+      (click)="navigateToMovie(movie.id)"
+      tabindex="0"
+      (keydown.enter)="navigateToMovie(movie.id)"
+      [attr.aria-label]="movie.title"
+    >
+      <div class="poster-wrapper">
+        <img
+          [src]="getPosterUrl(movie.poster_path)"
+          [alt]="movie.title"
+          loading="lazy"
+          class="poster-img"
+        />
+        <div class="badge-rating">
+          ⭐ {{ movie.vote_average | number:'1.1-1' }}
+        </div>
+      </div>
+      <div class="movie-info">
+        <h2 class="movie-title" [title]="movie.title">{{ movie.title }}</h2>
+        <span class="movie-year">{{ getReleaseYear(movie.release_date) }}</span>
+      </div>
+    </article>
+  </div>
+</div>

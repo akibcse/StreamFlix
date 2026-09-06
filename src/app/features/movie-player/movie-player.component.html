@@ -1,0 +1,65 @@
+<div class="player-page" *ngIf="state$ | async as state">
+  <div class="container">
+    <button class="back-btn" (click)="goBack()">
+      ← Back to Movies
+    </button>
+
+    <!-- Loading State -->
+    <div class="status-box" *ngIf="state.loading">
+      <div class="spinner"></div>
+      <p>Loading stream player & details...</p>
+    </div>
+
+    <!-- Error State -->
+    <div class="status-box error" *ngIf="state.error">
+      <p class="error-msg">{{ state.error }}</p>
+      <button class="retry-btn" (click)="ngOnInit()">Retry</button>
+    </div>
+
+    <!-- Player & Details Content -->
+    <main class="content-wrapper" *ngIf="!state.loading && state.movie">
+      <!-- Video Player Section -->
+      <section class="player-container">
+        <iframe
+          *ngIf="state.embedUrl"
+          [src]="state.embedUrl"
+          class="video-frame"
+          allowfullscreen
+          referrerpolicy="origin"
+          title="Movie Player"
+        ></iframe>
+      </section>
+
+      <!-- Movie Details Section -->
+      <section class="details-card">
+        <div class="header-row">
+          <h1 class="movie-title">{{ state.movie.title }}</h1>
+          <span class="rating-badge" *ngIf="state.movie.vote_average">
+            ⭐ {{ state.movie.vote_average | number:'1.1-1' }}
+          </span>
+        </div>
+
+        <p class="tagline" *ngIf="state.movie.tagline">"{{ state.movie.tagline }}"</p>
+
+        <div class="meta-row">
+          <span class="meta-item" *ngIf="state.movie.release_date">
+            📅 {{ state.movie.release_date | date:'yyyy' }}
+          </span>
+          <span class="meta-item" *ngIf="state.movie.runtime">
+            ⏱️ {{ state.movie.runtime }} min
+          </span>
+          <div class="genre-list" *ngIf="state.movie.genres?.length">
+            <span class="genre-chip" *ngFor="let genre of state.movie.genres">
+              {{ genre.name }}
+            </span>
+          </div>
+        </div>
+
+        <div class="overview-section">
+          <h2 class="section-subtitle">Overview</h2>
+          <p class="overview-text">{{ state.movie.overview || 'No overview available.' }}</p>
+        </div>
+      </section>
+    </main>
+  </div>
+</div>
