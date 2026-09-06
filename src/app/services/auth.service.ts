@@ -6,11 +6,13 @@ import {
   signOut,
   GoogleAuthProvider,
   updateProfile,
+  sendPasswordResetEmail,
+  updatePassword,
   onAuthStateChanged,
   User as FirebaseUser
 } from 'firebase/auth';
-import { ref, set, get, update, onValue, off } from 'firebase/database';
-import { BehaviorSubject, Observable, map } from 'rxjs';
+import { ref, set, get, update, remove, onValue, off } from 'firebase/database';
+import { BehaviorSubject, Observable, map, distinctUntilChanged } from 'rxjs';
 import { FirebaseService } from './firebase.service';
 import { AppUser } from '../models/user.model';
 import { environment } from '../../environments/environment';
@@ -32,7 +34,13 @@ export class AuthService {
   );
 
   public readonly isAdmin$: Observable<boolean> = this.currentUser$.pipe(
-    map(user => user?.role === 'admin')
+    map(user => {
+      if (!user) return false;
+      const emailLower = user.email?.toLowerCase() || '';
+      const isConfiguredAdmin = environment.adminEmails?.map(e => e.toLowerCase()).includes(emailLower);
+      return user.role === 'admin' || !!isConfiguredAdmin;
+    }),
+    distinctUntilChanged()
   );
 
   constructor() {
@@ -57,11 +65,12 @@ export class AuthService {
 
         let appUser: AppUser;
         const now = Date.now();
-        const isAdminConfigured = fbUser.email && environment.adminEmails?.includes(fbUser.email.toLowerCase());
+        const emailLower = fbUser.email?.toLowerCase() || '';
+        const isAdminConfigured = environment.adminEmails?.map(e => e.toLowerCase()).includes(emailLower);
 
         if (snapshot.exists()) {
           const data = snapshot.val();
-          const role = (isAdminConfigured || data.role === 'admin') ? 'admin' : (data.role || 'user');
+          const role: 'admin' | 'user' = (isAdminConfigured || data.role === 'admin') ? 'admin' : 'user';
           
           appUser = {
             uid: fbUser.uid,
@@ -80,16 +89,12 @@ export class AuthService {
             email: appUser.email
           });
         } else {
-          // Check if this is the first registered user to grant admin automatically
-          const allUsersSnap = await get(ref(this.firebase.db, 'users'));
-          const isFirstUser = !allUsersSnap.exists() || Object.keys(allUsersSnap.val() || {}).length === 0;
-
           appUser = {
             uid: fbUser.uid,
             email: fbUser.email,
             displayName: fbUser.displayName || 'User',
             photoURL: fbUser.photoURL || null,
-            role: (isFirstUser || isAdminConfigured) ? 'admin' : 'user',
+            role: isAdminConfigured ? 'admin' : 'user',
             createdAt: now,
             lastLoginAt: now
           };
@@ -100,13 +105,16 @@ export class AuthService {
         this.currentUserSubject.next(appUser);
       } catch (err) {
         console.error('Error syncing user profile with database:', err);
-        // Fallback user object in case database read fails
+        const emailLower = fbUser.email?.toLowerCase() || '';
+        const isAdminConfigured = environment.adminEmails?.map(e => e.toLowerCase()).includes(emailLower);
+        const role: 'admin' | 'user' = isAdminConfigured ? 'admin' : 'user';
+
         this.currentUserSubject.next({
           uid: fbUser.uid,
           email: fbUser.email,
           displayName: fbUser.displayName || 'User',
           photoURL: fbUser.photoURL,
-          role: environment.adminEmails?.includes(fbUser.email?.toLowerCase() || '') ? 'admin' : 'user',
+          role,
           createdAt: Date.now(),
           lastLoginAt: Date.now()
         });
@@ -125,9 +133,7 @@ export class AuthService {
     const now = Date.now();
     const isAdminConfigured = environment.adminEmails?.includes(email.toLowerCase());
 
-    const allUsersSnap = await get(ref(this.firebase.db, 'users'));
-    const isFirstUser = !allUsersSnap.exists() || Object.keys(allUsersSnap.val() || {}).length === 0;
-    const role: 'admin' | 'user' = (isFirstUser || isAdminConfigured) ? 'admin' : 'user';
+    const role: 'admin' | 'user' = isAdminConfigured ? 'admin' : 'user';
 
     const user: AppUser = {
       uid: cred.user.uid,
@@ -190,5 +196,47 @@ export class AuthService {
         role
       });
     }
+  }
+
+  async updateUserData(uid: string, data: Partial<AppUser>): Promise<void> {
+    const userRef = ref(this.firebase.db, `users/${uid}`);
+    await update(userRef, data);
+
+    if (this.currentUserSubject.value?.uid === uid) {
+      this.currentUserSubject.next({
+        ...this.currentUserSubject.value,
+        ...data
+      });
+    }
+  }
+
+  async deleteUser(uid: string): Promise<void> {
+    const userRef = ref(this.firebase.db, `users/${uid}`);
+    await remove(userRef);
+  }
+
+  async resetPassword(email: string): Promise<void> {
+    await sendPasswordResetEmail(this.firebase.auth, email);
+  }
+
+  async updateProfileData(displayName: string, photoURL?: string): Promise<void> {
+    const user = this.firebase.auth.currentUser;
+    if (!user) throw new Error('Not logged in');
+    await updateProfile(user, { displayName, photoURL });
+    const userRef = ref(this.firebase.db, `users/${user.uid}`);
+    await update(userRef, { displayName, photoURL: photoURL || null });
+    if (this.currentUserSubject.value) {
+      this.currentUserSubject.next({
+        ...this.currentUserSubject.value,
+        displayName,
+        photoURL: photoURL || null
+      });
+    }
+  }
+
+  async changePassword(newPassword: string): Promise<void> {
+    const user = this.firebase.auth.currentUser;
+    if (!user) throw new Error('Not logged in');
+    await updatePassword(user, newPassword);
   }
 }

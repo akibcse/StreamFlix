@@ -88,6 +88,10 @@ export class VisitorLogService {
     }
   }
 
+  getLogs(): Observable<VisitorLog[]> {
+    return this.getRecentLogs();
+  }
+
   getRecentLogs(): Observable<VisitorLog[]> {
     return new Observable<VisitorLog[]>(observer => {
       const logsRef = ref(this.firebase.db, 'visitor_logs');

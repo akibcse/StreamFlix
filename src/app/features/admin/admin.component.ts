@@ -7,6 +7,7 @@ import { ref, onValue, off, remove } from 'firebase/database';
 import { VisitorLogService } from '../../services/visitor-log.service';
 import { AuthService } from '../../services/auth.service';
 import { FirebaseService } from '../../services/firebase.service';
+import { SettingsService } from '../../services/settings.service';
 import { VisitorLog, VisitorStats } from '../../models/visitor-log.model';
 import { AppUser } from '../../models/user.model';
 
@@ -43,6 +44,9 @@ export class AdminComponent {
   private readonly visitorService = inject(VisitorLogService);
   private readonly authService = inject(AuthService);
   private readonly firebase = inject(FirebaseService);
+  private readonly settingsService = inject(SettingsService);
+
+  readonly siteName$ = this.settingsService.settings$.pipe(map(s => s.siteName || 'StreamFlix'));
 
   readonly activeTab = signal<'logs' | 'users' | 'servers' | 'reports' | 'system'>('logs');
   readonly searchQuery = signal('');

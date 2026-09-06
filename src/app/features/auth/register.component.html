@@ -8,6 +8,10 @@
     {{ errorMessage() }}
   </div>
 
+  <div class="alert alert-warning" *ngIf="(registrationOpen$ | async) === false" style="background: rgba(234, 179, 8, 0.15); border: 1px solid rgba(234, 179, 8, 0.3); color: #fde047; padding: 0.75rem; border-radius: 8px; margin-bottom: 1rem; font-size: 0.9rem;">
+    ⚠️ Public account registration is currently disabled by administrator.
+  </div>
+
   <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="auth-form">
     <div class="form-group">
       <label class="form-label" for="displayName">Full Name</label>

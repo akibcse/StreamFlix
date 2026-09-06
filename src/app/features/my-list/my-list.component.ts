@@ -318,7 +318,8 @@ export class MyListComponent {
     this.activityService.toggleFavorite(item);
   }
 
-  navigateToMedia(type: string, id: number): void {
-    this.router.navigate([`/${type}`, id]);
+  navigateToMedia(type?: string, id?: number): void {
+    if (!id) return;
+    this.router.navigate([`/${type || 'movie'}`, id]);
   }
 }

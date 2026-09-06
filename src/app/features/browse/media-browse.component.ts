@@ -279,13 +279,12 @@ export class MediaBrowseComponent implements OnInit {
       this.route.queryParams
     ]).pipe(
       switchMap(() =>
-        this.movieService.discover(
-          this.mediaType(),
-          this.selectedGenre() || undefined,
-          this.selectedSort(),
-          this.selectedYear() || undefined,
-          this.currentPage()
-        )
+        this.movieService.discover(this.mediaType(), {
+          genreId: this.selectedGenre() || undefined,
+          sortBy: this.selectedSort(),
+          year: this.selectedYear() || undefined,
+          page: this.currentPage()
+        })
       ),
       map(res => res.results)
     );
@@ -324,13 +323,12 @@ export class MediaBrowseComponent implements OnInit {
   }
 
   private refresh(): void {
-    this.mediaItems$ = this.movieService.discover(
-      this.mediaType(),
-      this.selectedGenre() || undefined,
-      this.selectedSort(),
-      this.selectedYear() || undefined,
-      this.currentPage()
-    ).pipe(map(res => res.results));
+    this.mediaItems$ = this.movieService.discover(this.mediaType(), {
+      genreId: this.selectedGenre() || undefined,
+      sortBy: this.selectedSort(),
+      year: this.selectedYear() || undefined,
+      page: this.currentPage()
+    }).pipe(map(res => res.results));
   }
 
   getPosterUrl(path: string | null): string {

@@ -4,7 +4,7 @@
     <header class="admin-header">
       <div>
         <span class="admin-tag">Master Control Portal</span>
-        <h1 class="admin-title">StreamFlix Administration</h1>
+        <h1 class="admin-title">{{ (siteName$ | async) }} Administration</h1>
       </div>
       <div class="live-status">
         <span class="pulse-dot"></span>
@@ -343,7 +343,7 @@
         <div class="info-card">
           <h2 class="card-heading">Quick Admin Passcode</h2>
           <p class="card-desc">
-            Use this secret key on the <a routerLink="/admin/login">Admin Login</a> portal to grant administrator status to any account:
+            Use this secret key on the <a routerLink="/login">Sign In</a> portal to grant administrator status to any account:
           </p>
           <div class="passcode-display">
             <code>streamflix-admin-2026</code>

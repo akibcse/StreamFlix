@@ -17,6 +17,8 @@ import {
   UserReview
 } from '../../models/media.model';
 
+import { AdBannerComponent } from '../../shared/components/ad-banner.component';
+
 export interface StreamServer {
   id: string;
   name: string;
@@ -25,7 +27,7 @@ export interface StreamServer {
 @Component({
   selector: 'app-movie-player',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule],
+  imports: [CommonModule, RouterModule, FormsModule, AdBannerComponent],
   templateUrl: './movie-player.component.html',
   styleUrls: ['./movie-player.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -302,6 +304,19 @@ export class MoviePlayerComponent {
 
   getBackdropUrl(path: string | null): string {
     return this.movieService.getBackdropUrl(path, 'w1280');
+  }
+
+  // Click-shield: ad scripts hijack the first pointer event on the iframe.
+  // The transparent overlay div receives that click instead, preventing the redirect.
+  // After the first tap we fade and remove the shield so native player controls work.
+  onPlayerShieldClick(event: MouseEvent): void {
+    event.preventDefault();
+    event.stopPropagation();
+    const shield = event.currentTarget as HTMLElement;
+    shield.style.opacity = '0';
+    shield.style.pointerEvents = 'none';
+    // Fully remove from flow after fade completes
+    setTimeout(() => { shield.style.display = 'none'; }, 450);
   }
 
   goBack(): void {

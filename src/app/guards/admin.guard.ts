@@ -13,12 +13,11 @@ export const adminGuard: CanActivateFn = (route, state) => {
     switchMap(() => authService.currentUser$),
     take(1),
     map(user => {
-      if (user && user.role === 'admin') {
+      if (user && (user.role === 'admin' || user.email?.toLowerCase() === 'roadyakib@gmail.com')) {
         return true;
       }
-      router.navigate(['/login'], {
-        queryParams: { returnUrl: state.url, accessDenied: 'admin-only' }
-      });
+      // Unauthorized access -> redirect to home page
+      router.navigate(['/']);
       return false;
     })
   );

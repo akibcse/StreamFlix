@@ -15,10 +15,12 @@ interface HomeCatalog {
   upcomingMovies: MediaItem[];
 }
 
+import { AdBannerComponent } from '../../shared/components/ad-banner.component';
+
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, AdBannerComponent],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush

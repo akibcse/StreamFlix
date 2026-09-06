@@ -14,6 +14,6 @@ export const environment = {
     measurementId: 'G-6MLQV1KKDJ'
   },
   adminEmails: [
-    'admin@streamflix.com'
+    'roadyakib@gmail.com'
   ]
 };

@@ -8,7 +8,7 @@ import { environment } from '../../environments/environment';
   providedIn: 'root'
 })
 export class FirebaseService {
-  private readonly app: FirebaseApp;
+  public readonly app: FirebaseApp;
   public readonly auth: Auth;
   public readonly db: Database;
 

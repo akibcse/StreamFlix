@@ -11,6 +11,7 @@
       <div class="hero-gradient-bottom"></div>
     </div>
 
+  <div class="hero-container">
     <div class="hero-content">
       <div class="hero-badge">
         <span class="pulse-icon">🔥</span> #1 TRENDING TODAY
@@ -47,6 +48,7 @@
         </button>
       </div>
     </div>
+  </div>
   </header>
 
   <div class="main-content">
@@ -149,6 +151,9 @@
         <button class="scroll-btn right" (click)="scrollRow(rowTrendingTv, 'right')">›</button>
       </div>
     </section>
+
+    <!-- Ad Slot: home_interstitial -->
+    <app-ad-banner position="home_interstitial"></app-ad-banner>
 
     <!-- ROW 3: TOP RATED CINEMA -->
     <section class="media-row-section" *ngIf="catalog.topRatedMovies.length">

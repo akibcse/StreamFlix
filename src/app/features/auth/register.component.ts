@@ -4,6 +4,9 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 
+import { SettingsService } from '../../services/settings.service';
+import { map } from 'rxjs';
+
 @Component({
   selector: 'app-register',
   standalone: true,
@@ -15,7 +18,12 @@ import { AuthService } from '../../services/auth.service';
 export class RegisterComponent {
   private readonly fb = inject(FormBuilder);
   private readonly auth = inject(AuthService);
+  private readonly settingsService = inject(SettingsService);
   private readonly router = inject(Router);
+
+  readonly registrationOpen$ = this.settingsService.settings$.pipe(
+    map(s => s.registrationOpen !== false)
+  );
 
   readonly registerForm = this.fb.group({
     displayName: ['', [Validators.required, Validators.minLength(2)]],
@@ -28,6 +36,11 @@ export class RegisterComponent {
   readonly errorMessage = signal<string | null>(null);
 
   async onSubmit(): Promise<void> {
+    if (this.settingsService.settings.registrationOpen === false) {
+      this.errorMessage.set('Public user registration is currently closed by the administrator.');
+      return;
+    }
+
     if (this.registerForm.invalid) {
       this.registerForm.markAllAsTouched();
       return;

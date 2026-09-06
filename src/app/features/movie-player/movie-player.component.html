@@ -71,16 +71,30 @@
       </div>
     </div>
 
+    <!-- Top Ad Slot (player_top) -->
+    <app-ad-banner position="player_top"></app-ad-banner>
+
     <!-- Video Player Frame -->
     <section class="player-container">
       <iframe
         [src]="getEmbedUrl(media)"
         class="video-frame"
         allowfullscreen
-        referrerpolicy="origin"
+        referrerpolicy="no-referrer"
         title="StreamFlix Player"
+        allow="fullscreen; autoplay; picture-in-picture; encrypted-media"
       ></iframe>
+      <!-- Click-shield: intercepts the first click that ad scripts hijack -->
+      <div class="player-click-shield" (click)="onPlayerShieldClick($event)">
+        <div class="shield-play-hint">
+          <div class="shield-play-icon">▶</div>
+          <span class="shield-play-text">Click to Play</span>
+        </div>
+      </div>
     </section>
+
+    <!-- Bottom Ad Slot (player_bottom) -->
+    <app-ad-banner position="player_bottom"></app-ad-banner>
 
     <!-- TV Series Season & Episode Selector -->
     <section class="series-controls" *ngIf="media.seasons?.length">
