@@ -8,7 +8,12 @@ import {
   StreamServerConfig,
   MediaType,
   MediaDetails,
-  AdminLog
+  AdminLog,
+  AutoImportCategory,
+  AutoImportOptions,
+  AutoImportProgress,
+  AutoSyncConfig,
+  MediaItem
 } from '../models/media.model';
 import { firstValueFrom } from 'rxjs';
 
@@ -76,7 +81,11 @@ export class AdminMediaService {
 
   // ─── Import from TMDB ────────────────────────────────────────────
 
-  async importFromTmdb(tmdbId: number, mediaType: MediaType): Promise<MediaOverride> {
+  async importFromTmdb(
+    tmdbId: number,
+    mediaType: MediaType,
+    customFlags?: { featured?: boolean; trending?: boolean; published?: boolean }
+  ): Promise<MediaOverride> {
     const details = await firstValueFrom(
       mediaType === 'movie'
         ? this.movieService.getMovieDetails(tmdbId)
@@ -86,10 +95,16 @@ export class AdminMediaService {
     const override: MediaOverride = {
       id: tmdbId.toString(),
       mediaType,
-      published: true,
+      title: details.title || details.name || '',
+      poster_path: details.poster_path || null,
+      backdrop_path: details.backdrop_path || null,
+      vote_average: details.vote_average || 0,
+      release_date: details.release_date || details.first_air_date || '',
+      overview: details.overview || '',
+      published: customFlags?.published ?? true,
       draft: false,
-      featured: false,
-      trending: false,
+      featured: customFlags?.featured ?? false,
+      trending: customFlags?.trending ?? false,
       addedAt: Date.now(),
       slug: this.generateSlug(details.title || details.name || ''),
       seoTitle: `${details.title || details.name} (${(details.release_date || details.first_air_date || '').substring(0, 4)})`,
@@ -112,6 +127,214 @@ export class AdminMediaService {
       }
     }
     return { success, failed };
+  }
+
+  // ─── Automated Import Engine ─────────────────────────────────────
+
+  async autoImportMovies(
+    options: AutoImportOptions,
+    onProgress?: (progress: AutoImportProgress) => void,
+    cancellationToken?: { isCancelled: boolean }
+  ): Promise<AutoImportProgress> {
+    const progress: AutoImportProgress = {
+      current: 0,
+      total: options.limit,
+      title: '',
+      posterPath: null,
+      successCount: 0,
+      skippedCount: 0,
+      failedCount: 0,
+      status: 'running',
+      message: 'Preparing automated import...',
+      logs: []
+    };
+
+    const emit = () => onProgress?.({ ...progress, logs: [...progress.logs] });
+    emit();
+
+    try {
+      // 1. Fetch existing movie IDs to check for duplicates
+      progress.message = 'Checking existing library for duplicates...';
+      emit();
+      const existing = await this.getAllOverrides('movie');
+      const existingIds = new Set(existing.map(m => m.id.toString()));
+
+      // 2. Fetch candidate movies from TMDB according to chosen category
+      progress.message = `Fetching ${options.category} movies from TMDB API...`;
+      emit();
+
+      const candidateMovies: MediaItem[] = [];
+      const pageSize = 20;
+      const pagesNeeded = Math.ceil(options.limit / pageSize);
+
+      if (options.category === 'all') {
+        const fetchers = [
+          () => firstValueFrom(this.movieService.getTrendingMovies('week', 1)),
+          () => firstValueFrom(this.movieService.getPopularMovies(1)),
+          () => firstValueFrom(this.movieService.getTopRatedMovies(1)),
+          () => firstValueFrom(this.movieService.getNowPlayingMovies(1)),
+          () => firstValueFrom(this.movieService.getUpcomingMovies(1))
+        ];
+        const results = await Promise.allSettled(fetchers.map(f => f()));
+        for (const res of results) {
+          if (res.status === 'fulfilled' && res.value?.results) {
+            for (const item of res.value.results) {
+              if (!candidateMovies.some(c => c.id === item.id)) {
+                candidateMovies.push(item);
+              }
+            }
+          }
+        }
+      } else {
+        for (let p = 1; p <= pagesNeeded; p++) {
+          if (cancellationToken?.isCancelled) break;
+          let obs;
+          switch (options.category) {
+            case 'trending':
+              obs = this.movieService.getTrendingMovies('week', p);
+              break;
+            case 'popular':
+              obs = this.movieService.getPopularMovies(p);
+              break;
+            case 'top_rated':
+              obs = this.movieService.getTopRatedMovies(p);
+              break;
+            case 'now_playing':
+              obs = this.movieService.getNowPlayingMovies(p);
+              break;
+            case 'upcoming':
+              obs = this.movieService.getUpcomingMovies(p);
+              break;
+            default:
+              obs = this.movieService.getPopularMovies(p);
+          }
+
+          try {
+            const pageData = await firstValueFrom(obs);
+            if (pageData?.results) {
+              for (const item of pageData.results) {
+                if (!candidateMovies.some(c => c.id === item.id)) {
+                  candidateMovies.push(item);
+                }
+              }
+            }
+          } catch (err) {
+            console.error(`Error fetching page ${p} for ${options.category}:`, err);
+          }
+        }
+      }
+
+      const targetMovies = candidateMovies.slice(0, options.limit);
+      progress.total = targetMovies.length;
+      progress.message = `Found ${targetMovies.length} movies. Starting import process...`;
+      emit();
+
+      // 3. Import each movie with delay
+      for (let i = 0; i < targetMovies.length; i++) {
+        if (cancellationToken?.isCancelled) {
+          progress.status = 'cancelled';
+          progress.message = `Import stopped by user. Processed ${progress.current}/${progress.total} movies.`;
+          emit();
+          return progress;
+        }
+
+        const movie = targetMovies[i];
+        progress.current = i + 1;
+        progress.title = movie.title || `Movie #${movie.id}`;
+        progress.posterPath = movie.poster_path;
+
+        const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+
+        if (options.skipExisting !== false && existingIds.has(movie.id.toString())) {
+          progress.skippedCount++;
+          progress.message = `Skipped "${progress.title}" (already in library)`;
+          progress.logs.unshift({
+            title: progress.title,
+            status: 'skipped',
+            time: timeStr
+          });
+          emit();
+          continue;
+        }
+
+        try {
+          progress.message = `Importing "${progress.title}"...`;
+          emit();
+
+          await this.importFromTmdb(movie.id, 'movie', {
+            featured: options.markFeatured,
+            trending: options.markTrending,
+            published: options.autoPublish ?? true
+          });
+
+          existingIds.add(movie.id.toString());
+          progress.successCount++;
+          progress.logs.unshift({
+            title: progress.title,
+            status: 'success',
+            time: timeStr
+          });
+          emit();
+        } catch (err: any) {
+          progress.failedCount++;
+          progress.message = `Failed "${progress.title}": ${err.message || 'Error'}`;
+          progress.logs.unshift({
+            title: progress.title,
+            status: 'error',
+            time: timeStr
+          });
+          emit();
+        }
+
+        // Slight pause to respect TMDB API limits
+        await new Promise(r => setTimeout(r, 60));
+      }
+
+      progress.status = 'completed';
+      progress.message = `Auto-import completed! ${progress.successCount} imported, ${progress.skippedCount} skipped, ${progress.failedCount} failed.`;
+      emit();
+
+      await this.logAction('auto_import_movies', options.category, `Imported: ${progress.successCount}, Skipped: ${progress.skippedCount}, Failed: ${progress.failedCount}`);
+      await this.updateLastSyncStats(progress.successCount);
+
+      return progress;
+    } catch (err: any) {
+      progress.status = 'error';
+      progress.message = `Import failed: ${err.message || 'Unknown error'}`;
+      emit();
+      return progress;
+    }
+  }
+
+  // ─── Auto Sync Settings ──────────────────────────────────────────
+
+  async getAutoSyncConfig(): Promise<AutoSyncConfig> {
+    const snap = await get(ref(this.db, 'auto_sync_movies'));
+    if (!snap.exists()) {
+      return {
+        enabled: false,
+        category: 'trending',
+        limit: 20
+      };
+    }
+    return snap.val();
+  }
+
+  async saveAutoSyncConfig(config: AutoSyncConfig): Promise<void> {
+    await set(ref(this.db, 'auto_sync_movies'), config);
+    await this.logAction('save_auto_sync_config', config.category, `enabled=${config.enabled}, limit=${config.limit}`);
+  }
+
+  private async updateLastSyncStats(count: number): Promise<void> {
+    try {
+      const snap = await get(ref(this.db, 'auto_sync_movies'));
+      if (snap.exists()) {
+        await update(ref(this.db, 'auto_sync_movies'), {
+          lastSyncTimestamp: Date.now(),
+          lastSyncCount: count
+        });
+      }
+    } catch { /* ok */ }
   }
 
   // ─── Streaming Servers ───────────────────────────────────────────
@@ -206,6 +429,17 @@ export class AdminMediaService {
     try {
       const user = await firstValueFrom(this.auth.currentUser$);
       if (!user) return;
+
+      let geo: any = null;
+      try {
+        const stored = sessionStorage.getItem('streamflix_cached_geo_v2');
+        if (stored) geo = JSON.parse(stored);
+      } catch { /* ignore */ }
+
+      const ua = typeof navigator !== 'undefined' ? navigator.userAgent : '';
+      const dev = /Mobi|Android|iPhone/i.test(ua) ? 'Mobile' : /iPad|Tablet/i.test(ua) ? 'Tablet' : 'Desktop';
+      const os = /Win/i.test(ua) ? 'Windows' : /Mac/i.test(ua) ? 'macOS' : /Android/i.test(ua) ? 'Android' : /iPhone|iPad/i.test(ua) ? 'iOS' : 'Linux';
+
       const log: AdminLog = {
         adminId: user.uid,
         adminEmail: user.email || '',
@@ -213,7 +447,11 @@ export class AdminMediaService {
         target,
         details,
         timestamp: Date.now(),
-        level: 'info'
+        level: 'info',
+        ip: geo?.ip || undefined,
+        location: geo?.city ? `${geo.city}, ${geo.country}` : geo?.country || undefined,
+        isp: geo?.isp || geo?.org || undefined,
+        device: `${dev} (${os})`
       };
       await push(ref(this.db, 'admin_logs'), log);
     } catch { /* silent */ }

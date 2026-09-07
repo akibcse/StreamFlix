@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { combineLatest, map, Observable } from 'rxjs';
 import { ref, onValue, off, remove } from 'firebase/database';
-import { VisitorLogService } from '../../services/visitor-log.service';
+import { VisitorLogService, DetailedGeoData } from '../../services/visitor-log.service';
 import { AuthService } from '../../services/auth.service';
 import { FirebaseService } from '../../services/firebase.service';
 import { SettingsService } from '../../services/settings.service';
@@ -53,12 +53,15 @@ export class AdminComponent {
   readonly isClearing = signal(false);
   readonly actionMessage = signal<string | null>(null);
 
+  // Selected log for detailed telemetry dossier modal
+  readonly selectedLog = signal<VisitorLog | null>(null);
+
   // Streaming Servers Config (State)
   readonly servers = signal<StreamingServerConfig[]>([
-    { id: 'vidsrc-me', name: 'VidSrc Prime (Default)', status: 'online', priority: 1, enabled: true },
-    { id: 'vidsrc-cc', name: 'VidSrc CC (V2 Mirror)', status: 'online', priority: 2, enabled: true },
-    { id: 'multiembed', name: 'MultiEmbed VIP', status: 'online', priority: 3, enabled: true },
-    { id: 'autoembed', name: 'AutoEmbed Fast', status: 'online', priority: 4, enabled: true }
+    { id: 'multiembed', name: 'MultiEmbed (Server 1 - Default)', status: 'online', priority: 1, enabled: true },
+    { id: 'vidsrc-me', name: 'VidSrc Prime (Server 2)', status: 'online', priority: 2, enabled: true },
+    { id: 'vidsrc-cc', name: 'VidSrc CC (Server 3)', status: 'online', priority: 3, enabled: true },
+    { id: 'autoembed', name: 'AutoEmbed Fast (Server 4)', status: 'online', priority: 4, enabled: true }
   ]);
 
   readonly stats$: Observable<VisitorStats> = this.visitorService.getVisitorStats();
@@ -79,11 +82,19 @@ export class AdminComponent {
       return logs.filter(
         l =>
           l.ip?.toLowerCase().includes(q) ||
+          l.isp?.toLowerCase().includes(q) ||
+          l.org?.toLowerCase().includes(q) ||
+          (l.asn && String(l.asn).toLowerCase().includes(q)) ||
           l.path?.toLowerCase().includes(q) ||
           l.country?.toLowerCase().includes(q) ||
+          l.countryCode?.toLowerCase().includes(q) ||
           l.city?.toLowerCase().includes(q) ||
+          l.region?.toLowerCase().includes(q) ||
+          l.postal?.toLowerCase().includes(q) ||
           l.browser?.toLowerCase().includes(q) ||
           l.os?.toLowerCase().includes(q) ||
+          l.device?.toLowerCase().includes(q) ||
+          l.deviceModel?.toLowerCase().includes(q) ||
           l.userEmail?.toLowerCase().includes(q)
       );
     })
@@ -119,6 +130,23 @@ export class AdminComponent {
   onSearchChange(event: Event): void {
     const input = event.target as HTMLInputElement;
     this.searchQuery.set(input.value);
+  }
+
+  openLogDetails(log: VisitorLog): void {
+    this.selectedLog.set(log);
+  }
+
+  closeLogDetails(): void {
+    this.selectedLog.set(null);
+  }
+
+  copyText(text?: string, label: string = 'Text'): void {
+    if (!text) return;
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(text).then(() => {
+        this.showTemporaryNotice(`Copied ${label} to clipboard!`);
+      });
+    }
   }
 
   async toggleRole(user: AppUser): Promise<void> {
@@ -160,12 +188,25 @@ export class AdminComponent {
     }
   }
 
-  private showTemporaryNotice(msg: string): void {
+  showTemporaryNotice(msg: string): void {
     this.actionMessage.set(msg);
     setTimeout(() => this.actionMessage.set(null), 3500);
   }
 
   formatDate(ts: number | undefined): string {
     return ts ? new Date(ts).toLocaleString() : 'N/A';
+  }
+
+  getRelativeTime(ts: number | undefined): string {
+    if (!ts) return '';
+    const diff = Date.now() - ts;
+    const secs = Math.floor(diff / 1000);
+    if (secs < 60) return 'Just now';
+    const mins = Math.floor(secs / 60);
+    if (mins < 60) return `${mins}m ago`;
+    const hours = Math.floor(mins / 60);
+    if (hours < 24) return `${hours}h ago`;
+    const days = Math.floor(hours / 24);
+    return `${days}d ago`;
   }
 }

@@ -274,6 +274,12 @@ export const DEFAULT_PERMISSIONS: Record<AdminRole, AdminPermissions> = {
 export interface MediaOverride {
   id: string;
   mediaType: MediaType;
+  title?: string;
+  poster_path?: string | null;
+  backdrop_path?: string | null;
+  vote_average?: number;
+  release_date?: string;
+  overview?: string;
   featured?: boolean;
   trending?: boolean;
   published?: boolean;
@@ -289,6 +295,38 @@ export interface MediaOverride {
   seoDescription?: string;
   seoImage?: string;
   slug?: string;
+}
+
+export type AutoImportCategory = 'trending' | 'popular' | 'now_playing' | 'top_rated' | 'upcoming' | 'all';
+
+export interface AutoImportOptions {
+  category: AutoImportCategory;
+  limit: number;
+  skipExisting?: boolean;
+  autoPublish?: boolean;
+  markFeatured?: boolean;
+  markTrending?: boolean;
+}
+
+export interface AutoImportProgress {
+  current: number;
+  total: number;
+  title: string;
+  posterPath?: string | null;
+  successCount: number;
+  skippedCount: number;
+  failedCount: number;
+  status: 'idle' | 'running' | 'completed' | 'cancelled' | 'error';
+  message: string;
+  logs: { title: string; status: 'success' | 'skipped' | 'error'; time: string }[];
+}
+
+export interface AutoSyncConfig {
+  enabled: boolean;
+  category: AutoImportCategory;
+  limit: number;
+  lastSyncTimestamp?: number;
+  lastSyncCount?: number;
 }
 
 // ─── Site Settings ──────────────────────────────────────────────────
@@ -329,13 +367,13 @@ export interface SiteSettings {
 }
 
 export const DEFAULT_SITE_SETTINGS: SiteSettings = {
-  siteName: 'StreamFlix',
-  logoUrl: '',
-  faviconUrl: '',
+  siteName: 'Streamflixbd',
+  logoUrl: '/logo.png',
+  faviconUrl: '/favicon.ico',
   siteUrl: 'https://ott.akibhasan.online',
   contactEmail: 'roadyakib@gmail.com',
-  footerText: 'The premier free streaming destination for full HD movies and television series.',
-  copyrightText: '© 2026 StreamFlix. Developed by Md. Akib Hasan (roadyakib@gmail.com). All rights reserved.',
+  footerText: 'MOVIES ANYTIME EVERYWHERE. The premier free streaming destination for full HD movies and television series.',
+  copyrightText: '© 2026 Streamflixbd. Developed by Md. Akib Hasan (roadyakib@gmail.com). All rights reserved.',
   defaultLanguage: 'en',
   defaultCountry: 'US',
   timezone: 'UTC',
@@ -435,4 +473,8 @@ export interface AdminLog {
   details?: string;
   timestamp: number;
   level: LogLevel;
+  ip?: string;
+  location?: string;
+  isp?: string;
+  device?: string;
 }

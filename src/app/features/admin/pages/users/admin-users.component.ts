@@ -49,6 +49,9 @@ import { environment } from '../../../../../environments/environment';
               <th>User</th>
               <th>Email</th>
               <th>Current Role</th>
+              <th>Last IP & ISP</th>
+              <th>Location</th>
+              <th>Device</th>
               <th>Joined Date</th>
               <th>Last Active</th>
               <th style="text-align: right;">Actions</th>
@@ -77,10 +80,40 @@ import { environment } from '../../../../../environments/environment';
                   👤 User
                 </span>
               </td>
+              <td>
+                <div class="user-ip-cell" *ngIf="u.lastIp; else noIp">
+                  <span class="user-ip-text">{{ u.lastIp }}</span>
+                  <span class="user-isp-text" *ngIf="u.lastIsp" [title]="u.lastIsp">⚡ {{ u.lastIsp }}</span>
+                </div>
+                <ng-template #noIp><span class="text-muted">—</span></ng-template>
+              </td>
+              <td>
+                <div class="user-loc-cell" *ngIf="u.lastCountry || u.lastCity; else noLoc">
+                  <span class="flag-icon">{{ u.lastFlag || '📍' }}</span>
+                  <span>{{ u.lastCity ? u.lastCity + ', ' : '' }}{{ u.lastCountry }}</span>
+                </div>
+                <ng-template #noLoc><span class="text-muted">—</span></ng-template>
+              </td>
+              <td>
+                <div class="user-dev-cell" *ngIf="u.lastDevice || u.lastOs; else noDev">
+                  <span>{{ u.lastDevice === 'Mobile' ? '📱' : '💻' }} {{ u.lastDevice || 'Desktop' }}</span>
+                  <span class="dev-sub" *ngIf="u.lastOs">{{ u.lastOs }} • {{ u.lastBrowser }}</span>
+                </div>
+                <ng-template #noDev><span class="text-muted">—</span></ng-template>
+              </td>
               <td>{{ u.createdAt | date:'mediumDate' }}</td>
               <td>{{ u.lastLoginAt ? (u.lastLoginAt | date:'short') : 'N/A' }}</td>
               <td style="text-align: right;">
                 <div class="action-btn-group">
+                  <!-- TELEMETRY BUTTON -->
+                  <button
+                    class="btn-action-telemetry"
+                    (click)="openTelemetryModal(u)"
+                    title="Inspect Login Telemetry, ISP & Location"
+                  >
+                    🛰️
+                  </button>
+
                   <!-- ROLE TOGGLE BUTTON -->
                   <button
                     class="btn-action-role"
@@ -88,7 +121,7 @@ import { environment } from '../../../../../environments/environment';
                     (click)="toggleRole(u)"
                     [title]="isUserAdmin(u) ? 'Demote Admin to User' : 'Assign Admin Role'"
                   >
-                    {{ isUserAdmin(u) ? 'Demote to User' : 'Assign Admin' }}
+                    {{ isUserAdmin(u) ? 'Demote' : 'Assign Admin' }}
                   </button>
 
                   <!-- EDIT USER BUTTON -->
@@ -113,7 +146,7 @@ import { environment } from '../../../../../environments/environment';
             </tr>
 
             <tr *ngIf="filteredUsers.length === 0">
-              <td colspan="6" class="empty-cell">
+              <td colspan="9" class="empty-cell">
                 No users found matching "{{ searchFilter }}".
               </td>
             </tr>
@@ -179,6 +212,116 @@ import { environment } from '../../../../../environments/environment';
               </button>
             </div>
           </form>
+        </div>
+      <!-- USER TELEMETRY MODAL -->
+      <div class="modal-backdrop" *ngIf="telemetryUser" (click)="closeTelemetryModal()">
+        <div class="modal-card dossier-user-card" (click)="$event.stopPropagation()">
+          <div class="modal-header">
+            <div class="modal-title-row">
+              <span class="modal-icon">🛰️</span>
+              <h3>User Login & Telemetry Dossier</h3>
+            </div>
+            <button class="btn-modal-close" (click)="closeTelemetryModal()">✕</button>
+          </div>
+
+          <div class="user-dossier-body">
+            <div class="dossier-user-summary">
+              <div class="user-avatar" [class.admin-avatar]="isUserAdmin(telemetryUser)">
+                {{ (telemetryUser.displayName || telemetryUser.email || 'U').charAt(0).toUpperCase() }}
+              </div>
+              <div class="summary-details">
+                <h4>{{ telemetryUser.displayName || 'No Name' }}</h4>
+                <span class="summary-email">{{ telemetryUser.email }}</span>
+                <span class="summary-role">{{ isUserAdmin(telemetryUser) ? '🛡️ Administrator' : '👤 Standard User' }}</span>
+              </div>
+            </div>
+
+            <div class="dossier-grid-mini">
+              <!-- Network & IP -->
+              <div class="dossier-block">
+                <span class="block-title">🌐 Network & IP</span>
+                <div class="dossier-item">
+                  <span class="d-label">Last Known IP</span>
+                  <span class="d-val font-mono">{{ telemetryUser.lastIp || 'N/A' }}</span>
+                </div>
+                <div class="dossier-item" *ngIf="telemetryUser.lastIsp">
+                  <span class="d-label">ISP Provider</span>
+                  <span class="d-val text-cyan">⚡ {{ telemetryUser.lastIsp }}</span>
+                </div>
+                <div class="dossier-item" *ngIf="telemetryUser.lastAsn">
+                  <span class="d-label">ASN</span>
+                  <span class="d-val font-mono">{{ telemetryUser.lastAsn }}</span>
+                </div>
+              </div>
+
+              <!-- Location -->
+              <div class="dossier-block">
+                <span class="block-title">📍 Location</span>
+                <div class="dossier-item">
+                  <span class="d-label">Country</span>
+                  <span class="d-val">{{ telemetryUser.lastFlag || '📍' }} {{ telemetryUser.lastCountry || 'Unknown' }}</span>
+                </div>
+                <div class="dossier-item" *ngIf="telemetryUser.lastCity || telemetryUser.lastRegion">
+                  <span class="d-label">City / Region</span>
+                  <span class="d-val">{{ telemetryUser.lastCity }}{{ telemetryUser.lastRegion ? ', ' + telemetryUser.lastRegion : '' }}</span>
+                </div>
+                <div class="dossier-item" *ngIf="telemetryUser.lastPostal">
+                  <span class="d-label">Postal / Zip</span>
+                  <span class="d-val">📮 {{ telemetryUser.lastPostal }}</span>
+                </div>
+                <div class="dossier-item" *ngIf="telemetryUser.lastLat && telemetryUser.lastLon">
+                  <span class="d-label">Map Coordinates</span>
+                  <span class="d-val">
+                    <a [href]="'https://www.google.com/maps?q=' + telemetryUser.lastLat + ',' + telemetryUser.lastLon" target="_blank" class="map-link-btn">
+                      📍 View on Maps ↗
+                    </a>
+                  </span>
+                </div>
+              </div>
+
+              <!-- Device & Environment -->
+              <div class="dossier-block">
+                <span class="block-title">💻 Device & System</span>
+                <div class="dossier-item">
+                  <span class="d-label">Device Type</span>
+                  <span class="d-val">{{ telemetryUser.lastDevice || 'Desktop' }}</span>
+                </div>
+                <div class="dossier-item" *ngIf="telemetryUser.lastOs">
+                  <span class="d-label">Operating System</span>
+                  <span class="d-val">{{ telemetryUser.lastOs }}</span>
+                </div>
+                <div class="dossier-item" *ngIf="telemetryUser.lastBrowser">
+                  <span class="d-label">Browser</span>
+                  <span class="d-val">{{ telemetryUser.lastBrowser }}</span>
+                </div>
+                <div class="dossier-item" *ngIf="telemetryUser.lastScreen">
+                  <span class="d-label">Screen Resolution</span>
+                  <span class="d-val">{{ telemetryUser.lastScreen }}</span>
+                </div>
+              </div>
+
+              <!-- Activity Dates -->
+              <div class="dossier-block">
+                <span class="block-title">⏱️ Activity History</span>
+                <div class="dossier-item">
+                  <span class="d-label">Joined</span>
+                  <span class="d-val">{{ telemetryUser.createdAt | date:'medium' }}</span>
+                </div>
+                <div class="dossier-item">
+                  <span class="d-label">Last Active</span>
+                  <span class="d-val">{{ telemetryUser.lastLoginAt ? (telemetryUser.lastLoginAt | date:'medium') : 'N/A' }}</span>
+                </div>
+                <div class="dossier-item" *ngIf="telemetryUser.lastTimezone">
+                  <span class="d-label">Timezone</span>
+                  <span class="d-val">🕒 {{ telemetryUser.lastTimezone }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="modal-actions">
+            <button type="button" class="btn-cancel" (click)="closeTelemetryModal()">Close</button>
+          </div>
         </div>
       </div>
     </div>
@@ -362,6 +505,45 @@ import { environment } from '../../../../../environments/environment';
     }
     .btn-action-delete:hover { background: #ef4444; color: white; }
 
+    .btn-action-telemetry {
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      color: #34d399;
+      padding: 0.35rem 0.55rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.82rem;
+      transition: all 0.2s;
+    }
+    .btn-action-telemetry:hover { background: #10b981; color: white; }
+
+    .user-ip-cell { display: flex; flex-direction: column; gap: 2px; }
+    .user-ip-text { font-family: monospace; font-size: 0.82rem; color: #ffffff; font-weight: 600; }
+    .user-isp-text { font-size: 0.74rem; color: #38bdf8; max-width: 140px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .user-loc-cell { display: flex; align-items: center; gap: 0.35rem; font-size: 0.82rem; color: #cbd5e1; }
+    .user-dev-cell { display: flex; flex-direction: column; gap: 2px; font-size: 0.82rem; color: #e2e8f0; }
+    .dev-sub { font-size: 0.73rem; color: #94a3b8; }
+    .text-muted { color: #64748b; }
+    .text-cyan { color: #38bdf8 !important; }
+    .font-mono { font-family: monospace; }
+
+    .dossier-user-card { max-width: 640px !important; }
+    .user-dossier-body { padding: 1.25rem 1.5rem; display: flex; flex-direction: column; gap: 1.25rem; }
+    .dossier-user-summary { display: flex; align-items: center; gap: 1rem; background: rgba(255, 255, 255, 0.03); padding: 1rem; border-radius: 10px; border: 1px solid rgba(255, 255, 255, 0.06); }
+    .summary-details h4 { margin: 0 0 0.2rem; font-size: 1.05rem; color: white; }
+    .summary-email { font-size: 0.82rem; color: #94a3b8; font-family: monospace; display: block; margin-bottom: 0.25rem; }
+    .summary-role { font-size: 0.75rem; color: #a5b4fc; font-weight: 600; }
+
+    .dossier-grid-mini { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    @media (max-width: 600px) { .dossier-grid-mini { grid-template-columns: 1fr; } }
+    .dossier-block { background: rgba(0, 0, 0, 0.25); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 8px; padding: 0.85rem; display: flex; flex-direction: column; gap: 0.5rem; }
+    .block-title { font-size: 0.76rem; text-transform: uppercase; color: #818cf8; font-weight: 700; letter-spacing: 0.05em; margin-bottom: 0.2rem; }
+    .dossier-item { display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; }
+    .d-label { color: #94a3b8; }
+    .d-val { color: #e2e8f0; font-weight: 500; text-align: right; }
+    .map-link-btn { color: #818cf8; text-decoration: none; font-size: 0.75rem; background: rgba(99, 102, 241, 0.15); padding: 2px 6px; border-radius: 4px; }
+    .map-link-btn:hover { text-decoration: underline; background: #6366f1; color: white; }
+
     .empty-cell {
       text-align: center;
       padding: 2.5rem;
@@ -534,6 +716,7 @@ export class AdminUsersComponent implements OnInit {
   successMsg = '';
   errorMsg = '';
 
+  telemetryUser: AppUser | null = null;
   editingUser: AppUser | null = null;
   editForm: { displayName: string; email: string; role: 'admin' | 'user' } = {
     displayName: '',
@@ -541,6 +724,14 @@ export class AdminUsersComponent implements OnInit {
     role: 'user'
   };
   saving = false;
+
+  openTelemetryModal(user: AppUser): void {
+    this.telemetryUser = user;
+  }
+
+  closeTelemetryModal(): void {
+    this.telemetryUser = null;
+  }
 
   get adminCount(): number {
     return this.users.filter(u => this.isUserAdmin(u)).length;

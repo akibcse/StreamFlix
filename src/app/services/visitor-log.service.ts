@@ -2,17 +2,52 @@ import { Injectable, inject } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { ref, push, onValue, off, remove } from 'firebase/database';
-import { Observable, filter, catchError, of } from 'rxjs';
+import { Observable, filter, catchError, of, firstValueFrom } from 'rxjs';
 import { FirebaseService } from './firebase.service';
 import { AuthService } from './auth.service';
 import { VisitorLog, VisitorStats } from '../models/visitor-log.model';
 
-interface GeoData {
+export interface DetailedGeoData {
   ip: string;
+  ipType?: string;
   city?: string;
   region?: string;
-  country_name?: string;
+  country?: string;
+  countryCode?: string;
+  postal?: string;
+  latitude?: number;
+  longitude?: number;
+  timezone?: string;
+  timezoneOffset?: string;
+  isp?: string;
+  org?: string;
+  asn?: string | number;
+  flag?: string;
 }
+
+export interface DetailedDeviceData {
+  device: string;
+  deviceModel: string;
+  browser: string;
+  browserVersion: string;
+  os: string;
+  osVersion: string;
+  screenResolution: string;
+  viewport: string;
+  pixelRatio: number;
+  colorDepth: number;
+  orientation: string;
+  cpuCores?: number;
+  ram?: string;
+  connectionType?: string;
+  downlink?: string;
+  rtt?: string;
+  language: string;
+  touchSupport: boolean;
+  userAgent: string;
+}
+
+const GEO_STORAGE_KEY = 'streamflix_cached_geo_v2';
 
 @Injectable({
   providedIn: 'root'
@@ -23,17 +58,20 @@ export class VisitorLogService {
   private readonly firebase = inject(FirebaseService);
   private readonly auth = inject(AuthService);
 
-  private cachedGeo: GeoData | null = null;
+  private cachedGeo: DetailedGeoData | null = null;
   private isTrackingStarted = false;
+  private geoFetchPromise: Promise<DetailedGeoData> | null = null;
 
-  constructor() {}
+  constructor() {
+    this.restoreCachedGeo();
+  }
 
   startTracking(): void {
     if (this.isTrackingStarted) return;
     this.isTrackingStarted = true;
 
-    // Prefetch client IP / geo info
-    this.fetchGeoInfo();
+    // Prefetch client IP / geo info immediately
+    this.getGeoInfo().catch(() => {});
 
     // Listen to route changes
     this.router.events
@@ -43,42 +81,436 @@ export class VisitorLogService {
       });
   }
 
-  private fetchGeoInfo(): void {
-    this.http
-      .get<GeoData>('https://ipapi.co/json/')
-      .pipe(
-        catchError(() => {
-          // Fallback to simple ipify if ipapi rate-limited
-          return this.http.get<{ ip: string }>('https://api.ipify.org?format=json').pipe(
+  private restoreCachedGeo(): void {
+    try {
+      const stored = sessionStorage.getItem(GEO_STORAGE_KEY);
+      if (stored) {
+        this.cachedGeo = JSON.parse(stored);
+      }
+    } catch {
+      /* ignore storage issues */
+    }
+  }
+
+  private saveCachedGeo(data: DetailedGeoData): void {
+    this.cachedGeo = data;
+    try {
+      sessionStorage.setItem(GEO_STORAGE_KEY, JSON.stringify(data));
+    } catch {
+      /* ignore */
+    }
+  }
+
+  /**
+   * Fetches accurate IP geolocation, ISP, and network data using a multi-provider fallback strategy.
+   */
+  async getGeoInfo(): Promise<DetailedGeoData> {
+    if (this.cachedGeo && this.cachedGeo.ip && this.cachedGeo.ip !== 'Detecting...') {
+      return this.cachedGeo;
+    }
+
+    if (this.geoFetchPromise) {
+      return this.geoFetchPromise;
+    }
+
+    this.geoFetchPromise = (async () => {
+      // 1. Try ipwho.is (CORS enabled, HTTPS, rich ISP & ASN data)
+      try {
+        const res = await firstValueFrom(
+          this.http.get<any>('https://ipwho.is/').pipe(
+            catchError(() => of(null))
+          )
+        );
+
+        if (res && res.success !== false && res.ip) {
+          const geo: DetailedGeoData = {
+            ip: res.ip,
+            ipType: res.type || (res.ip.includes(':') ? 'IPv6' : 'IPv4'),
+            city: res.city || '',
+            region: res.region || '',
+            country: res.country || '',
+            countryCode: res.country_code || '',
+            postal: res.postal || '',
+            latitude: res.latitude,
+            longitude: res.longitude,
+            timezone: res.timezone?.id || Intl.DateTimeFormat().resolvedOptions().timeZone,
+            timezoneOffset: res.timezone?.utc || '',
+            isp: res.connection?.isp || res.connection?.org || '',
+            org: res.connection?.org || '',
+            asn: res.connection?.asn ? `AS${res.connection.asn}` : '',
+            flag: res.flag?.emoji || this.getFlagEmoji(res.country_code)
+          };
+          this.saveCachedGeo(geo);
+          return geo;
+        }
+      } catch {
+        /* proceed to fallback */
+      }
+
+      // 2. Try freeipapi.com
+      try {
+        const res = await firstValueFrom(
+          this.http.get<any>('https://freeipapi.com/api/json').pipe(
+            catchError(() => of(null))
+          )
+        );
+
+        if (res && res.ipAddress) {
+          const geo: DetailedGeoData = {
+            ip: res.ipAddress,
+            ipType: res.ipVersion === 6 ? 'IPv6' : 'IPv4',
+            city: res.cityName || '',
+            region: res.regionName || '',
+            country: res.countryName || '',
+            countryCode: res.countryCode || '',
+            postal: res.zipCode || '',
+            latitude: res.latitude,
+            longitude: res.longitude,
+            timezone: res.timeZone || Intl.DateTimeFormat().resolvedOptions().timeZone,
+            flag: this.getFlagEmoji(res.countryCode)
+          };
+          this.saveCachedGeo(geo);
+          return geo;
+        }
+      } catch {
+        /* proceed to fallback */
+      }
+
+      // 3. Try ipapi.co
+      try {
+        const res = await firstValueFrom(
+          this.http.get<any>('https://ipapi.co/json/').pipe(
+            catchError(() => of(null))
+          )
+        );
+
+        if (res && res.ip) {
+          const geo: DetailedGeoData = {
+            ip: res.ip,
+            ipType: res.version || (res.ip.includes(':') ? 'IPv6' : 'IPv4'),
+            city: res.city || '',
+            region: res.region || '',
+            country: res.country_name || '',
+            countryCode: res.country_code || '',
+            postal: res.postal || '',
+            latitude: res.latitude,
+            longitude: res.longitude,
+            timezone: res.timezone || Intl.DateTimeFormat().resolvedOptions().timeZone,
+            timezoneOffset: res.utc_offset || '',
+            isp: res.org || '',
+            org: res.org || '',
+            asn: res.asn || '',
+            flag: this.getFlagEmoji(res.country_code)
+          };
+          this.saveCachedGeo(geo);
+          return geo;
+        }
+      } catch {
+        /* proceed to fallback */
+      }
+
+      // 4. Basic fallback to ipify
+      try {
+        const res = await firstValueFrom(
+          this.http.get<{ ip: string }>('https://api.ipify.org?format=json').pipe(
             catchError(() => of({ ip: 'Unknown IP' }))
-          );
-        })
-      )
-      .subscribe(data => {
-        this.cachedGeo = data;
-      });
+          )
+        );
+
+        const geo: DetailedGeoData = {
+          ip: res.ip || 'Unknown IP',
+          timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+          country: 'Global'
+        };
+        this.saveCachedGeo(geo);
+        return geo;
+      } catch {
+        const fallbackGeo: DetailedGeoData = {
+          ip: 'Unknown IP',
+          timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+          country: 'Global'
+        };
+        return fallbackGeo;
+      } finally {
+        this.geoFetchPromise = null;
+      }
+    })();
+
+    return this.geoFetchPromise;
+  }
+
+  /**
+   * Allows ad-hoc lookup of an arbitrary IP (e.g. from the admin console).
+   */
+  async lookupSpecificIp(ip: string): Promise<DetailedGeoData | null> {
+    if (!ip || ip === 'Detecting...' || ip === 'Unknown IP') return null;
+    try {
+      const res = await firstValueFrom(
+        this.http.get<any>(`https://ipwho.is/${encodeURIComponent(ip)}`).pipe(
+          catchError(() => of(null))
+        )
+      );
+      if (res && res.success !== false) {
+        return {
+          ip: res.ip,
+          ipType: res.type || (res.ip.includes(':') ? 'IPv6' : 'IPv4'),
+          city: res.city || '',
+          region: res.region || '',
+          country: res.country || '',
+          countryCode: res.country_code || '',
+          postal: res.postal || '',
+          latitude: res.latitude,
+          longitude: res.longitude,
+          timezone: res.timezone?.id,
+          timezoneOffset: res.timezone?.utc,
+          isp: res.connection?.isp || res.connection?.org,
+          org: res.connection?.org,
+          asn: res.connection?.asn ? `AS${res.connection.asn}` : '',
+          flag: res.flag?.emoji || this.getFlagEmoji(res.country_code)
+        };
+      }
+    } catch {
+      /* ignore */
+    }
+    return null;
+  }
+
+  /**
+   * Helper to convert country code into a flag emoji (e.g. 'US' -> 🇺🇸, 'BD' -> 🇧🇩)
+   */
+  getFlagEmoji(countryCode?: string): string {
+    if (!countryCode || countryCode.length !== 2) return '🌐';
+    const codePoints = countryCode
+      .toUpperCase()
+      .split('')
+      .map(char => 127397 + char.charCodeAt(0));
+    return String.fromCodePoint(...codePoints);
+  }
+
+  /**
+   * Extracts thorough client device, hardware, display, and environment diagnostics.
+   */
+  getDeviceInfo(): DetailedDeviceData {
+    const ua = navigator.userAgent;
+    const { browser, browserVersion } = this.parseBrowser(ua);
+    const { os, osVersion } = this.parseOs(ua);
+    const { device, deviceModel } = this.parseDevice(ua, os);
+
+    // Screen & Display
+    const width = window.screen.width || window.innerWidth || 0;
+    const height = window.screen.height || window.innerHeight || 0;
+    const screenResolution = `${width}×${height}`;
+    const viewport = `${window.innerWidth}×${window.innerHeight}`;
+    const pixelRatio = window.devicePixelRatio || 1;
+    const colorDepth = window.screen.colorDepth || 24;
+    const orientation = window.innerHeight > window.innerWidth ? 'portrait' : 'landscape';
+
+    // Hardware specs
+    const cpuCores = navigator.hardwareConcurrency || undefined;
+    const mem = (navigator as any).deviceMemory;
+    const ram = mem ? `${mem} GB` : undefined;
+    const touchSupport = (navigator.maxTouchPoints > 0) || ('ontouchstart' in window);
+
+    // Network specs
+    const conn = (navigator as any).connection;
+    const connectionType = conn?.effectiveType ? conn.effectiveType.toUpperCase() : undefined;
+    const downlink = conn?.downlink ? `${conn.downlink} Mbps` : undefined;
+    const rtt = conn?.rtt ? `${conn.rtt} ms` : undefined;
+
+    const language = navigator.language || 'en';
+
+    return {
+      device,
+      deviceModel,
+      browser,
+      browserVersion,
+      os,
+      osVersion,
+      screenResolution,
+      viewport,
+      pixelRatio,
+      colorDepth,
+      orientation,
+      cpuCores,
+      ram,
+      connectionType,
+      downlink,
+      rtt,
+      language,
+      touchSupport,
+      userAgent: ua
+    };
+  }
+
+  private parseBrowser(ua: string): { browser: string; browserVersion: string } {
+    let browser = 'Unknown Browser';
+    let browserVersion = '';
+
+    if (/Edg\/([\d.]+)/i.test(ua)) {
+      browser = 'Microsoft Edge';
+      browserVersion = RegExp.$1;
+    } else if (/OPR\/([\d.]+)/i.test(ua) || /Opera\/([\d.]+)/i.test(ua)) {
+      browser = 'Opera';
+      browserVersion = RegExp.$1;
+    } else if (/SamsungBrowser\/([\d.]+)/i.test(ua)) {
+      browser = 'Samsung Internet';
+      browserVersion = RegExp.$1;
+    } else if (/Vivaldi\/([\d.]+)/i.test(ua)) {
+      browser = 'Vivaldi';
+      browserVersion = RegExp.$1;
+    } else if (/UCBrowser\/([\d.]+)/i.test(ua)) {
+      browser = 'UC Browser';
+      browserVersion = RegExp.$1;
+    } else if (/Chrome\/([\d.]+)/i.test(ua)) {
+      browser = 'Google Chrome';
+      browserVersion = RegExp.$1;
+    } else if (/Firefox\/([\d.]+)/i.test(ua)) {
+      browser = 'Mozilla Firefox';
+      browserVersion = RegExp.$1;
+    } else if (/Version\/([\d.]+).*Safari/i.test(ua)) {
+      browser = 'Apple Safari';
+      browserVersion = RegExp.$1;
+    } else if (/MSIE ([\d.]+)|Trident.*rv:([\d.]+)/i.test(ua)) {
+      browser = 'Internet Explorer';
+      browserVersion = RegExp.$1 || RegExp.$2;
+    }
+
+    const majorVersion = browserVersion.split('.')[0];
+    const displayBrowser = majorVersion ? `${browser} ${majorVersion}` : browser;
+    return { browser: displayBrowser, browserVersion };
+  }
+
+  private parseOs(ua: string): { os: string; osVersion: string } {
+    let os = 'Unknown OS';
+    let osVersion = '';
+
+    if (/Windows NT 10\.0/i.test(ua)) {
+      // Windows 10 or Windows 11
+      os = 'Windows 10/11';
+      osVersion = '10.0';
+    } else if (/Windows NT 6\.3/i.test(ua)) {
+      os = 'Windows 8.1';
+      osVersion = '8.1';
+    } else if (/Windows NT 6\.1/i.test(ua)) {
+      os = 'Windows 7';
+      osVersion = '7.0';
+    } else if (/Mac OS X ([\d_]+)/i.test(ua)) {
+      const ver = RegExp.$1.replace(/_/g, '.');
+      os = 'macOS';
+      osVersion = ver;
+    } else if (/Android ([\d.]+)/i.test(ua)) {
+      os = 'Android';
+      osVersion = RegExp.$1;
+    } else if (/iPhone OS ([\d_]+)/i.test(ua)) {
+      const ver = RegExp.$1.replace(/_/g, '.');
+      os = 'iOS';
+      osVersion = ver;
+    } else if (/iPad.*OS ([\d_]+)/i.test(ua)) {
+      const ver = RegExp.$1.replace(/_/g, '.');
+      os = 'iPadOS';
+      osVersion = ver;
+    } else if (/CrOS [a-zA-Z0-9_]+ ([\d.]+)/i.test(ua)) {
+      os = 'ChromeOS';
+      osVersion = RegExp.$1;
+    } else if (/Linux/i.test(ua)) {
+      os = 'Linux';
+      osVersion = 'Standard';
+    }
+
+    const displayOs = osVersion && osVersion !== 'Standard' ? `${os} ${osVersion.split('.')[0]}` : os;
+    return { os: displayOs, osVersion };
+  }
+
+  private parseDevice(ua: string, os: string): { device: string; deviceModel: string } {
+    let device = 'Desktop';
+    let deviceModel = 'Desktop PC';
+
+    const isMobile = /Mobile|Android|iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua);
+    const isTablet = /iPad|Tablet|PlayBook|Silk/i.test(ua) || (os === 'Android' && !/Mobile/i.test(ua));
+    const isTV = /SmartTV|GoogleTV|AppleTV|HbbTV|Roku/i.test(ua);
+
+    if (isTV) {
+      device = 'Smart TV';
+      deviceModel = 'Connected TV';
+    } else if (isTablet) {
+      device = 'Tablet';
+      if (/iPad/i.test(ua)) deviceModel = 'Apple iPad';
+      else deviceModel = 'Android Tablet';
+    } else if (isMobile) {
+      device = 'Mobile';
+      if (/iPhone/i.test(ua)) deviceModel = 'Apple iPhone';
+      else if (/Pixel ([\w\s]+)/i.test(ua)) deviceModel = `Google Pixel ${RegExp.$1}`;
+      else if (/SM-([A-Za-z0-9]+)/i.test(ua)) deviceModel = `Samsung Galaxy (SM-${RegExp.$1})`;
+      else if (/Xiaomi|Redmi|MI\s/i.test(ua)) deviceModel = 'Xiaomi Device';
+      else if (/OnePlus/i.test(ua)) deviceModel = 'OnePlus Device';
+      else if (/Huawei|Honor/i.test(ua)) deviceModel = 'Huawei Device';
+      else deviceModel = 'Smartphone';
+    } else {
+      device = 'Desktop';
+      if (/Macintosh|Mac OS/i.test(ua)) deviceModel = 'Apple Mac';
+      else if (/Windows/i.test(ua)) deviceModel = 'Windows PC';
+      else if (/Linux/i.test(ua)) deviceModel = 'Linux Workstation';
+      else if (/CrOS/i.test(ua)) deviceModel = 'Chromebook';
+    }
+
+    return { device, deviceModel };
   }
 
   private async recordVisit(path: string): Promise<void> {
     try {
       const user = this.auth.currentUser;
-      const geo = this.cachedGeo;
-      const userAgent = navigator.userAgent;
-      const { browser, os, device } = this.parseUserAgent(userAgent);
+      const geo = await this.getGeoInfo();
+      const dev = this.getDeviceInfo();
 
       const log: VisitorLog = {
         timestamp: Date.now(),
         dateStr: new Date().toLocaleString(),
         path: path || '/',
-        ip: geo?.ip || 'Detecting...',
-        city: geo?.city || '',
-        region: geo?.region || '',
-        country: geo?.country_name || 'Global',
-        browser,
-        os,
-        device,
+
+        // IP & Network / ISP info
+        ip: geo.ip || 'Detecting...',
+        ipType: geo.ipType || (geo.ip?.includes(':') ? 'IPv6' : 'IPv4'),
+        isp: geo.isp || '',
+        org: geo.org || '',
+        asn: geo.asn || '',
+        connectionType: dev.connectionType,
+        downlink: dev.downlink,
+        rtt: dev.rtt,
+
+        // Precise Location
+        city: geo.city || '',
+        region: geo.region || '',
+        country: geo.country || 'Global',
+        countryCode: geo.countryCode || '',
+        postal: geo.postal || '',
+        latitude: geo.latitude,
+        longitude: geo.longitude,
+        timezone: geo.timezone || Intl.DateTimeFormat().resolvedOptions().timeZone,
+        timezoneOffset: geo.timezoneOffset || '',
+        flag: geo.flag || this.getFlagEmoji(geo.countryCode),
+
+        // Device & System info
+        device: dev.device,
+        deviceModel: dev.deviceModel,
+        browser: dev.browser,
+        browserVersion: dev.browserVersion,
+        os: dev.os,
+        osVersion: dev.osVersion,
+        screenResolution: dev.screenResolution,
+        viewport: dev.viewport,
+        pixelRatio: dev.pixelRatio,
+        colorDepth: dev.colorDepth,
+        orientation: dev.orientation,
+        cpuCores: dev.cpuCores,
+        ram: dev.ram,
+        language: dev.language,
+        touchSupport: dev.touchSupport,
+
+        // User & Session Identity
         userId: user?.uid || null,
-        userEmail: user?.email || 'Anonymous Visitor'
+        userEmail: user?.email || 'Anonymous Visitor',
+        userAgent: dev.userAgent,
+        referrer: document.referrer || undefined
       };
 
       const logsRef = ref(this.firebase.db, 'visitor_logs');
@@ -132,7 +564,7 @@ export class VisitorLogService {
             logs.sort((a, b) => b.timestamp - a.timestamp);
 
             const totalVisits = logs.length;
-            const uniqueIps = new Set(logs.map(l => l.ip).filter(ip => ip && ip !== 'Detecting...'));
+            const uniqueIps = new Set(logs.map(l => l.ip).filter(ip => ip && ip !== 'Detecting...' && ip !== 'Unknown IP'));
             const uniqueVisitors = uniqueIps.size || totalVisits;
 
             // Compute top pages
@@ -172,30 +604,5 @@ export class VisitorLogService {
   async clearLogs(): Promise<void> {
     const logsRef = ref(this.firebase.db, 'visitor_logs');
     await remove(logsRef);
-  }
-
-  private parseUserAgent(ua: string): { browser: string; os: string; device: string } {
-    let browser = 'Other';
-    if (ua.includes('Firefox')) browser = 'Firefox';
-    else if (ua.includes('Edg')) browser = 'Edge';
-    else if (ua.includes('Chrome')) browser = 'Chrome';
-    else if (ua.includes('Safari')) browser = 'Safari';
-    else if (ua.includes('MSIE') || ua.includes('Trident/')) browser = 'Internet Explorer';
-
-    let os = 'Unknown OS';
-    if (ua.includes('Win')) os = 'Windows';
-    else if (ua.includes('Mac')) os = 'macOS';
-    else if (ua.includes('Linux')) os = 'Linux';
-    else if (ua.includes('Android')) os = 'Android';
-    else if (ua.includes('iPhone') || ua.includes('iPad')) os = 'iOS';
-
-    let device = 'Desktop';
-    if (/Mobi|Android|iPhone/i.test(ua)) {
-      device = 'Mobile';
-    } else if (/iPad|Tablet/i.test(ua)) {
-      device = 'Tablet';
-    }
-
-    return { browser, os, device };
   }
 }

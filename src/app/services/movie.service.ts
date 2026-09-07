@@ -31,9 +31,9 @@ export class MovieService {
 
   // ─── MOVIES ────────────────────────────────────────────────────────
 
-  getTrendingMovies(timeWindow: 'day' | 'week' = 'week'): Observable<PaginatedResponse<MediaItem>> {
+  getTrendingMovies(timeWindow: 'day' | 'week' = 'week', page = 1): Observable<PaginatedResponse<MediaItem>> {
     return this.http
-      .get<PaginatedResponse<MediaItem>>(`${this.baseUrl}/trending/movie/${timeWindow}`, { params: this.getParams() })
+      .get<PaginatedResponse<MediaItem>>(`${this.baseUrl}/trending/movie/${timeWindow}`, { params: this.getParams({ page }) })
       .pipe(map(res => this.attachMediaType(res, 'movie')));
   }
 

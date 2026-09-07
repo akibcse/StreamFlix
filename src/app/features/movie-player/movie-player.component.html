@@ -75,22 +75,15 @@
     <app-ad-banner position="player_top"></app-ad-banner>
 
     <!-- Video Player Frame -->
-    <section class="player-container">
+    <section class="player-container" id="playerContainer">
       <iframe
         [src]="getEmbedUrl(media)"
         class="video-frame"
         allowfullscreen
         referrerpolicy="no-referrer"
         title="StreamFlix Player"
-        allow="fullscreen; autoplay; picture-in-picture; encrypted-media"
+        allow="autoplay *; fullscreen *; picture-in-picture *; encrypted-media *; accelerometer; gyroscope; clipboard-write"
       ></iframe>
-      <!-- Click-shield: intercepts the first click that ad scripts hijack -->
-      <div class="player-click-shield" (click)="onPlayerShieldClick($event)">
-        <div class="shield-play-hint">
-          <div class="shield-play-icon">▶</div>
-          <span class="shield-play-text">Click to Play</span>
-        </div>
-      </div>
     </section>
 
     <!-- Bottom Ad Slot (player_bottom) -->
@@ -241,7 +234,8 @@
           </div>
         </div>
         <textarea
-          [(ngModel)]="newReviewText"
+          [ngModel]="newReviewText()"
+          (ngModelChange)="newReviewText.set($event)"
           placeholder="Write what you liked or disliked about this title..."
           class="review-textarea"
           rows="3"
@@ -333,7 +327,7 @@
       </div>
       <div class="modal-body report-body">
         <label>Issue Description:</label>
-        <select [(ngModel)]="reportReason" class="report-select">
+        <select [ngModel]="reportReason()" (ngModelChange)="reportReason.set($event)" class="report-select">
           <option value="Video buffering or not playing">Video buffering or not playing</option>
           <option value="Audio out of sync">Audio out of sync</option>
           <option value="Wrong movie or episode">Wrong movie or episode</option>

@@ -1,6 +1,7 @@
 import { Component, ChangeDetectionStrategy, inject, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
-import { Router, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { UserActivityService } from '../../services/user-activity.service';
 import { MovieService } from '../../services/movie.service';
 import { WatchlistItem, WatchHistoryItem } from '../../models/media.model';
@@ -50,15 +51,15 @@ import { WatchlistItem, WatchHistoryItem } from '../../models/media.model';
         <main *ngIf="activeTab() === 'watchlist'">
           <div class="media-grid" *ngIf="(watchlist$ | async) as items">
             <article *ngFor="let item of items" class="list-card">
-              <div class="card-thumb" (click)="navigateToMedia(item.mediaType, item.id)">
-                <img [src]="getPosterUrl(item.poster_path)" [alt]="item.title" loading="lazy" />
+              <div class="card-thumb" (click)="navigateToMedia(item.mediaType || item.media_type, item.id)">
+                <img [src]="getPosterUrl(item.poster_path)" [alt]="item.title || item.name || 'Poster'" loading="lazy" />
                 <span class="rating-badge">⭐ {{ item.vote_average | number:'1.1-1' }}</span>
                 <div class="hover-play"><span>▶</span></div>
               </div>
               <div class="card-details">
-                <h3 class="card-title">{{ item.title }}</h3>
+                <h3 class="card-title">{{ item.title || item.name || 'Untitled' }}</h3>
                 <div class="card-footer">
-                  <span class="card-type">{{ item.mediaType === 'tv' ? 'TV Series' : 'Movie' }}</span>
+                  <span class="card-type">{{ (item.mediaType === 'tv' || item.media_type === 'tv') ? 'TV Series' : 'Movie' }}</span>
                   <button class="btn-remove" (click)="removeWatchlist(item)" title="Remove from watchlist">
                     ✕ Remove
                   </button>
@@ -79,15 +80,15 @@ import { WatchlistItem, WatchHistoryItem } from '../../models/media.model';
         <main *ngIf="activeTab() === 'favorites'">
           <div class="media-grid" *ngIf="(favorites$ | async) as items">
             <article *ngFor="let item of items" class="list-card">
-              <div class="card-thumb" (click)="navigateToMedia(item.mediaType, item.id)">
-                <img [src]="getPosterUrl(item.poster_path)" [alt]="item.title" loading="lazy" />
+              <div class="card-thumb" (click)="navigateToMedia(item.mediaType || item.media_type, item.id)">
+                <img [src]="getPosterUrl(item.poster_path)" [alt]="item.title || item.name || 'Poster'" loading="lazy" />
                 <span class="rating-badge">⭐ {{ item.vote_average | number:'1.1-1' }}</span>
                 <div class="hover-play"><span>▶</span></div>
               </div>
               <div class="card-details">
-                <h3 class="card-title">{{ item.title }}</h3>
+                <h3 class="card-title">{{ item.title || item.name || 'Untitled' }}</h3>
                 <div class="card-footer">
-                  <span class="card-type">{{ item.mediaType === 'tv' ? 'TV Series' : 'Movie' }}</span>
+                  <span class="card-type">{{ (item.mediaType === 'tv' || item.media_type === 'tv') ? 'TV Series' : 'Movie' }}</span>
                   <button class="btn-remove" (click)="removeFavorite(item)" title="Remove from favorites">
                     ✕ Remove
                   </button>
@@ -108,20 +109,25 @@ import { WatchlistItem, WatchHistoryItem } from '../../models/media.model';
         <main *ngIf="activeTab() === 'history'">
           <div class="media-grid" *ngIf="(history$ | async) as items">
             <article *ngFor="let item of items" class="list-card history-card">
-              <div class="card-thumb" (click)="navigateToMedia(item.mediaType, item.id)">
-                <img [src]="getPosterUrl(item.poster_path)" [alt]="item.title" loading="lazy" />
+              <div class="card-thumb" (click)="resumeMedia(item)">
+                <img [src]="getPosterUrl(item.poster_path)" [alt]="item.title || item.name || 'Poster'" loading="lazy" />
                 <span class="resume-badge" *ngIf="item.episode">
                   S{{ item.season }} • E{{ item.episode }}
                 </span>
                 <div class="hover-play"><span>▶ Resume</span></div>
               </div>
               <div class="card-details">
-                <h3 class="card-title">{{ item.title }}</h3>
+                <h3 class="card-title">{{ item.title || item.name || 'Untitled' }}</h3>
                 <div class="card-footer">
                   <span class="time-text">{{ item.watchedAt | date:'mediumDate' }}</span>
-                  <button class="btn-play-resume" (click)="navigateToMedia(item.mediaType, item.id)">
-                    Play
-                  </button>
+                  <div style="display: flex; gap: 0.5rem; align-items: center;">
+                    <button class="btn-play-resume" (click)="resumeMedia(item)">
+                      Resume
+                    </button>
+                    <button class="btn-remove" (click)="removeHistory(item, $event)" title="Remove from history">
+                      ✕
+                    </button>
+                  </div>
                 </div>
               </div>
             </article>
@@ -295,6 +301,7 @@ export class MyListComponent {
   private readonly activityService = inject(UserActivityService);
   private readonly movieService = inject(MovieService);
   private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
 
   readonly activeTab = signal<'watchlist' | 'favorites' | 'history'>('watchlist');
 
@@ -302,8 +309,26 @@ export class MyListComponent {
   readonly favorites$ = this.activityService.favorites$;
   readonly history$ = this.activityService.history$;
 
+  constructor() {
+    this.route.queryParamMap.pipe(takeUntilDestroyed()).subscribe(params => {
+      const tabParam = (params.get('tab') || '').toLowerCase();
+      if (tabParam === 'favorites' || tabParam === 'favourite' || tabParam === 'favourites') {
+        this.activeTab.set('favorites');
+      } else if (tabParam === 'history' || tabParam === 'continue' || tabParam === 'watched') {
+        this.activeTab.set('history');
+      } else if (tabParam === 'watchlist') {
+        this.activeTab.set('watchlist');
+      }
+    });
+  }
+
   setTab(tab: 'watchlist' | 'favorites' | 'history'): void {
     this.activeTab.set(tab);
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { tab },
+      queryParamsHandling: 'merge'
+    });
   }
 
   getPosterUrl(path: string | null): string {
@@ -318,8 +343,30 @@ export class MyListComponent {
     this.activityService.toggleFavorite(item);
   }
 
+  resumeMedia(item: WatchHistoryItem): void {
+    if (!item.id) return;
+    if (typeof window !== 'undefined') {
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+    }
+    const type = (item.mediaType === 'tv' || item.media_type === 'tv') ? 'tv' : 'movie';
+    const queryParams: Record<string, number> = {};
+    if (type === 'tv') {
+      if (item.season) queryParams['season'] = item.season;
+      if (item.episode) queryParams['episode'] = item.episode;
+    }
+    this.router.navigate([`/${type}`, item.id, 'watch'], { queryParams });
+  }
+
+  removeHistory(item: WatchHistoryItem, event?: Event): void {
+    if (event) event.stopPropagation();
+    this.activityService.removeFromHistory(item.id);
+  }
+
   navigateToMedia(type?: string, id?: number): void {
     if (!id) return;
-    this.router.navigate([`/${type || 'movie'}`, id]);
+    const cleanType = (type === 'tv') ? 'tv' : 'movie';
+    this.router.navigate([`/${cleanType}`, id]);
   }
 }

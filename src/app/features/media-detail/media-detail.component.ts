@@ -94,7 +94,7 @@ import { MediaDetails, MediaItem, MediaType, UserReview } from '../../models/med
 
               <!-- ACTION BUTTONS -->
               <div class="action-buttons">
-                <a [routerLink]="['/' + mediaType, media()?.id, 'watch']" class="btn-watch">
+                <a [routerLink]="['/' + mediaType, media()?.id, 'watch']" class="btn-watch" (click)="onPlayClick()">
                   <span class="icon-play">▶</span>
                   <span>Watch Now</span>
                 </a>
@@ -1029,6 +1029,8 @@ export class MediaDetailComponent implements OnInit, OnDestroy {
           this.mediaId = id;
           this.loadDetails(id);
           this.loadReviews(id);
+          this.isInWatchlist.set(this.userActivity.isInWatchlist(id));
+          this.isInFavorites.set(this.userActivity.isInFavorites(id));
         }
       })
     );
@@ -1036,12 +1038,16 @@ export class MediaDetailComponent implements OnInit, OnDestroy {
     // Subscribe to watchlist/favorites changes for reactive UI updates
     this.subs.add(
       this.userActivity.watchlist$.subscribe(list => {
-        this.isInWatchlist.set(list.some(item => item.id === this.mediaId));
+        if (this.mediaId) {
+          this.isInWatchlist.set(list.some(item => Number(item.id) === Number(this.mediaId)));
+        }
       })
     );
     this.subs.add(
       this.userActivity.favorites$.subscribe(list => {
-        this.isInFavorites.set(list.some(item => item.id === this.mediaId));
+        if (this.mediaId) {
+          this.isInFavorites.set(list.some(item => Number(item.id) === Number(this.mediaId)));
+        }
       })
     );
   }
@@ -1105,31 +1111,45 @@ export class MediaDetailComponent implements OnInit, OnDestroy {
   async toggleWatchlist(): Promise<void> {
     const item = this.media();
     if (!item) return;
-    await this.userActivity.toggleWatchlist({
+    const added = await this.userActivity.toggleWatchlist({
       id: item.id,
+      mediaType: this.mediaType,
       media_type: this.mediaType,
-      title: item.title,
-      name: item.name,
+      title: item.title || item.name || 'Untitled',
+      name: item.name || item.title || 'Untitled',
       poster_path: item.poster_path,
+      backdrop_path: item.backdrop_path,
       vote_average: item.vote_average || 0,
-      release_date: item.release_date || item.first_air_date,
+      release_date: item.release_date || item.first_air_date || '',
       addedAt: Date.now()
     });
+    this.isInWatchlist.set(added);
+  }
+
+  onPlayClick(): void {
+    if (typeof window !== 'undefined') {
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+    }
   }
 
   async toggleFavorite(): Promise<void> {
     const item = this.media();
     if (!item) return;
-    await this.userActivity.toggleFavorite({
+    const added = await this.userActivity.toggleFavorite({
       id: item.id,
+      mediaType: this.mediaType,
       media_type: this.mediaType,
-      title: item.title,
-      name: item.name,
+      title: item.title || item.name || 'Untitled',
+      name: item.name || item.title || 'Untitled',
       poster_path: item.poster_path,
+      backdrop_path: item.backdrop_path,
       vote_average: item.vote_average || 0,
-      release_date: item.release_date || item.first_air_date,
+      release_date: item.release_date || item.first_air_date || '',
       addedAt: Date.now()
     });
+    this.isInFavorites.set(added);
   }
 
   async submitReview(): Promise<void> {

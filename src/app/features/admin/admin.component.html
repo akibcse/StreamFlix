@@ -8,7 +8,7 @@
       </div>
       <div class="live-status">
         <span class="pulse-dot"></span>
-        <span class="live-text">Realtime Telemetry Active</span>
+        <span class="live-text">Realtime Telemetry & IP Geolocation Active</span>
       </div>
     </header>
 
@@ -60,7 +60,7 @@
         [class.active]="activeTab() === 'logs'"
         (click)="setTab('logs')"
       >
-        📋 Visitor Tracking Logs
+        📋 Visitor & User Activity Logs
       </button>
       <button
         type="button"
@@ -96,26 +96,37 @@
       </button>
     </div>
 
-    <!-- TAB 1: VISITOR LOGS -->
+    <!-- TAB 1: VISITOR & USER TELEMETRY LOGS -->
     <section class="tab-panel" *ngIf="activeTab() === 'logs'">
       <div class="panel-toolbar">
         <div class="search-box">
           <input
             type="text"
-            placeholder="Search by IP, country, page path, user..."
+            placeholder="Search by IP, ISP, ASN, City, Country, Device, OS, Browser, User..."
             [value]="searchQuery()"
             (input)="onSearchChange($event)"
             class="search-input"
           />
         </div>
-        <button
-          type="button"
-          class="btn-danger"
-          (click)="clearAllLogs()"
-          [disabled]="isClearing()"
-        >
-          🗑️ Clear All Logs
-        </button>
+        <div class="toolbar-actions">
+          <button
+            type="button"
+            class="btn-danger"
+            (click)="clearAllLogs()"
+            [disabled]="isClearing()"
+          >
+            🗑️ Clear All Logs
+          </button>
+        </div>
+      </div>
+
+      <!-- Telemetry Highlights Bar -->
+      <div class="telemetry-features-pill">
+        <span class="pill-item">🌐 <strong>Realtime IP Lookup</strong>: City, Region, Country & Postal</span>
+        <span class="pill-sep">•</span>
+        <span class="pill-item">⚡ <strong>ISP & ASN</strong>: Carrier, Network Provider & ASN Route</span>
+        <span class="pill-sep">•</span>
+        <span class="pill-item">💻 <strong>Device & Hardware</strong>: Model, OS, Browser, Screen & Cores</span>
       </div>
 
       <div class="table-card">
@@ -123,49 +134,149 @@
           <table class="data-table">
             <thead>
               <tr>
-                <th>Date & Time</th>
-                <th>IP & Geolocation</th>
-                <th>Page Path</th>
-                <th>Device & OS</th>
-                <th>User / Guest</th>
+                <th>Time & User</th>
+                <th>IP & ISP Provider</th>
+                <th>Precise Location</th>
+                <th>Device, OS & Display</th>
+                <th>Path Visited</th>
+                <th style="text-align: center;">Action</th>
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let log of filteredLogs$ | async">
-                <td class="cell-time">
-                  {{ log.dateStr || formatDate(log.timestamp) }}
-                </td>
+              <tr *ngFor="let log of filteredLogs$ | async" class="log-row">
+                <!-- Time & User -->
                 <td>
-                  <div class="ip-cell">
-                    <span class="ip-addr">{{ log.ip }}</span>
-                    <span class="geo-location" *ngIf="log.country || log.city">
-                      📍 {{ log.city ? log.city + ', ' : '' }}{{ log.country }}
-                    </span>
+                  <div class="time-user-cell">
+                    <span class="cell-time">{{ log.dateStr || formatDate(log.timestamp) }}</span>
+                    <span class="time-relative" *ngIf="log.timestamp">{{ getRelativeTime(log.timestamp) }}</span>
+                    <div class="user-identity">
+                      <span class="user-tag" [class.user-logged-in]="log.userId">
+                        <ng-container *ngIf="log.userId">👤 {{ log.userEmail || 'Member' }}</ng-container>
+                        <ng-container *ngIf="!log.userId">👻 Guest</ng-container>
+                      </span>
+                    </div>
                   </div>
                 </td>
+
+                <!-- IP & ISP Provider -->
                 <td>
-                  <a [routerLink]="log.path" class="path-link" target="_blank">
-                    {{ log.path }}
-                  </a>
+                  <div class="ip-isp-cell">
+                    <div class="ip-top-row">
+                      <span class="ip-addr" (click)="copyText(log.ip, 'IP Address')" title="Click to copy IP">
+                        {{ log.ip }}
+                      </span>
+                      <span class="ip-type-badge" *ngIf="log.ipType">{{ log.ipType }}</span>
+                    </div>
+                    <!-- ISP & ASN -->
+                    <div class="isp-info" *ngIf="log.isp || log.org">
+                      <span class="isp-name" [title]="'ISP: ' + (log.isp || log.org)">
+                        ⚡ {{ log.isp || log.org }}
+                      </span>
+                      <span class="asn-badge" *ngIf="log.asn" title="Autonomous System Number">
+                        {{ log.asn }}
+                      </span>
+                    </div>
+                    <div class="net-speed" *ngIf="log.connectionType || log.downlink">
+                      <span class="net-type">{{ log.connectionType }}</span>
+                      <span *ngIf="log.downlink" class="downlink-text">• {{ log.downlink }}</span>
+                    </div>
+                  </div>
                 </td>
+
+                <!-- Precise Location -->
+                <td>
+                  <div class="location-cell">
+                    <div class="geo-primary">
+                      <span class="country-flag">{{ log.flag || '📍' }}</span>
+                      <strong class="country-name">{{ log.country || 'Global' }}</strong>
+                      <span class="country-code" *ngIf="log.countryCode">({{ log.countryCode }})</span>
+                    </div>
+                    <div class="geo-secondary" *ngIf="log.city || log.region">
+                      <span *ngIf="log.city">{{ log.city }}</span>
+                      <span *ngIf="log.city && log.region">, </span>
+                      <span *ngIf="log.region">{{ log.region }}</span>
+                      <span class="postal-tag" *ngIf="log.postal">📮 {{ log.postal }}</span>
+                    </div>
+                    <div class="geo-coords" *ngIf="log.latitude && log.longitude">
+                      <a
+                        [href]="'https://www.google.com/maps?q=' + log.latitude + ',' + log.longitude"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="coord-link"
+                        title="View precise location on Google Maps"
+                      >
+                        📍 {{ log.latitude | number:'1.2-4' }}, {{ log.longitude | number:'1.2-4' }} ↗
+                      </a>
+                    </div>
+                    <div class="geo-tz" *ngIf="log.timezone">
+                      <span class="tz-text">🕒 {{ log.timezone }}</span>
+                    </div>
+                  </div>
+                </td>
+
+                <!-- Device, OS & Display -->
                 <td>
                   <div class="device-cell">
-                    <span class="device-badge">{{ log.device }}</span>
-                    <span class="os-text">{{ log.os }} • {{ log.browser }}</span>
+                    <div class="device-header">
+                      <span class="device-icon">
+                        <ng-container [ngSwitch]="log.device">
+                          <span *ngSwitchCase="'Mobile'">📱</span>
+                          <span *ngSwitchCase="'Tablet'">📟</span>
+                          <span *ngSwitchCase="'Smart TV'">📺</span>
+                          <span *ngSwitchDefault>💻</span>
+                        </ng-container>
+                      </span>
+                      <span class="device-badge" [class.device-mobile]="log.device === 'Mobile'" [class.device-tablet]="log.device === 'Tablet'">
+                        {{ log.device }}
+                      </span>
+                      <span class="device-model" *ngIf="log.deviceModel && log.deviceModel !== 'General'">
+                        {{ log.deviceModel }}
+                      </span>
+                    </div>
+                    <div class="os-browser-text">
+                      <span class="os-name">{{ log.os }}</span>
+                      <span class="dot-sep">•</span>
+                      <span class="browser-name">{{ log.browser }}</span>
+                    </div>
+                    <div class="display-hardware">
+                      <span class="screen-size" *ngIf="log.screenResolution">
+                        🖥️ {{ log.screenResolution }}<span *ngIf="log.pixelRatio && log.pixelRatio > 1"> ({{ log.pixelRatio }}x)</span>
+                      </span>
+                      <span class="hw-spec" *ngIf="log.cpuCores">
+                        ⚙️ {{ log.cpuCores }} Cores<span *ngIf="log.ram"> • {{ log.ram }}</span>
+                      </span>
+                    </div>
                   </div>
                 </td>
+
+                <!-- Path Visited -->
                 <td>
-                  <span
-                    class="user-tag"
-                    [class.user-logged-in]="log.userId"
+                  <div class="path-cell">
+                    <a [routerLink]="log.path" class="path-link" target="_blank" [title]="'Open ' + log.path">
+                      {{ log.path }}
+                    </a>
+                  </div>
+                </td>
+
+                <!-- Action Button -->
+                <td style="text-align: center;">
+                  <button
+                    type="button"
+                    class="btn-inspect"
+                    (click)="openLogDetails(log)"
+                    title="Inspect Full Telemetry Dossier"
                   >
-                    {{ log.userEmail || 'Anonymous' }}
-                  </span>
+                    🔍 Inspect
+                  </button>
                 </td>
               </tr>
+
               <tr *ngIf="(filteredLogs$ | async)?.length === 0">
-                <td colspan="5" class="empty-state">
-                  No visitor telemetry recorded yet.
+                <td colspan="6" class="empty-state">
+                  <div class="empty-box">
+                    <span class="empty-icon">🛰️</span>
+                    <p>No telemetry records found matching "{{ searchQuery() }}"</p>
+                  </div>
                 </td>
               </tr>
             </tbody>
@@ -181,18 +292,21 @@
           <table class="data-table">
             <thead>
               <tr>
-                <th>User</th>
+                <th>User Account</th>
                 <th>Role</th>
+                <th>Last Known IP & ISP</th>
+                <th>Precise Location</th>
+                <th>Last Device & OS</th>
                 <th>Joined</th>
                 <th>Last Active</th>
-                <th>Manage Role</th>
+                <th style="text-align: right;">Manage</th>
               </tr>
             </thead>
             <tbody>
               <tr *ngFor="let user of allUsers$ | async">
                 <td>
                   <div class="user-cell">
-                    <div class="user-avatar-circle">
+                    <div class="user-avatar-circle" [class.admin-circle]="user.role === 'admin'">
                       {{ (user.displayName || user.email || 'U').charAt(0).toUpperCase() }}
                     </div>
                     <div>
@@ -210,13 +324,45 @@
                     {{ user.role === 'admin' ? '🛡️ Administrator' : '👤 User' }}
                   </span>
                 </td>
+                <td>
+                  <div class="ip-isp-mini" *ngIf="user.lastIp; else noUserIp">
+                    <span class="ip-addr-sm" (click)="copyText(user.lastIp, 'User IP')">{{ user.lastIp }}</span>
+                    <span class="isp-text-sm" *ngIf="user.lastIsp">⚡ {{ user.lastIsp }}</span>
+                  </div>
+                  <ng-template #noUserIp>
+                    <span class="na-text">—</span>
+                  </ng-template>
+                </td>
+                <td>
+                  <div class="location-mini" *ngIf="user.lastCountry || user.lastCity; else noUserLoc">
+                    <span class="country-flag">{{ user.lastFlag || '📍' }}</span>
+                    <span>
+                      <ng-container *ngIf="user.lastCity">{{ user.lastCity }}, </ng-container>
+                      <ng-container *ngIf="user.lastCountry">{{ user.lastCountry }}</ng-container>
+                    </span>
+                  </div>
+                  <ng-template #noUserLoc>
+                    <span class="na-text">—</span>
+                  </ng-template>
+                </td>
+                <td>
+                  <div class="device-mini" *ngIf="user.lastDevice || user.lastOs; else noUserDev">
+                    <span class="device-text-sm">
+                      {{ user.lastDevice === 'Mobile' ? '📱' : '💻' }} {{ user.lastDevice || 'Desktop' }}
+                    </span>
+                    <span class="os-browser-sm">{{ user.lastOs }} • {{ user.lastBrowser }}</span>
+                  </div>
+                  <ng-template #noUserDev>
+                    <span class="na-text">—</span>
+                  </ng-template>
+                </td>
                 <td class="cell-time">
                   {{ formatDate(user.createdAt) }}
                 </td>
                 <td class="cell-time">
                   {{ formatDate(user.lastLoginAt) }}
                 </td>
-                <td>
+                <td style="text-align: right;">
                   <button
                     type="button"
                     class="btn-action"
@@ -229,7 +375,7 @@
                 </td>
               </tr>
               <tr *ngIf="(allUsers$ | async)?.length === 0">
-                <td colspan="5" class="empty-state">
+                <td colspan="8" class="empty-state">
                   No registered users in the database yet.
                 </td>
               </tr>
@@ -248,27 +394,35 @@
               <tr>
                 <th>Server Name</th>
                 <th>Provider ID</th>
+                <th>Priority Order</th>
                 <th>Health Status</th>
-                <th>Priority</th>
-                <th>Toggle Status</th>
+                <th>Active Toggle</th>
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let s of servers()">
-                <td><strong>{{ s.name }}</strong></td>
-                <td><code>{{ s.id }}</code></td>
+              <tr *ngFor="let server of servers()">
                 <td>
-                  <span class="health-badge online">● ONLINE</span>
+                  <strong>{{ server.name }}</strong>
                 </td>
-                <td>#{{ s.priority }}</td>
+                <td>
+                  <code class="code-badge">{{ server.id }}</code>
+                </td>
+                <td>
+                  <span class="priority-badge">#{{ server.priority }}</span>
+                </td>
+                <td>
+                  <span class="status-indicator" [class.status-online]="server.status === 'online'">
+                    ● {{ server.status | uppercase }}
+                  </span>
+                </td>
                 <td>
                   <button
                     type="button"
-                    class="btn-toggle"
-                    [class.disabled]="!s.enabled"
-                    (click)="toggleServer(s.id)"
+                    class="btn-toggle-server"
+                    [class.btn-server-active]="server.enabled"
+                    (click)="toggleServer(server.id)"
                   >
-                    {{ s.enabled ? 'Enabled' : 'Disabled' }}
+                    {{ server.enabled ? '✓ Enabled' : '✕ Disabled' }}
                   </button>
                 </td>
               </tr>
@@ -285,30 +439,47 @@
           <table class="data-table">
             <thead>
               <tr>
+                <th>Date</th>
                 <th>Title / Media</th>
-                <th>Reported Reason</th>
-                <th>Server</th>
                 <th>Episode / Season</th>
-                <th>Reported At</th>
+                <th>Failed Server</th>
+                <th>User Complaint</th>
+                <th>Reported By</th>
                 <th>Action</th>
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let r of brokenReports$ | async">
-                <td><strong>{{ r.title }}</strong></td>
-                <td><span class="reason-tag">{{ r.reason }}</span></td>
-                <td><code>{{ r.server }}</code></td>
-                <td>{{ r.season ? 'S' + r.season + ' E' + r.episode : 'Full Movie' }}</td>
-                <td class="cell-time">{{ r.dateStr }}</td>
+              <tr *ngFor="let report of brokenReports$ | async">
+                <td class="cell-time">{{ report.dateStr || formatDate(report.timestamp) }}</td>
                 <td>
-                  <button class="btn-resolve" (click)="deleteReport(r.id)">
-                    ✓ Mark Resolved
+                  <a [routerLink]="['/watch', report.mediaId]" class="path-link">
+                    {{ report.title }}
+                  </a>
+                </td>
+                <td>
+                  <span *ngIf="report.season">S{{ report.season }} E{{ report.episode }}</span>
+                  <span *ngIf="!report.season">—</span>
+                </td>
+                <td>
+                  <code class="code-badge">{{ report.server }}</code>
+                </td>
+                <td class="reason-cell">
+                  <span class="reason-chip">{{ report.reason }}</span>
+                </td>
+                <td>{{ report.reportedBy }}</td>
+                <td>
+                  <button
+                    type="button"
+                    class="btn-resolve"
+                    (click)="deleteReport(report.id)"
+                  >
+                    ✓ Resolve
                   </button>
                 </td>
               </tr>
               <tr *ngIf="(brokenReports$ | async)?.length === 0">
-                <td colspan="6" class="empty-state">
-                  🎉 No broken stream reports! All streams are reported healthy.
+                <td colspan="7" class="empty-state">
+                  No broken stream complaints submitted. All playback operating smoothly!
                 </td>
               </tr>
             </tbody>
@@ -317,39 +488,234 @@
       </div>
     </section>
 
-    <!-- TAB 5: SYSTEM CONFIG -->
+    <!-- TAB 5: SYSTEM & API CONFIG -->
     <section class="tab-panel" *ngIf="activeTab() === 'system'">
-      <div class="config-grid">
-        <div class="info-card">
-          <h2 class="card-heading">Firebase Project Credentials</h2>
-          <div class="config-row">
-            <span class="config-label">Project ID:</span>
-            <span class="config-val">streamflixbdd</span>
-          </div>
-          <div class="config-row">
-            <span class="config-label">Auth Domain:</span>
-            <span class="config-val">streamflixbdd.firebaseapp.com</span>
-          </div>
-          <div class="config-row">
-            <span class="config-label">Realtime Database:</span>
-            <span class="config-val">https://streamflixbdd-default-rtdb.firebaseio.com</span>
-          </div>
-          <div class="config-row">
-            <span class="config-label">Storage Bucket:</span>
-            <span class="config-val">streamflixbdd.firebasestorage.app</span>
-          </div>
+      <div class="system-grid">
+        <div class="system-card">
+          <h3>🛰️ Geolocation & IP Lookup Engine</h3>
+          <p class="sys-desc">Realtime IP resolution is active with automatic multi-tiered failover:</p>
+          <ul class="sys-list">
+            <li><strong>Primary Provider</strong>: <code>ipwho.is</code> (HTTPS + High accuracy ISP, ASN, Postal, Coordinates)</li>
+            <li><strong>Secondary Provider</strong>: <code>freeipapi.com</code> (HTTPS fallback)</li>
+            <li><strong>Tertiary Provider</strong>: <code>ipapi.co</code> (HTTPS fallback)</li>
+            <li><strong>Caching Strategy</strong>: Session storage cached per client to preserve quotas and accelerate navigation</li>
+          </ul>
         </div>
-
-        <div class="info-card">
-          <h2 class="card-heading">Quick Admin Passcode</h2>
-          <p class="card-desc">
-            Use this secret key on the <a routerLink="/login">Sign In</a> portal to grant administrator status to any account:
-          </p>
-          <div class="passcode-display">
-            <code>streamflix-admin-2026</code>
-          </div>
+        <div class="system-card">
+          <h3>💻 Client Telemetry Engine</h3>
+          <p class="sys-desc">Client environment is securely gathered on each page transition:</p>
+          <ul class="sys-list">
+            <li><strong>Hardware</strong>: CPU cores, system RAM, touchscreen support</li>
+            <li><strong>Display</strong>: Screen resolution, viewport dimensions, device pixel ratio, color depth</li>
+            <li><strong>Network</strong>: Connection type (4G/WiFi), downlink bandwidth, round-trip time</li>
+            <li><strong>Software</strong>: Operating system with major release, web browser and build</li>
+          </ul>
         </div>
       </div>
     </section>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════ -->
+  <!-- TELEMETRY DOSSIER MODAL (Full IP, ISP, Location, Device & Session View) -->
+  <!-- ═══════════════════════════════════════════════════════════════════════ -->
+  <div class="modal-backdrop" *ngIf="selectedLog() as log" (click)="closeLogDetails()">
+    <div class="modal-card dossier-modal" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <div class="modal-title-wrap">
+          <span class="dossier-badge">TELEMETRY DOSSIER</span>
+          <h2>
+            <span>{{ log.flag || '📍' }} </span>
+            <span *ngIf="log.city">{{ log.city }}, </span>
+            <span>{{ log.country || 'Global' }}</span>
+          </h2>
+          <span class="dossier-subtitle">Recorded on {{ log.dateStr || formatDate(log.timestamp) }}</span>
+        </div>
+        <button class="btn-close-modal" (click)="closeLogDetails()" aria-label="Close modal">✕</button>
+      </div>
+
+      <div class="dossier-grid">
+        <!-- 1. Network & IP Dossier -->
+        <div class="dossier-section">
+          <div class="section-title-row">
+            <span class="section-icon">🌐</span>
+            <h3>Network & IP Address</h3>
+          </div>
+          <div class="dossier-table">
+            <div class="dossier-row">
+              <span class="row-label">IP Address</span>
+              <span class="row-val">
+                <code class="code-hl">{{ log.ip }}</code>
+                <button class="btn-copy-mini" (click)="copyText(log.ip, 'IP')" title="Copy IP">📋</button>
+              </span>
+            </div>
+            <div class="dossier-row">
+              <span class="row-label">IP Protocol</span>
+              <span class="row-val"><span class="badge-mini">{{ log.ipType || 'IPv4' }}</span></span>
+            </div>
+            <div class="dossier-row">
+              <span class="row-label">ISP Provider</span>
+              <span class="row-val highlight-cyan">⚡ {{ log.isp || log.org || 'Standard ISP' }}</span>
+            </div>
+            <div class="dossier-row" *ngIf="log.org">
+              <span class="row-label">Organization</span>
+              <span class="row-val">{{ log.org }}</span>
+            </div>
+            <div class="dossier-row" *ngIf="log.asn">
+              <span class="row-label">Autonomous System (ASN)</span>
+              <span class="row-val"><code class="code-hl">{{ log.asn }}</code></span>
+            </div>
+            <div class="dossier-row" *ngIf="log.connectionType">
+              <span class="row-label">Network Type</span>
+              <span class="row-val">{{ log.connectionType }}</span>
+            </div>
+            <div class="dossier-row" *ngIf="log.downlink || log.rtt">
+              <span class="row-label">Speed & Latency</span>
+              <span class="row-val">{{ log.downlink || 'N/A' }} <span *ngIf="log.rtt">• {{ log.rtt }} RTT</span></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Precise Geolocation Dossier -->
+        <div class="dossier-section">
+          <div class="section-title-row">
+            <span class="section-icon">📍</span>
+            <h3>Precise Geolocation</h3>
+          </div>
+          <div class="dossier-table">
+            <div class="dossier-row">
+              <span class="row-label">Country</span>
+              <span class="row-val">{{ log.flag }} {{ log.country }} <span *ngIf="log.countryCode">({{ log.countryCode }})</span></span>
+            </div>
+            <div class="dossier-row" *ngIf="log.region">
+              <span class="row-label">Region / State</span>
+              <span class="row-val">{{ log.region }}</span>
+            </div>
+            <div class="dossier-row" *ngIf="log.city">
+              <span class="row-label">City</span>
+              <span class="row-val">{{ log.city }}</span>
+            </div>
+            <div class="dossier-row" *ngIf="log.postal">
+              <span class="row-label">Postal / ZIP Code</span>
+              <span class="row-val">📮 {{ log.postal }}</span>
+            </div>
+            <div class="dossier-row" *ngIf="log.latitude && log.longitude">
+              <span class="row-label">Coordinates</span>
+              <span class="row-val">
+                <a
+                  [href]="'https://www.google.com/maps?q=' + log.latitude + ',' + log.longitude"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="coord-link-lg"
+                >
+                  📍 {{ log.latitude }}, {{ log.longitude }} (Open Map ↗)
+                </a>
+              </span>
+            </div>
+            <div class="dossier-row" *ngIf="log.timezone">
+              <span class="row-label">Timezone</span>
+              <span class="row-val">🕒 {{ log.timezone }} <span *ngIf="log.timezoneOffset">({{ log.timezoneOffset }})</span></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. Device & Hardware Dossier -->
+        <div class="dossier-section">
+          <div class="section-title-row">
+            <span class="section-icon">💻</span>
+            <h3>Device & Environment</h3>
+          </div>
+          <div class="dossier-table">
+            <div class="dossier-row">
+              <span class="row-label">Device Category</span>
+              <span class="row-val"><span class="badge-mini">{{ log.device }}</span></span>
+            </div>
+            <div class="dossier-row" *ngIf="log.deviceModel">
+              <span class="row-label">Device Model</span>
+              <span class="row-val highlight-amber">{{ log.deviceModel }}</span>
+            </div>
+            <div class="dossier-row">
+              <span class="row-label">Operating System</span>
+              <span class="row-val">{{ log.os }} <span *ngIf="log.osVersion && log.osVersion !== 'Standard'">({{ log.osVersion }})</span></span>
+            </div>
+            <div class="dossier-row">
+              <span class="row-label">Web Browser</span>
+              <span class="row-val">{{ log.browser }}</span>
+            </div>
+            <div class="dossier-row" *ngIf="log.screenResolution">
+              <span class="row-label">Screen Resolution</span>
+              <span class="row-val">{{ log.screenResolution }} <span *ngIf="log.pixelRatio">({{ log.pixelRatio }}x)</span></span>
+            </div>
+            <div class="dossier-row" *ngIf="log.viewport">
+              <span class="row-label">Viewport Size</span>
+              <span class="row-val">{{ log.viewport }}</span>
+            </div>
+            <div class="dossier-row" *ngIf="log.cpuCores">
+              <span class="row-label">CPU Cores</span>
+              <span class="row-val">{{ log.cpuCores }} Cores</span>
+            </div>
+            <div class="dossier-row" *ngIf="log.ram">
+              <span class="row-label">RAM Memory</span>
+              <span class="row-val">{{ log.ram }}</span>
+            </div>
+            <div class="dossier-row" *ngIf="log.language">
+              <span class="row-label">System Language</span>
+              <span class="row-val">{{ log.language }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. User & Session Dossier -->
+        <div class="dossier-section">
+          <div class="section-title-row">
+            <span class="section-icon">👤</span>
+            <h3>User & Session</h3>
+          </div>
+          <div class="dossier-table">
+            <div class="dossier-row">
+              <span class="row-label">User Account</span>
+              <span class="row-val highlight-green">{{ log.userEmail || 'Anonymous Guest' }}</span>
+            </div>
+            <div class="dossier-row" *ngIf="log.userId">
+              <span class="row-label">User UID</span>
+              <span class="row-val"><code class="code-hl-sm">{{ log.userId }}</code></span>
+            </div>
+            <div class="dossier-row">
+              <span class="row-label">Visited Path</span>
+              <span class="row-val"><a [routerLink]="log.path" class="path-link" target="_blank">{{ log.path }}</a></span>
+            </div>
+            <div class="dossier-row" *ngIf="log.referrer">
+              <span class="row-label">Referrer</span>
+              <span class="row-val truncate-text" [title]="log.referrer">{{ log.referrer }}</span>
+            </div>
+            <div class="dossier-row" *ngIf="log.userAgent">
+              <span class="row-label">User Agent</span>
+              <span class="row-val ua-text" [title]="log.userAgent">{{ log.userAgent }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn-export-json"
+          (click)="copyText(log.ip, 'IP Address')"
+        >
+          📋 Copy IP Address
+        </button>
+        <a
+          *ngIf="log.latitude && log.longitude"
+          [href]="'https://www.google.com/maps?q=' + log.latitude + ',' + log.longitude"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="btn-maps-link"
+        >
+          🗺️ Open in Google Maps
+        </a>
+        <button type="button" class="btn-close-dossier" (click)="closeLogDetails()">
+          Done
+        </button>
+      </div>
+    </div>
   </div>
 </div>

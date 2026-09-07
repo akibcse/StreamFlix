@@ -351,6 +351,50 @@ import { AdminLog } from '../../../../models/media.model';
       padding: 2rem;
       font-size: 0.9rem;
     }
+
+    @media (max-width: 640px) {
+      .welcome-banner {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 1.25rem;
+        gap: 1rem;
+      }
+      .welcome-banner h1 {
+        font-size: 1.45rem;
+      }
+      .quick-buttons {
+        flex-direction: column;
+        width: 100%;
+      }
+      .btn-quick {
+        justify-content: center;
+      }
+      .metrics-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem;
+      }
+      .metric-card {
+        padding: 1rem 0.85rem;
+        gap: 0.75rem;
+      }
+      .metric-icon {
+        width: 40px;
+        height: 40px;
+        font-size: 1.2rem;
+      }
+      .metric-value {
+        font-size: 1.35rem;
+      }
+      .metric-trend {
+        display: none;
+      }
+      .modules-grid {
+        grid-template-columns: 1fr;
+      }
+      .dash-card {
+        padding: 1rem;
+      }
+    }
   `]
 })
 export class AdminDashboardComponent implements OnInit {

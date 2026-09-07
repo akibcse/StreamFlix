@@ -92,6 +92,18 @@ export class HomeComponent {
     rowElement.scrollBy({ left: scrollAmount, behavior: 'smooth' });
   }
 
+  /** Navigate directly to the player (play button / card click) */
+  navigateToWatch(item: MediaItem): void {
+    if (typeof window !== 'undefined') {
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+    }
+    const type = item.media_type || (item.first_air_date ? 'tv' : 'movie');
+    this.router.navigate([`/${type}`, item.id, 'watch']);
+  }
+
+  /** Navigate to media detail page (info button) */
   navigateToMedia(item: MediaItem): void {
     const type = item.media_type || (item.first_air_date ? 'tv' : 'movie');
     this.router.navigate([`/${type}`, item.id]);

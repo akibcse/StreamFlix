@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, inject, signal, computed } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, inject, signal, computed, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
@@ -32,22 +32,44 @@ export interface StreamServer {
   styleUrls: ['./movie-player.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class MoviePlayerComponent {
+export class MoviePlayerComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly movieService = inject(MovieService);
   private readonly activityService = inject(UserActivityService);
   private readonly auth = inject(AuthService);
   private readonly sanitizer = inject(DomSanitizer);
+  private readonly cdr = inject(ChangeDetectorRef);
+
+  constructor() {
+    this.route.queryParamMap.pipe(takeUntilDestroyed()).subscribe(params => {
+      const s = Number(params.get('season'));
+      const e = Number(params.get('episode'));
+      if (s && s > 0) {
+        this.selectedSeason.set(s);
+        this.seasonTrigger$.next(s);
+      }
+      if (e && e > 0) {
+        this.selectedEpisode.set(e);
+      }
+      this.cdr.markForCheck();
+    });
+    this.activityService.watchlist$.pipe(takeUntilDestroyed()).subscribe(() => {
+      this.cdr.markForCheck();
+    });
+    this.activityService.favorites$.pipe(takeUntilDestroyed()).subscribe(() => {
+      this.cdr.markForCheck();
+    });
+  }
 
   readonly servers: StreamServer[] = [
-    { id: 'vidsrc-me', name: 'VidSrc Prime (Server 1)' },
-    { id: 'vidsrc-cc', name: 'VidSrc CC (Server 2)' },
-    { id: 'multiembed', name: 'MultiEmbed (Server 3)' },
+    { id: 'multiembed', name: 'MultiEmbed (Server 1)' },
+    { id: 'vidsrc-me', name: 'VidSrc Prime (Server 2)' },
+    { id: 'vidsrc-cc', name: 'VidSrc CC (Server 3)' },
     { id: 'autoembed', name: 'AutoEmbed (Server 4)' }
   ];
 
-  readonly selectedServer = signal<string>('vidsrc-me');
+  readonly selectedServer = signal<string>('multiembed');
   readonly selectedSeason = signal<number>(1);
   readonly selectedEpisode = signal<number>(1);
   readonly showTrailerModal = signal<boolean>(false);
@@ -55,7 +77,6 @@ export class MoviePlayerComponent {
   readonly reportReason = signal<string>('Video buffering or not playing');
   readonly copyNotice = signal<string | null>(null);
 
-  // Review Form
   readonly newReviewRating = signal<number>(10);
   readonly newReviewText = signal<string>('');
   readonly isSubmittingReview = signal<boolean>(false);
@@ -107,7 +128,27 @@ export class MoviePlayerComponent {
   readonly watchlist$ = this.activityService.watchlist$;
   readonly favorites$ = this.activityService.favorites$;
 
-  // Embed URL Generator
+  ngOnInit(): void {
+    this.scrollToPlayer(false);
+  }
+
+  private scrollToPlayer(smooth = false): void {
+    if (typeof window !== 'undefined') {
+      window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: smooth ? 'smooth' : 'instant'
+      });
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+    }
+  }
+
+  private currentRawUrl = '';
+  private currentSafeUrl: SafeResourceUrl | null = null;
+  private lastRecordedKey = '';
+
+  // Embed URL Generator with stable caching and autoplay support
   getEmbedUrl(media: MediaDetails): SafeResourceUrl {
     const serverId = this.selectedServer();
     const isTv = !!media.seasons || !media.title;
@@ -119,57 +160,68 @@ export class MoviePlayerComponent {
     if (isTv) {
       switch (serverId) {
         case 'vidsrc-cc':
-          raw = `https://vidsrc.cc/v2/embed/tv/${media.id}/${s}/${e}`;
+          raw = `https://vidsrc.cc/v2/embed/tv/${media.id}/${s}/${e}?autoplay=1&autoPlay=true`;
           break;
         case 'multiembed':
-          raw = `https://multiembed.mov/?video_id=${media.id}&tmdb=1&s=${s}&e=${e}`;
+          raw = `https://multiembed.mov/?video_id=${media.id}&tmdb=1&s=${s}&e=${e}&autoplay=1&autoPlay=true`;
           break;
         case 'autoembed':
-          raw = `https://player.autoembed.cc/embed/tv/${media.id}/${s}/${e}`;
+          raw = `https://player.autoembed.cc/embed/tv/${media.id}/${s}/${e}?autoplay=1&autoPlay=true`;
           break;
         case 'vidsrc-me':
         default:
           raw = imdbId
-            ? `https://vidsrc.me/embed/tv?imdb=${imdbId}&season=${s}&episode=${e}`
-            : `https://vidsrc.me/embed/tv?tmdb=${media.id}&season=${s}&episode=${e}`;
+            ? `https://vidsrc.me/embed/tv?imdb=${imdbId}&season=${s}&episode=${e}&autoplay=1&autoPlay=true`
+            : `https://vidsrc.me/embed/tv?tmdb=${media.id}&season=${s}&episode=${e}&autoplay=1&autoPlay=true`;
           break;
       }
     } else {
       switch (serverId) {
         case 'vidsrc-cc':
-          raw = `https://vidsrc.cc/v2/embed/movie/${media.id}`;
+          raw = `https://vidsrc.cc/v2/embed/movie/${media.id}?autoplay=1&autoPlay=true`;
           break;
         case 'multiembed':
-          raw = `https://multiembed.mov/?video_id=${media.id}&tmdb=1`;
+          raw = `https://multiembed.mov/?video_id=${media.id}&tmdb=1&autoplay=1&autoPlay=true`;
           break;
         case 'autoembed':
-          raw = `https://player.autoembed.cc/embed/movie/${media.id}`;
+          raw = `https://player.autoembed.cc/embed/movie/${media.id}?autoplay=1&autoPlay=true`;
           break;
         case 'vidsrc-me':
         default:
           raw = imdbId
-            ? `https://vidsrc.me/embed/movie?imdb=${imdbId}`
-            : `https://vidsrc.me/embed/movie?tmdb=${media.id}`;
+            ? `https://vidsrc.me/embed/movie?imdb=${imdbId}&autoplay=1&autoPlay=true`
+            : `https://vidsrc.me/embed/movie?tmdb=${media.id}&autoplay=1&autoPlay=true`;
           break;
       }
     }
 
-    // Auto-record watch history
-    this.activityService.recordWatch({
-      id: media.id,
-      mediaType: isTv ? 'tv' : 'movie',
-      title: media.title || media.name || 'Untitled',
-      poster_path: media.poster_path,
-      backdrop_path: media.backdrop_path,
-      vote_average: media.vote_average,
-      release_date: media.release_date || media.first_air_date || '',
-      addedAt: Date.now(),
-      season: isTv ? s : undefined,
-      episode: isTv ? e : undefined,
-      watchedAt: Date.now()
-    });
+    if (raw === this.currentRawUrl && this.currentSafeUrl) {
+      return this.currentSafeUrl;
+    }
 
-    return this.sanitizer.bypassSecurityTrustResourceUrl(raw);
+    this.currentRawUrl = raw;
+    this.currentSafeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(raw);
+
+    // Auto-record watch history only when media/season/episode actually changes
+    const recordKey = `${media.id}_${s}_${e}`;
+    if (this.lastRecordedKey !== recordKey) {
+      this.lastRecordedKey = recordKey;
+      this.activityService.recordWatch({
+        id: media.id,
+        mediaType: isTv ? 'tv' : 'movie',
+        title: media.title || media.name || 'Untitled',
+        poster_path: media.poster_path,
+        backdrop_path: media.backdrop_path,
+        vote_average: media.vote_average,
+        release_date: media.release_date || media.first_air_date || '',
+        addedAt: Date.now(),
+        season: isTv ? s : undefined,
+        episode: isTv ? e : undefined,
+        watchedAt: Date.now()
+      });
+    }
+
+    return this.currentSafeUrl;
   }
 
   // Trailer URL
@@ -188,27 +240,32 @@ export class MoviePlayerComponent {
 
   selectServer(id: string): void {
     this.selectedServer.set(id);
+    this.scrollToPlayer(true);
   }
 
   selectSeason(seasonNumber: number): void {
     this.selectedSeason.set(seasonNumber);
     this.selectedEpisode.set(1);
     this.seasonTrigger$.next(seasonNumber);
+    this.scrollToPlayer(true);
   }
 
   selectEpisode(episodeNumber: number): void {
     this.selectedEpisode.set(episodeNumber);
+    this.scrollToPlayer(true);
   }
 
   nextEpisode(episodesCount: number): void {
     if (this.selectedEpisode() < episodesCount) {
       this.selectedEpisode.update(e => e + 1);
+      this.scrollToPlayer(true);
     }
   }
 
   prevEpisode(): void {
     if (this.selectedEpisode() > 1) {
       this.selectedEpisode.update(e => e - 1);
+      this.scrollToPlayer(true);
     }
   }
 
@@ -221,32 +278,48 @@ export class MoviePlayerComponent {
     return this.activityService.isInFavorites(mediaId);
   }
 
-  toggleWatchlist(media: MediaDetails): void {
+  async toggleWatchlist(media: MediaDetails): Promise<void> {
     const isTv = !!media.seasons || !media.title;
-    this.activityService.toggleWatchlist({
+    const added = await this.activityService.toggleWatchlist({
       id: media.id,
       mediaType: isTv ? 'tv' : 'movie',
+      media_type: isTv ? 'tv' : 'movie',
       title: media.title || media.name || 'Untitled',
+      name: media.name || media.title || 'Untitled',
       poster_path: media.poster_path,
       backdrop_path: media.backdrop_path,
       vote_average: media.vote_average,
       release_date: media.release_date || media.first_air_date || '',
       addedAt: Date.now()
     });
+    this.copyNotice.set(added ? '✓ Added to Watchlist!' : 'Removed from Watchlist');
+    setTimeout(() => {
+      this.copyNotice.set(null);
+      this.cdr.markForCheck();
+    }, 3000);
+    this.cdr.markForCheck();
   }
 
-  toggleFavorite(media: MediaDetails): void {
+  async toggleFavorite(media: MediaDetails): Promise<void> {
     const isTv = !!media.seasons || !media.title;
-    this.activityService.toggleFavorite({
+    const added = await this.activityService.toggleFavorite({
       id: media.id,
       mediaType: isTv ? 'tv' : 'movie',
+      media_type: isTv ? 'tv' : 'movie',
       title: media.title || media.name || 'Untitled',
+      name: media.name || media.title || 'Untitled',
       poster_path: media.poster_path,
       backdrop_path: media.backdrop_path,
       vote_average: media.vote_average,
       release_date: media.release_date || media.first_air_date || '',
       addedAt: Date.now()
     });
+    this.copyNotice.set(added ? '❤️ Added to Favorites!' : 'Removed from Favorites');
+    setTimeout(() => {
+      this.copyNotice.set(null);
+      this.cdr.markForCheck();
+    }, 3000);
+    this.cdr.markForCheck();
   }
 
   // Share Link
@@ -304,19 +377,6 @@ export class MoviePlayerComponent {
 
   getBackdropUrl(path: string | null): string {
     return this.movieService.getBackdropUrl(path, 'w1280');
-  }
-
-  // Click-shield: ad scripts hijack the first pointer event on the iframe.
-  // The transparent overlay div receives that click instead, preventing the redirect.
-  // After the first tap we fade and remove the shield so native player controls work.
-  onPlayerShieldClick(event: MouseEvent): void {
-    event.preventDefault();
-    event.stopPropagation();
-    const shield = event.currentTarget as HTMLElement;
-    shield.style.opacity = '0';
-    shield.style.pointerEvents = 'none';
-    // Fully remove from flow after fade completes
-    setTimeout(() => { shield.style.display = 'none'; }, 450);
   }
 
   goBack(): void {

@@ -68,6 +68,8 @@ export class AuthService {
         const emailLower = fbUser.email?.toLowerCase() || '';
         const isAdminConfigured = environment.adminEmails?.map(e => e.toLowerCase()).includes(emailLower);
 
+        const telemetry = this.getClientTelemetry();
+
         if (snapshot.exists()) {
           const data = snapshot.val();
           const role: 'admin' | 'user' = (isAdminConfigured || data.role === 'admin') ? 'admin' : 'user';
@@ -79,14 +81,16 @@ export class AuthService {
             photoURL: fbUser.photoURL || null,
             role,
             createdAt: data.createdAt || now,
-            lastLoginAt: now
+            lastLoginAt: now,
+            ...telemetry
           };
 
           await update(userRef, {
             lastLoginAt: now,
             role: appUser.role,
             displayName: appUser.displayName,
-            email: appUser.email
+            email: appUser.email,
+            ...telemetry
           });
         } else {
           appUser = {
@@ -96,7 +100,8 @@ export class AuthService {
             photoURL: fbUser.photoURL || null,
             role: isAdminConfigured ? 'admin' : 'user',
             createdAt: now,
-            lastLoginAt: now
+            lastLoginAt: now,
+            ...telemetry
           };
 
           await set(userRef, appUser);
@@ -124,6 +129,45 @@ export class AuthService {
     });
   }
 
+  private getClientTelemetry(): Partial<AppUser> {
+    let geo: any = null;
+    try {
+      const stored = sessionStorage.getItem('streamflix_cached_geo_v2');
+      if (stored) geo = JSON.parse(stored);
+    } catch { /* ignore */ }
+
+    const ua = typeof navigator !== 'undefined' ? navigator.userAgent : '';
+    const isMobile = /Mobile|Android|iPhone/i.test(ua);
+    const isTablet = /iPad|Tablet/i.test(ua);
+    const dev = isTablet ? 'Tablet' : isMobile ? 'Mobile' : 'Desktop';
+    const os = /Win/i.test(ua) ? 'Windows' : /Mac/i.test(ua) ? 'macOS' : /Android/i.test(ua) ? 'Android' : /iPhone|iPad/i.test(ua) ? 'iOS' : 'Linux';
+    const browser = /Edg/i.test(ua) ? 'Edge' : /Chrome/i.test(ua) ? 'Chrome' : /Firefox/i.test(ua) ? 'Firefox' : /Safari/i.test(ua) ? 'Safari' : 'Browser';
+    const screen = typeof window !== 'undefined' ? `${window.screen.width}×${window.screen.height}` : undefined;
+
+    const res: Partial<AppUser> = {
+      lastDevice: dev,
+      lastOs: os,
+      lastBrowser: browser,
+      lastScreen: screen
+    };
+
+    if (geo?.ip && geo.ip !== 'Detecting...') res.lastIp = geo.ip;
+    if (geo?.isp || geo?.org) res.lastIsp = geo.isp || geo.org;
+    if (geo?.org) res.lastOrg = geo.org;
+    if (geo?.asn) res.lastAsn = geo.asn;
+    if (geo?.city) res.lastCity = geo.city;
+    if (geo?.region) res.lastRegion = geo.region;
+    if (geo?.country) res.lastCountry = geo.country;
+    if (geo?.countryCode) res.lastCountryCode = geo.countryCode;
+    if (geo?.postal) res.lastPostal = geo.postal;
+    if (geo?.latitude) res.lastLat = geo.latitude;
+    if (geo?.longitude) res.lastLon = geo.longitude;
+    if (geo?.timezone) res.lastTimezone = geo.timezone;
+    if (geo?.flag) res.lastFlag = geo.flag;
+
+    return res;
+  }
+
   async register(email: string, password: string, displayName: string): Promise<AppUser> {
     const cred = await createUserWithEmailAndPassword(this.firebase.auth, email, password);
     if (displayName) {
@@ -132,8 +176,8 @@ export class AuthService {
 
     const now = Date.now();
     const isAdminConfigured = environment.adminEmails?.includes(email.toLowerCase());
-
     const role: 'admin' | 'user' = isAdminConfigured ? 'admin' : 'user';
+    const telemetry = this.getClientTelemetry();
 
     const user: AppUser = {
       uid: cred.user.uid,
@@ -142,7 +186,8 @@ export class AuthService {
       photoURL: null,
       role,
       createdAt: now,
-      lastLoginAt: now
+      lastLoginAt: now,
+      ...telemetry
     };
 
     await set(ref(this.firebase.db, `users/${user.uid}`), user);

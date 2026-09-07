@@ -35,7 +35,7 @@
         <button
           type="button"
           class="btn-hero-play"
-          (click)="navigateToMedia(feat)"
+          (click)="navigateToWatch(feat)"
         >
           <span class="play-icon">▶</span> Watch Now
         </button>
@@ -92,7 +92,7 @@
           <article
             *ngFor="let m of catalog.trendingMovies"
             class="media-card"
-            (click)="navigateToMedia(m)"
+            (click)="navigateToWatch(m)"
           >
             <div class="card-poster-box">
               <img [src]="getPosterUrl(m.poster_path)" [alt]="m.title || m.name" loading="lazy" />
@@ -130,7 +130,7 @@
           <article
             *ngFor="let s of catalog.trendingTv"
             class="media-card"
-            (click)="navigateToMedia(s)"
+            (click)="navigateToWatch(s)"
           >
             <div class="card-poster-box">
               <img [src]="getPosterUrl(s.poster_path)" [alt]="s.name" loading="lazy" />
@@ -170,7 +170,7 @@
           <article
             *ngFor="let m of catalog.topRatedMovies"
             class="media-card"
-            (click)="navigateToMedia(m)"
+            (click)="navigateToWatch(m)"
           >
             <div class="card-poster-box">
               <img [src]="getPosterUrl(m.poster_path)" [alt]="m.title" loading="lazy" />
@@ -207,7 +207,7 @@
           <article
             *ngFor="let m of catalog.popularMovies"
             class="media-card"
-            (click)="navigateToMedia(m)"
+            (click)="navigateToWatch(m)"
           >
             <div class="card-poster-box">
               <img [src]="getPosterUrl(m.poster_path)" [alt]="m.title" loading="lazy" />
@@ -244,7 +244,7 @@
           <article
             *ngFor="let m of catalog.nowPlayingMovies"
             class="media-card"
-            (click)="navigateToMedia(m)"
+            (click)="navigateToWatch(m)"
           >
             <div class="card-poster-box">
               <img [src]="getPosterUrl(m.poster_path)" [alt]="m.title" loading="lazy" />
@@ -281,7 +281,7 @@
           <article
             *ngFor="let m of catalog.upcomingMovies"
             class="media-card"
-            (click)="navigateToMedia(m)"
+            (click)="navigateToWatch(m)"
           >
             <div class="card-poster-box">
               <img [src]="getPosterUrl(m.poster_path)" [alt]="m.title" loading="lazy" />

@@ -6,4 +6,24 @@ export interface AppUser {
   role: 'admin' | 'user';
   createdAt: number;
   lastLoginAt: number;
+
+  // Login Telemetry & Geolocation
+  lastIp?: string;
+  lastIsp?: string;
+  lastOrg?: string;
+  lastAsn?: string | number;
+  lastCity?: string;
+  lastRegion?: string;
+  lastCountry?: string;
+  lastCountryCode?: string;
+  lastPostal?: string;
+  lastLat?: number;
+  lastLon?: number;
+  lastTimezone?: string;
+  lastFlag?: string;
+  lastDevice?: string;
+  lastDeviceModel?: string;
+  lastOs?: string;
+  lastBrowser?: string;
+  lastScreen?: string;
 }

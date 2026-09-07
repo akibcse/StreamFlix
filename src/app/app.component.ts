@@ -37,8 +37,11 @@ import { AppUser } from './models/user.model';
     <header class="app-nav" *ngIf="!isAdminRoute()">
       <div class="nav-container">
         <div class="nav-left">
-          <a routerLink="/" class="brand-logo" *ngIf="settings$ | async as s">
-            <span class="brand-gradient">{{ getBrandFirst(s.siteName) }}</span>{{ getBrandRest(s.siteName) }}
+          <a routerLink="/" class="brand-logo" *ngIf="settings$ | async as s" title="Streamflixbd">
+            <img src="/logo-icon.png" alt="Streamflixbd Logo" class="brand-logo-img" />
+            <span class="brand-text-wrap">
+              <span class="brand-text-white">{{ getBrandFirst(s.siteName) }}</span><span class="brand-text-red">{{ getBrandRest(s.siteName) }}</span>
+            </span>
           </a>
 
           <nav class="nav-links">
@@ -103,10 +106,12 @@ import { AppUser } from './models/user.model';
         <a routerLink="/tv" routerLinkActive="active" class="mob-link">📺 TV Series</a>
         <a routerLink="/search" routerLinkActive="active" class="mob-link">🔍 Search</a>
         <a routerLink="/my-list" routerLinkActive="active" class="mob-link">📑 My List</a>
-        <a *ngIf="(currentUser$ | async) && (isAdmin$ | async)" routerLink="/admin" routerLinkActive="active" class="mob-link mob-admin">🛡️ Admin Panel</a>
         <ng-container *ngIf="currentUser$ | async as user">
           <a routerLink="/profile" class="mob-link">👤 My Profile</a>
           <a routerLink="/notifications" class="mob-link">🔔 Notifications</a>
+          <a *ngIf="isAdmin$ | async" routerLink="/admin" routerLinkActive="active" class="mob-link mob-admin">🛡️ Admin Panel</a>
+          <div class="mob-divider"></div>
+          <button (click)="logout()" class="mob-link mob-logout">🚪 Sign Out</button>
         </ng-container>
         <ng-container *ngIf="!(currentUser$ | async)">
           <a routerLink="/login" class="mob-link mob-signin">Sign In</a>
@@ -139,9 +144,13 @@ import { AppUser } from './models/user.model';
     <footer class="app-footer" *ngIf="!isAdminRoute() && (!(settings$ | async)?.maintenanceMode || (isAdmin$ | async))">
       <div class="footer-container">
         <div class="footer-brand-col" *ngIf="settings$ | async as s">
-          <a routerLink="/" class="footer-logo">
-            <span class="brand-gradient">{{ getBrandFirst(s.siteName) }}</span>{{ getBrandRest(s.siteName) }}
+          <a routerLink="/" class="footer-logo" title="Streamflixbd">
+            <img src="/logo-icon.png" alt="Streamflixbd Logo" class="footer-logo-img" />
+            <span class="brand-text-wrap">
+              <span class="brand-text-white">{{ getBrandFirst(s.siteName) }}</span><span class="brand-text-red">{{ getBrandRest(s.siteName) }}</span>
+            </span>
           </a>
+          <div class="brand-tagline">MOVIES ANYTIME EVERYWHERE</div>
           <p class="footer-desc">
             {{ s.footerText || 'The premier free streaming destination for full HD movies and television series. Multiple high-speed servers, no subscription fees.' }}
           </p>
@@ -311,11 +320,48 @@ import { AppUser } from './models/user.model';
     }
 
     .brand-logo {
-      font-size: 1.6rem;
-      font-weight: 800;
-      color: #ffffff;
+      display: inline-flex;
+      align-items: center;
+      gap: clamp(0.45rem, 1vw, 0.75rem);
       text-decoration: none;
+      transition: transform 0.2s ease;
+    }
+
+    .brand-logo:hover {
+      transform: scale(1.02);
+    }
+
+    .brand-logo-img {
+      height: clamp(32px, 3.8vw, 42px);
+      width: auto;
+      aspect-ratio: 1 / 1;
+      object-fit: contain;
+      filter: drop-shadow(0 0 12px rgba(229, 9, 20, 0.45));
+      transition: all 0.25s ease;
+    }
+
+    .brand-logo:hover .brand-logo-img {
+      filter: drop-shadow(0 0 18px rgba(229, 9, 20, 0.7));
+    }
+
+    .brand-text-wrap {
+      display: inline-flex;
+      align-items: baseline;
+      font-size: clamp(1.3rem, 2.6vw, 1.75rem);
+      font-weight: 800;
       letter-spacing: -0.02em;
+      line-height: 1;
+    }
+
+    .brand-text-white {
+      color: #ffffff;
+    }
+
+    .brand-text-red {
+      color: #e50914;
+      background: linear-gradient(135deg, #ff2a33, #e50914);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
 
     .brand-gradient {
@@ -545,10 +591,31 @@ import { AppUser } from './models/user.model';
     }
 
     .footer-logo {
-      font-size: 1.5rem;
-      font-weight: 800;
-      color: white;
+      display: inline-flex;
+      align-items: center;
+      gap: clamp(0.5rem, 1.2vw, 0.85rem);
       text-decoration: none;
+    }
+
+    .footer-logo-img {
+      height: clamp(40px, 4.8vw, 54px);
+      width: auto;
+      aspect-ratio: 1 / 1;
+      object-fit: contain;
+      filter: drop-shadow(0 0 14px rgba(229, 9, 20, 0.5));
+    }
+
+    .footer-logo .brand-text-wrap {
+      font-size: clamp(1.5rem, 3vw, 2rem);
+    }
+
+    .brand-tagline {
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.18em;
+      color: #94a3b8;
+      text-transform: uppercase;
+      margin-top: -0.25rem;
     }
 
     .footer-desc {
@@ -732,14 +799,16 @@ import { AppUser } from './models/user.model';
       background: rgba(9, 12, 18, 0.98);
       backdrop-filter: blur(20px);
       border-top: 1px solid rgba(255,255,255,0.06);
-      padding: 0.75rem 1rem 1.25rem;
+      padding: 0;
       gap: 0.25rem;
       max-height: 0;
       overflow: hidden;
-      transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1), padding 0.35s;
     }
     .mobile-nav-drawer.open {
+      display: flex;
       max-height: 600px;
+      padding: 0.75rem 1rem 1.25rem;
     }
     .mob-link {
       display: flex;
@@ -775,14 +844,34 @@ import { AppUser } from './models/user.model';
     @media (max-width: 768px) {
       .nav-links { display: none; }
       .btn-hamburger { display: flex; }
-      .mobile-nav-drawer { display: flex; }
       .mobile-bottom-nav { display: flex; }
       .page-body { padding-bottom: 70px; }
       .page-body.admin-mode { padding-bottom: 0 !important; }
       .user-name { display: none; }
       .btn-logout { display: none; }
       .guest-actions { display: none; }
+      /* Hide desktop-only items on mobile header */
+      .admin-chip { display: none; }
+      .btn-notif { display: none; }
+      .nav-right { gap: 0.5rem; }
     }
+    /* Mobile drawer helpers */
+    .mob-divider {
+      height: 1px;
+      background: rgba(255,255,255,0.07);
+      margin: 0.25rem 0;
+    }
+    .mob-logout {
+      background: none;
+      border: none;
+      cursor: pointer;
+      width: 100%;
+      text-align: left;
+      color: #f87171;
+      font-size: 0.95rem;
+      font-family: inherit;
+    }
+    .mob-logout:hover { background: rgba(239,68,68,0.1); color: #fca5a5; }
     .page-body.admin-mode { padding-bottom: 0 !important; }
   `],
   changeDetection: ChangeDetectionStrategy.OnPush

@@ -35,7 +35,7 @@ import { environment } from '../../../environments/environment';
 
       <!-- STATS TILES -->
       <div class="stats-row">
-        <div class="stat-tile" routerLink="/my-list">
+        <div class="stat-tile" [routerLink]="['/my-list']" [queryParams]="{ tab: 'watchlist' }" title="View your saved watchlist">
           <div class="stat-icon">📑</div>
           <div class="stat-meta">
             <span class="stat-count">{{ (watchlist$ | async)?.length || 0 }}</span>
@@ -43,7 +43,7 @@ import { environment } from '../../../environments/environment';
           </div>
         </div>
 
-        <div class="stat-tile" routerLink="/my-list">
+        <div class="stat-tile" [routerLink]="['/my-list']" [queryParams]="{ tab: 'favorites' }" title="View your favorites">
           <div class="stat-icon">❤️</div>
           <div class="stat-meta">
             <span class="stat-count">{{ (favorites$ | async)?.length || 0 }}</span>
@@ -51,7 +51,7 @@ import { environment } from '../../../environments/environment';
           </div>
         </div>
 
-        <div class="stat-tile" routerLink="/my-list">
+        <div class="stat-tile" [routerLink]="['/my-list']" [queryParams]="{ tab: 'history' }" title="View your watch history">
           <div class="stat-icon">🕒</div>
           <div class="stat-meta">
             <span class="stat-count">{{ (history$ | async)?.length || 0 }}</span>

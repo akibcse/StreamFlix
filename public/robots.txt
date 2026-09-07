@@ -1,0 +1,17 @@
+# https://www.robotstxt.org/robotstxt.html
+User-agent: *
+Allow: /
+
+# Disallow private, auth, and administrative routes
+Disallow: /admin
+Disallow: /admin/*
+Disallow: /profile
+Disallow: /my-list
+Disallow: /notifications
+Disallow: /forgot-password
+
+# Search crawling control
+Disallow: /search?*
+
+# Direct Google and search engines to sitemap
+Sitemap: https://ott.akibhasan.online/sitemap.xml

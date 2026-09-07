@@ -38,6 +38,8 @@ import { AdminLog } from '../../../../models/media.model';
               <th>Action</th>
               <th>Target</th>
               <th>Administrator</th>
+              <th>IP & Location</th>
+              <th>Device</th>
               <th>Details</th>
             </tr>
           </thead>
@@ -49,6 +51,18 @@ import { AdminLog } from '../../../../models/media.model';
               </td>
               <td><strong>{{ log.target }}</strong></td>
               <td class="admin-cell">{{ log.adminEmail }}</td>
+              <td>
+                <div class="ip-loc-cell" *ngIf="log.ip || log.location; else noAuditIp">
+                  <span class="log-ip" *ngIf="log.ip">{{ log.ip }}</span>
+                  <span class="log-loc" *ngIf="log.location">📍 {{ log.location }}</span>
+                  <span class="log-isp" *ngIf="log.isp">⚡ {{ log.isp }}</span>
+                </div>
+                <ng-template #noAuditIp><span class="dash">—</span></ng-template>
+              </td>
+              <td>
+                <span class="log-device" *ngIf="log.device; else noAuditDev">💻 {{ log.device }}</span>
+                <ng-template #noAuditDev><span class="dash">—</span></ng-template>
+              </td>
               <td class="details-cell">{{ log.details || '—' }}</td>
             </tr>
           </tbody>
@@ -91,6 +105,12 @@ import { AdminLog } from '../../../../models/media.model';
     .time-cell { font-size: 0.8rem; color: #94a3b8; white-space: nowrap; }
     .action-tag { background: rgba(99, 102, 241, 0.2); color: #a5b4fc; padding: 2px 7px; border-radius: 4px; font-family: monospace; font-size: 0.8rem; }
     .admin-cell { color: #cbd5e1; font-size: 0.85rem; }
+    .ip-loc-cell { display: flex; flex-direction: column; gap: 2px; }
+    .log-ip { font-family: monospace; font-size: 0.8rem; color: #ffffff; }
+    .log-loc { font-size: 0.76rem; color: #94a3b8; }
+    .log-isp { font-size: 0.72rem; color: #38bdf8; }
+    .log-device { font-size: 0.78rem; color: #cbd5e1; }
+    .dash { color: #64748b; }
     .details-cell { font-size: 0.8rem; color: #94a3b8; max-width: 250px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .empty-state { text-align: center; padding: 3rem; color: #64748b; }
   `]
@@ -105,7 +125,14 @@ export class AdminLogsComponent implements OnInit {
     if (!this.searchFilter.trim()) return this.logs;
     const q = this.searchFilter.toLowerCase();
     return this.logs.filter(
-      l => (l.action || '').toLowerCase().includes(q) || (l.target || '').toLowerCase().includes(q) || (l.adminEmail || '').toLowerCase().includes(q)
+      l =>
+        (l.action || '').toLowerCase().includes(q) ||
+        (l.target || '').toLowerCase().includes(q) ||
+        (l.adminEmail || '').toLowerCase().includes(q) ||
+        (l.ip || '').toLowerCase().includes(q) ||
+        (l.location || '').toLowerCase().includes(q) ||
+        (l.isp || '').toLowerCase().includes(q) ||
+        (l.device || '').toLowerCase().includes(q)
     );
   }
 
