@@ -1,8 +1,9 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { getDatabase, ref, get, remove } from 'firebase/database';
 import { FirebaseService } from '../../../../services/firebase.service';
+import { AdminMediaService } from '../../../../services/admin-media.service';
 import { UserReview } from '../../../../models/media.model';
 
 @Component({
@@ -95,6 +96,8 @@ import { UserReview } from '../../../../models/media.model';
 })
 export class AdminReviewsComponent implements OnInit {
   private readonly firebase = inject(FirebaseService);
+  private readonly cdr = inject(ChangeDetectorRef);
+  private readonly adminMedia = inject(AdminMediaService);
 
   reviews: (UserReview & { id: string })[] = [];
   searchFilter = '';
@@ -121,13 +124,16 @@ export class AdminReviewsComponent implements OnInit {
     });
     all.sort((a, b) => b.createdAt - a.createdAt);
     this.reviews = all;
+    this.cdr.detectChanges();
   }
 
   async deleteReview(r: UserReview & { id: string }): Promise<void> {
     if (!confirm('Permanently remove this review?')) return;
     await remove(ref(this.firebase.db, `media_reviews/${r.mediaId}/${r.id}`));
     this.reviews = this.reviews.filter(item => item.id !== r.id);
+    await this.adminMedia.logAction('delete_review', `${r.mediaType}:${r.mediaId}`, `By: ${r.userEmail || r.userName}`);
     this.successMsg = 'Review deleted successfully.';
-    setTimeout(() => (this.successMsg = ''), 3000);
+    this.cdr.detectChanges();
+    setTimeout(() => { this.successMsg = ''; this.cdr.detectChanges(); }, 3000);
   }
 }

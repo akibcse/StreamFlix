@@ -1,4 +1,4 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable, inject, NgZone } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { ref, push, onValue, off, remove } from 'firebase/database';
@@ -57,6 +57,7 @@ export class VisitorLogService {
   private readonly http = inject(HttpClient);
   private readonly firebase = inject(FirebaseService);
   private readonly auth = inject(AuthService);
+  private readonly zone = inject(NgZone);
 
   private cachedGeo: DetailedGeoData | null = null;
   private isTrackingStarted = false;
@@ -72,6 +73,10 @@ export class VisitorLogService {
 
     // Prefetch client IP / geo info immediately
     this.getGeoInfo().catch(() => {});
+
+    // Record initial visit immediately on app startup
+    const initialPath = this.router.url || window.location.pathname || '/';
+    this.recordVisit(initialPath).catch(() => {});
 
     // Listen to route changes
     this.router.events
@@ -114,6 +119,40 @@ export class VisitorLogService {
     }
 
     this.geoFetchPromise = (async () => {
+      // 0. Server-side lookup via /api/geo (Vercel) — resolves the REAL public IP
+      //    from proxy headers, which is far more accurate than client-side APIs.
+      try {
+        const res = await firstValueFrom(
+          this.http.get<any>('/api/geo').pipe(
+            catchError(() => of(null))
+          )
+        );
+
+        if (res && res.success !== false && res.ip && res.ip !== 'Unknown IP') {
+          const geo: DetailedGeoData = {
+            ip: res.ip,
+            ipType: res.ipType || (res.ip.includes(':') ? 'IPv6' : 'IPv4'),
+            city: res.city || '',
+            region: res.region || '',
+            country: res.country || 'Global',
+            countryCode: res.countryCode || '',
+            postal: res.postal || '',
+            latitude: res.latitude,
+            longitude: res.longitude,
+            timezone: res.timezone || Intl.DateTimeFormat().resolvedOptions().timeZone,
+            timezoneOffset: res.timezoneOffset || '',
+            isp: res.isp || '',
+            org: res.org || '',
+            asn: res.asn || '',
+            flag: res.flag || this.getFlagEmoji(res.countryCode)
+          };
+          this.saveCachedGeo(geo);
+          return geo;
+        }
+      } catch {
+        /* proceed to client-side fallbacks */
+      }
+
       // 1. Try ipwho.is (CORS enabled, HTTPS, rich ISP & ASN data)
       try {
         const res = await firstValueFrom(
@@ -459,6 +498,11 @@ export class VisitorLogService {
   private async recordVisit(path: string): Promise<void> {
     try {
       const user = this.auth.currentUser;
+
+      // Skip authenticated admin sessions so the visitor log reflects real visitors,
+      // not the site owner's own browsing (which floods the log with one IP/location).
+      if (user?.role === 'admin') return;
+
       const geo = await this.getGeoInfo();
       const dev = this.getDeviceInfo();
 
@@ -502,19 +546,27 @@ export class VisitorLogService {
         colorDepth: dev.colorDepth,
         orientation: dev.orientation,
         cpuCores: dev.cpuCores,
-        ram: dev.ram,
-        language: dev.language,
-        touchSupport: dev.touchSupport,
+        ram: dev.ram || '',
+        language: dev.language || 'en',
+        touchSupport: !!dev.touchSupport,
 
         // User & Session Identity
         userId: user?.uid || null,
         userEmail: user?.email || 'Anonymous Visitor',
-        userAgent: dev.userAgent,
-        referrer: document.referrer || undefined
+        userAgent: dev.userAgent || '',
+        referrer: document.referrer || ''
       };
 
+      // Strip any undefined keys to guarantee Firebase RTDB compatibility
+      const cleanLog: Record<string, any> = {};
+      for (const [key, value] of Object.entries(log)) {
+        if (value !== undefined) {
+          cleanLog[key] = value;
+        }
+      }
+
       const logsRef = ref(this.firebase.db, 'visitor_logs');
-      await push(logsRef, log);
+      await push(logsRef, cleanLog);
     } catch (err) {
       console.warn('Visitor tracking skipped or failed:', err);
     }
@@ -530,19 +582,24 @@ export class VisitorLogService {
       const listener = onValue(
         logsRef,
         snapshot => {
-          if (snapshot.exists()) {
-            const data = snapshot.val();
-            const logs: VisitorLog[] = Object.entries(data).map(([id, val]) => ({
-              ...(val as VisitorLog),
-              id
-            }));
-            logs.sort((a, b) => b.timestamp - a.timestamp);
-            observer.next(logs);
-          } else {
-            observer.next([]);
-          }
+          this.zone.run(() => {
+            if (snapshot.exists()) {
+              const data = snapshot.val();
+              const logs: VisitorLog[] = Object.entries(data).map(([id, val]) => ({
+                ...(val as VisitorLog),
+                id
+              }));
+              logs.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+              observer.next(logs);
+            } else {
+              observer.next([]);
+            }
+          });
         },
-        error => observer.error(error)
+        error => {
+          console.warn('Visitor logs retrieval warning:', error);
+          this.zone.run(() => observer.next([]));
+        }
       );
 
       return () => off(logsRef, 'value', listener);
@@ -555,46 +612,56 @@ export class VisitorLogService {
       const listener = onValue(
         logsRef,
         snapshot => {
-          if (snapshot.exists()) {
-            const data = snapshot.val();
-            const logs: VisitorLog[] = Object.entries(data).map(([id, val]) => ({
-              ...(val as VisitorLog),
-              id
-            }));
-            logs.sort((a, b) => b.timestamp - a.timestamp);
+          this.zone.run(() => {
+            if (snapshot.exists()) {
+              const data = snapshot.val();
+              const logs: VisitorLog[] = Object.entries(data).map(([id, val]) => ({
+                ...(val as VisitorLog),
+                id
+              }));
+              logs.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
 
-            const totalVisits = logs.length;
-            const uniqueIps = new Set(logs.map(l => l.ip).filter(ip => ip && ip !== 'Detecting...' && ip !== 'Unknown IP'));
-            const uniqueVisitors = uniqueIps.size || totalVisits;
+              const totalVisits = logs.length;
+              const uniqueIps = new Set(logs.map(l => l.ip).filter(ip => ip && ip !== 'Detecting...' && ip !== 'Unknown IP'));
+              const uniqueVisitors = uniqueIps.size || totalVisits;
 
-            // Compute top pages
-            const pageCounts: Record<string, number> = {};
-            for (const log of logs) {
-              const p = log.path.split('?')[0];
-              pageCounts[p] = (pageCounts[p] || 0) + 1;
+              // Compute top pages
+              const pageCounts: Record<string, number> = {};
+              for (const log of logs) {
+                const p = (log.path || '/').split('?')[0];
+                pageCounts[p] = (pageCounts[p] || 0) + 1;
+              }
+
+              const topPages = Object.entries(pageCounts)
+                .map(([path, count]) => ({ path, count }))
+                .sort((a, b) => b.count - a.count)
+                .slice(0, 5);
+
+              observer.next({
+                totalVisits,
+                uniqueVisitors,
+                topPages,
+                recentLogs: logs.slice(0, 100)
+              });
+            } else {
+              observer.next({
+                totalVisits: 0,
+                uniqueVisitors: 0,
+                topPages: [],
+                recentLogs: []
+              });
             }
-
-            const topPages = Object.entries(pageCounts)
-              .map(([path, count]) => ({ path, count }))
-              .sort((a, b) => b.count - a.count)
-              .slice(0, 5);
-
-            observer.next({
-              totalVisits,
-              uniqueVisitors,
-              topPages,
-              recentLogs: logs.slice(0, 100)
-            });
-          } else {
-            observer.next({
-              totalVisits: 0,
-              uniqueVisitors: 0,
-              topPages: [],
-              recentLogs: []
-            });
-          }
+          });
         },
-        error => observer.error(error)
+        error => {
+          console.warn('Visitor stats retrieval warning:', error);
+          this.zone.run(() => observer.next({
+            totalVisits: 0,
+            uniqueVisitors: 0,
+            topPages: [],
+            recentLogs: []
+          }));
+        }
       );
 
       return () => off(logsRef, 'value', listener);

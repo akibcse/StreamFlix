@@ -1,88 +1,125 @@
-import { Component, Input, OnInit, inject, signal } from '@angular/core';
+import {
+  Component, Input, OnInit, OnDestroy, OnChanges,
+  inject, ElementRef, ViewChildren, QueryList,
+  AfterViewInit, ChangeDetectorRef, ChangeDetectionStrategy
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { SettingsService } from '../../services/settings.service';
 import { AdConfig } from '../../models/media.model';
+import { Subscription } from 'rxjs';
 
+/**
+ * AdBannerComponent
+ *
+ * Renders all active ads for a given placement position.
+ * Injects <script> tags properly using DOM APIs so they actually execute.
+ *
+ * Usage:
+ *   <app-ad-banner position="player_bottom"></app-ad-banner>
+ *   <app-ad-banner position="sidebar"></app-ad-banner>
+ */
 @Component({
   selector: 'app-ad-banner',
   standalone: true,
   imports: [CommonModule],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="ad-banner-container" *ngIf="activeAds.length > 0" [attr.data-position]="position">
-      <div class="ad-label">
-        <span>SPONSORED</span>
-      </div>
-      <div class="ad-slots">
-        <div *ngFor="let ad of activeAds" class="ad-slot" [innerHTML]="sanitizeHtml(ad.htmlCode)"></div>
-      </div>
+    <div class="ad-banner-wrap" *ngIf="activeAds.length > 0">
+      <span class="ad-label">AD</span>
+      <div
+        *ngFor="let ad of activeAds; let i = index"
+        class="ad-slot"
+        [attr.data-ad-id]="ad.id"
+        #adSlot
+      ></div>
     </div>
   `,
   styles: [`
-    .ad-banner-container {
-      margin: 1.25rem 0;
-      padding: 0.75rem;
-      background: rgba(15, 23, 42, 0.45);
-      border: 1px dashed rgba(255, 255, 255, 0.12);
-      border-radius: 12px;
+    .ad-banner-wrap {
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
       gap: 0.5rem;
-      min-height: 80px;
+      margin: 0.75rem 0;
       overflow: hidden;
       position: relative;
     }
     .ad-label {
-      align-self: flex-end;
-      font-size: 0.65rem;
-      letter-spacing: 0.05em;
-      color: #64748b;
+      font-size: 0.6rem;
+      letter-spacing: 0.08em;
+      color: #475569;
       font-weight: 700;
       text-transform: uppercase;
-    }
-    .ad-slots {
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 1rem;
+      align-self: flex-end;
+      padding: 0 2px;
     }
     .ad-slot {
-      width: 100%;
       display: flex;
-      justify-content: center;
       align-items: center;
+      justify-content: center;
+      width: 100%;
+      overflow: hidden;
     }
-    .ad-slot ::ng-deep img {
-      max-width: 100%;
-      height: auto;
-      border-radius: 8px;
-    }
-    .ad-slot ::ng-deep iframe {
-      max-width: 100%;
-      border: none;
-      border-radius: 8px;
-    }
+    .ad-slot ::ng-deep iframe { border: none; max-width: 100%; }
+    .ad-slot ::ng-deep img { max-width: 100%; height: auto; }
   `]
 })
-export class AdBannerComponent implements OnInit {
+export class AdBannerComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() position = 'player_bottom';
+  @ViewChildren('adSlot') adSlots!: QueryList<ElementRef<HTMLDivElement>>;
 
   private readonly settingsService = inject(SettingsService);
-  private readonly sanitizer = inject(DomSanitizer);
+  private readonly cdr = inject(ChangeDetectorRef);
+  private sub?: Subscription;
+  private rendered = false;
 
   activeAds: AdConfig[] = [];
 
   ngOnInit(): void {
-    this.settingsService.getAdsByPosition(this.position).subscribe(ads => {
+    this.sub = this.settingsService.getAdsByPosition(this.position).subscribe(ads => {
       this.activeAds = ads;
+      this.rendered = false;
+      this.cdr.markForCheck();
+      // Re-inject scripts after view updates
+      setTimeout(() => this.injectScripts(), 50);
     });
   }
 
-  sanitizeHtml(code: string): SafeHtml {
-    return this.sanitizer.bypassSecurityTrustHtml(code);
+  ngAfterViewInit(): void {
+    this.injectScripts();
+  }
+
+  ngOnDestroy(): void {
+    this.sub?.unsubscribe();
+  }
+
+  private injectScripts(): void {
+    if (!this.adSlots) return;
+    const slots = this.adSlots.toArray();
+    this.activeAds.forEach((ad, i) => {
+      const container = slots[i]?.nativeElement;
+      if (!container || container.hasChildNodes()) return;
+      this.injectAdCode(container, ad.htmlCode);
+    });
+  }
+
+  private injectAdCode(container: HTMLElement, htmlCode: string): void {
+    // Parse the htmlCode to extract scripts and non-script HTML
+    const template = document.createElement('template');
+    template.innerHTML = htmlCode.trim();
+
+    const nodes = Array.from(template.content.childNodes);
+    for (const node of nodes) {
+      if (node.nodeName === 'SCRIPT') {
+        const orig = node as HTMLScriptElement;
+        const script = document.createElement('script');
+        // Copy all attributes
+        Array.from(orig.attributes).forEach(attr => script.setAttribute(attr.name, attr.value));
+        script.text = orig.text || orig.innerHTML;
+        container.appendChild(script);
+      } else {
+        container.appendChild(document.importNode(node, true));
+      }
+    }
   }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AnalyticsService } from '../../../../services/analytics.service';
 import { VisitorLogService } from '../../../../services/visitor-log.service';
@@ -128,6 +128,7 @@ import { VisitorLogService } from '../../../../services/visitor-log.service';
 export class AdminAnalyticsComponent implements OnInit {
   private readonly analytics = inject(AnalyticsService);
   private readonly visitorLogs = inject(VisitorLogService);
+  private readonly cdr = inject(ChangeDetectorRef);
 
   totalViews = 0;
   totalStreams = 0;
@@ -142,9 +143,16 @@ export class AdminAnalyticsComponent implements OnInit {
       this.totalViews = logs.length * 3 + 12; // aggregate estimate
       this.totalStreams = Math.floor(logs.length * 1.5) + 8;
       this.totalSearches = Math.floor(logs.length * 0.8) + 5;
+      this.cdr.detectChanges();
     });
 
-    this.analytics.getPopularContent().then(list => (this.topContent = list));
-    this.analytics.getRecentSearches().then(list => (this.recentSearches = list));
+    this.analytics.getPopularContent().then(list => {
+      this.topContent = list;
+      this.cdr.detectChanges();
+    });
+    this.analytics.getRecentSearches().then(list => {
+      this.recentSearches = list;
+      this.cdr.detectChanges();
+    });
   }
 }

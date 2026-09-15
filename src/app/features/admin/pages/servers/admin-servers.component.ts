@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AdminMediaService } from '../../../../services/admin-media.service';
@@ -49,20 +49,20 @@ import { StreamServerConfig } from '../../../../models/media.model';
                 type="text"
                 [(ngModel)]="s.urlTemplate"
                 class="form-control"
-                placeholder="https://provider.to/embed/movie/{id}"
+                placeholder="https://vidsrc.me/embed/movie?tmdb={id}"
               />
-              <span class="hint">Tokens: {{ '{id}' }}, {{ '{imdbId}' }}</span>
+              <span class="hint">Available Tokens: <code>{{ '{id}' }}</code> (TMDB ID), <code>{{ '{imdbId}' }}</code></span>
             </div>
 
-            <div class="form-row" *ngIf="s.tvUrlTemplate !== undefined">
+            <div class="form-row">
               <label>TV Series Embed Template URL</label>
               <input
                 type="text"
                 [(ngModel)]="s.tvUrlTemplate"
                 class="form-control"
-                placeholder="https://provider.to/embed/tv/{id}/{s}/{e}"
+                placeholder="https://vidsrc.me/embed/tv?tmdb={id}&season={s}&episode={e}"
               />
-              <span class="hint">Tokens: {{ '{id}' }}, {{ '{s}' }}, {{ '{e}' }}</span>
+              <span class="hint">Available Tokens: <code>{{ '{id}' }}</code>, <code>{{ '{s}' }}</code> (Season), <code>{{ '{e}' }}</code> (Episode)</span>
             </div>
           </div>
         </div>
@@ -136,6 +136,7 @@ import { StreamServerConfig } from '../../../../models/media.model';
 })
 export class AdminServersComponent implements OnInit {
   private readonly adminMedia = inject(AdminMediaService);
+  private readonly cdr = inject(ChangeDetectorRef);
 
   servers: StreamServerConfig[] = [];
   successMsg = '';
@@ -146,6 +147,7 @@ export class AdminServersComponent implements OnInit {
 
   async loadServers(): Promise<void> {
     this.servers = await this.adminMedia.getServers();
+    this.cdr.detectChanges();
   }
 
   addNewServer(): void {
@@ -163,13 +165,18 @@ export class AdminServersComponent implements OnInit {
 
   async saveServer(s: StreamServerConfig): Promise<void> {
     await this.adminMedia.saveServer(s);
-    this.successMsg = `Server "${s.name}" saved.`;
-    setTimeout(() => (this.successMsg = ''), 3000);
+    this.successMsg = `Server "${s.name}" saved successfully.`;
+    this.cdr.detectChanges();
+    setTimeout(() => {
+      this.successMsg = '';
+      this.cdr.detectChanges();
+    }, 3000);
   }
 
   async deleteServer(id: string): Promise<void> {
     if (!confirm('Remove this video server?')) return;
     await this.adminMedia.deleteServer(id);
     this.servers = this.servers.filter(s => s.id !== id);
+    this.cdr.detectChanges();
   }
 }

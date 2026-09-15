@@ -2,8 +2,8 @@ import { Component, ChangeDetectionStrategy, inject, signal } from '@angular/cor
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { combineLatest, map, Observable } from 'rxjs';
-import { ref, onValue, off, remove } from 'firebase/database';
+import { BehaviorSubject, combineLatest, map, Observable, of, catchError, tap } from 'rxjs';
+import { ref, onValue, off, remove, get } from 'firebase/database';
 import { VisitorLogService, DetailedGeoData } from '../../services/visitor-log.service';
 import { AuthService } from '../../services/auth.service';
 import { FirebaseService } from '../../services/firebase.service';
@@ -22,6 +22,25 @@ export interface BrokenReport {
   reportedBy: string;
   timestamp: number;
   dateStr: string;
+}
+
+export interface IpLogGroup {
+  ip: string;
+  ipType?: string;
+  isp?: string;
+  asn?: string | number;
+  country?: string;
+  countryCode?: string;
+  city?: string;
+  region?: string;
+  flag?: string;
+  latitude?: number;
+  longitude?: number;
+  count: number;
+  lastSeen: number;
+  devicesLabel: string;
+  userEmail?: string;
+  logs: VisitorLog[];
 }
 
 export interface StreamingServerConfig {
@@ -50,17 +69,24 @@ export class AdminComponent {
 
   readonly activeTab = signal<'logs' | 'users' | 'servers' | 'reports' | 'system'>('logs');
   readonly searchQuery = signal('');
+  private readonly searchQuery$ = new BehaviorSubject<string>('');
   readonly isClearing = signal(false);
   readonly actionMessage = signal<string | null>(null);
 
+  // Expanded unique-IP groups (click a group header to show its access logs)
+  readonly expandedGroups = signal<Set<string>>(new Set());
+  readonly currentGroups = signal<IpLogGroup[]>([]);
+
   // Selected log for detailed telemetry dossier modal
   readonly selectedLog = signal<VisitorLog | null>(null);
+  readonly selectedUserHistory = signal<any[]>([]);
+  readonly selectedUserSearches = signal<any[]>([]);
 
   // Streaming Servers Config (State)
   readonly servers = signal<StreamingServerConfig[]>([
-    { id: 'multiembed', name: 'MultiEmbed (Server 1 - Default)', status: 'online', priority: 1, enabled: true },
-    { id: 'vidsrc-me', name: 'VidSrc Prime (Server 2)', status: 'online', priority: 2, enabled: true },
-    { id: 'vidsrc-cc', name: 'VidSrc CC (Server 3)', status: 'online', priority: 3, enabled: true },
+    { id: 'vidsrc-me', name: 'VidSrc Prime (Server 1 - Default)', status: 'online', priority: 1, enabled: true },
+    { id: 'vidsrc-cc', name: 'VidSrc CC (Server 2)', status: 'online', priority: 2, enabled: true },
+    { id: 'multiembed', name: 'MultiEmbed (Server 3)', status: 'online', priority: 3, enabled: true },
     { id: 'autoembed', name: 'AutoEmbed Fast (Server 4)', status: 'online', priority: 4, enabled: true }
   ]);
 
@@ -72,33 +98,124 @@ export class AdminComponent {
     map(users => users.filter(u => u.role === 'admin').length)
   );
 
-  readonly filteredLogs$: Observable<VisitorLog[]> = combineLatest([
-    this.visitorService.getRecentLogs(),
-    this.allUsers$
+  readonly logGroups$: Observable<IpLogGroup[]> = combineLatest([
+    this.visitorService.getRecentLogs().pipe(catchError(() => of([]))),
+    this.searchQuery$
   ]).pipe(
-    map(([logs]) => {
-      const q = this.searchQuery().toLowerCase().trim();
-      if (!q) return logs;
-      return logs.filter(
-        l =>
-          l.ip?.toLowerCase().includes(q) ||
-          l.isp?.toLowerCase().includes(q) ||
-          l.org?.toLowerCase().includes(q) ||
-          (l.asn && String(l.asn).toLowerCase().includes(q)) ||
-          l.path?.toLowerCase().includes(q) ||
-          l.country?.toLowerCase().includes(q) ||
-          l.countryCode?.toLowerCase().includes(q) ||
-          l.city?.toLowerCase().includes(q) ||
-          l.region?.toLowerCase().includes(q) ||
-          l.postal?.toLowerCase().includes(q) ||
-          l.browser?.toLowerCase().includes(q) ||
-          l.os?.toLowerCase().includes(q) ||
-          l.device?.toLowerCase().includes(q) ||
-          l.deviceModel?.toLowerCase().includes(q) ||
-          l.userEmail?.toLowerCase().includes(q)
-      );
-    })
+    map(([logs, query]) => {
+      const q = (query || '').toLowerCase().trim();
+      const filtered = q ? logs.filter(l => this.matchesQuery(l, q)) : logs;
+      const groups = this.groupLogsByIp(filtered);
+      return groups;
+    }),
+    tap(groups => this.currentGroups.set(groups))
   );
+
+  private matchesQuery(l: VisitorLog, q: string): boolean {
+    return !!(
+      (l.ip ?? '').toLowerCase().includes(q) ||
+      (l.isp ?? '').toLowerCase().includes(q) ||
+      (l.org ?? '').toLowerCase().includes(q) ||
+      (l.asn ? String(l.asn).toLowerCase().includes(q) : false) ||
+      (l.path ?? '').toLowerCase().includes(q) ||
+      (l.country ?? '').toLowerCase().includes(q) ||
+      (l.countryCode ?? '').toLowerCase().includes(q) ||
+      (l.city ?? '').toLowerCase().includes(q) ||
+      (l.region ?? '').toLowerCase().includes(q) ||
+      (l.postal ?? '').toLowerCase().includes(q) ||
+      (l.browser ?? '').toLowerCase().includes(q) ||
+      (l.os ?? '').toLowerCase().includes(q) ||
+      (l.device ?? '').toLowerCase().includes(q) ||
+      (l.deviceModel ?? '').toLowerCase().includes(q) ||
+      (l.userEmail ?? '').toLowerCase().includes(q)
+    );
+  }
+
+  /** Aggregate flat logs into unique-IP groups, newest activity first */
+  private groupLogsByIp(logs: VisitorLog[]): IpLogGroup[] {
+    const byIp = new Map<string, IpLogGroup>();
+
+    for (const log of logs) {
+      const ip = log.ip || 'Unknown IP';
+      let group = byIp.get(ip);
+      if (!group) {
+        group = {
+          ip,
+          ipType: log.ipType,
+          isp: log.isp || log.org || '',
+          asn: log.asn || '',
+          country: log.country,
+          countryCode: log.countryCode,
+          city: log.city,
+          region: log.region,
+          flag: log.flag,
+          latitude: log.latitude,
+          longitude: log.longitude,
+          count: 0,
+          lastSeen: 0,
+          devicesLabel: '',
+          logs: []
+        };
+        byIp.set(ip, group);
+      }
+
+      group.count++;
+      if (log.timestamp && log.timestamp > group.lastSeen) {
+        group.lastSeen = log.timestamp;
+      }
+      group.logs.push(log);
+
+      // Fill geo/ISP gaps from the most informative entry in the group
+      if (!group.country && log.country) {
+        group.country = log.country;
+        group.countryCode = log.countryCode;
+        group.city = log.city;
+        group.region = log.region;
+        group.flag = log.flag;
+        group.latitude = log.latitude;
+        group.longitude = log.longitude;
+      }
+      if (!group.isp && (log.isp || log.org)) {
+        group.isp = log.isp || log.org || '';
+        group.asn = log.asn || group.asn;
+      }
+      if (log.userId && !group.userEmail) {
+        group.userEmail = log.userEmail || 'Member';
+      }
+    }
+
+    const groups = [...byIp.values()];
+    for (const g of groups) {
+      g.logs.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+      g.devicesLabel = Array.from(new Set(g.logs.map(l => l.device || 'Unknown Device'))).join(', ');
+    }
+    groups.sort((a, b) => b.lastSeen - a.lastSeen);
+    return groups;
+  }
+
+  isGroupExpanded(ip: string): boolean {
+    return this.expandedGroups().has(ip);
+  }
+
+  toggleGroup(ip: string): void {
+    this.expandedGroups.update(set => {
+      const next = new Set(set);
+      if (next.has(ip)) {
+        next.delete(ip);
+      } else {
+        next.add(ip);
+      }
+      return next;
+    });
+  }
+
+  expandAllGroups(): void {
+    this.expandedGroups.set(new Set(this.currentGroups().map(g => g.ip)));
+  }
+
+  collapseAllGroups(): void {
+    this.expandedGroups.set(new Set());
+  }
 
   readonly brokenReports$: Observable<BrokenReport[]> = new Observable<BrokenReport[]>(observer => {
     const reportsRef = ref(this.firebase.db, 'broken_stream_reports');
@@ -129,11 +246,34 @@ export class AdminComponent {
 
   onSearchChange(event: Event): void {
     const input = event.target as HTMLInputElement;
-    this.searchQuery.set(input.value);
+    const val = input.value;
+    this.searchQuery.set(val);
+    this.searchQuery$.next(val);
   }
 
   openLogDetails(log: VisitorLog): void {
     this.selectedLog.set(log);
+    this.selectedUserHistory.set([]);
+    this.selectedUserSearches.set([]);
+    // Fetch watch & search history if user is logged in
+    if (log.userId) {
+      get(ref(this.firebase.db, `user_activity/${log.userId}/history`)).then(snap => {
+        if (snap.exists()) {
+          const items = Object.values(snap.val() as Record<string, any>)
+            .sort((a: any, b: any) => (b.watchedAt || b.timestamp || 0) - (a.watchedAt || a.timestamp || 0))
+            .slice(0, 20);
+          this.selectedUserHistory.set(items);
+        }
+      }).catch(() => {});
+      get(ref(this.firebase.db, `user_activity/${log.userId}/searches`)).then(snap => {
+        if (snap.exists()) {
+          const items = Object.values(snap.val() as Record<string, any>)
+            .sort((a: any, b: any) => (b.timestamp || 0) - (a.timestamp || 0))
+            .slice(0, 20);
+          this.selectedUserSearches.set(items);
+        }
+      }).catch(() => {});
+    }
   }
 
   closeLogDetails(): void {

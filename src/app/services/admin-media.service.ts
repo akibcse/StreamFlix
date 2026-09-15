@@ -1,4 +1,4 @@
-import { Injectable, inject, signal } from '@angular/core';
+import { Injectable, inject, signal, NgZone } from '@angular/core';
 import { getDatabase, ref, set, get, push, remove, update } from 'firebase/database';
 import { FirebaseService } from './firebase.service';
 import { MovieService } from './movie.service';
@@ -22,26 +22,28 @@ export class AdminMediaService {
   private readonly firebase = inject(FirebaseService);
   private readonly movieService = inject(MovieService);
   private readonly auth = inject(AuthService);
+  private readonly zone = inject(NgZone);
   private db = getDatabase(this.firebase.app);
 
   // ─── Media Overrides ─────────────────────────────────────────────
 
   async getAllOverrides(mediaType?: MediaType): Promise<MediaOverride[]> {
     const snap = await get(ref(this.db, 'admin_media'));
-    if (!snap.exists()) return [];
-    const all = Object.values(snap.val() as Record<string, MediaOverride>);
-    return mediaType ? all.filter(m => m.mediaType === mediaType) : all;
+    return this.zone.run(() => {
+      if (!snap.exists()) return [];
+      const all = Object.values(snap.val() as Record<string, MediaOverride>);
+      return mediaType ? all.filter(m => m.mediaType === mediaType) : all;
+    });
   }
 
   async getOverride(id: string, mediaType?: MediaType): Promise<MediaOverride | null> {
     const key = mediaType ? `${mediaType}_${id}` : id;
     const snap = await get(ref(this.db, `admin_media/${key}`));
-    // Fallback to old key format for backward compat
     if (!snap.exists() && mediaType) {
       const snapOld = await get(ref(this.db, `admin_media/${id}`));
-      return snapOld.exists() ? snapOld.val() : null;
+      return this.zone.run(() => snapOld.exists() ? snapOld.val() : null);
     }
-    return snap.exists() ? snap.val() : null;
+    return this.zone.run(() => snap.exists() ? snap.val() : null);
   }
 
   async saveOverride(override: MediaOverride): Promise<void> {
@@ -131,11 +133,12 @@ export class AdminMediaService {
 
   // ─── Automated Import Engine ─────────────────────────────────────
 
-  async autoImportMovies(
+  async autoImportMedia(
     options: AutoImportOptions,
     onProgress?: (progress: AutoImportProgress) => void,
     cancellationToken?: { isCancelled: boolean }
   ): Promise<AutoImportProgress> {
+    const targetMediaType = options.mediaType || 'movie';
     const progress: AutoImportProgress = {
       current: 0,
       total: options.limit,
@@ -153,103 +156,160 @@ export class AdminMediaService {
     emit();
 
     try {
-      // 1. Fetch existing movie IDs to check for duplicates
+      // 1. Fetch existing IDs for duplicate prevention
       progress.message = 'Checking existing library for duplicates...';
       emit();
-      const existing = await this.getAllOverrides('movie');
-      const existingIds = new Set(existing.map(m => m.id.toString()));
+      const existingMovies = await this.getAllOverrides('movie');
+      const existingTv = await this.getAllOverrides('tv');
+      const movieIds = new Set(existingMovies.map(m => m.id.toString()));
+      const tvIds = new Set(existingTv.map(t => t.id.toString()));
 
-      // 2. Fetch candidate movies from TMDB according to chosen category
-      progress.message = `Fetching ${options.category} movies from TMDB API...`;
+      // 2. Fetch candidate media from TMDB API
+      progress.message = `Fetching ${options.category} ${targetMediaType.toUpperCase()} from TMDB API...`;
       emit();
 
-      const candidateMovies: MediaItem[] = [];
-      const pageSize = 20;
-      const pagesNeeded = Math.ceil(options.limit / pageSize);
+      type Candidate = { item: MediaItem; type: MediaType };
+      const candidates: Candidate[] = [];
 
-      if (options.category === 'all') {
-        const fetchers = [
-          () => firstValueFrom(this.movieService.getTrendingMovies('week', 1)),
-          () => firstValueFrom(this.movieService.getPopularMovies(1)),
-          () => firstValueFrom(this.movieService.getTopRatedMovies(1)),
-          () => firstValueFrom(this.movieService.getNowPlayingMovies(1)),
-          () => firstValueFrom(this.movieService.getUpcomingMovies(1))
-        ];
-        const results = await Promise.allSettled(fetchers.map(f => f()));
-        for (const res of results) {
-          if (res.status === 'fulfilled' && res.value?.results) {
-            for (const item of res.value.results) {
-              if (!candidateMovies.some(c => c.id === item.id)) {
-                candidateMovies.push(item);
-              }
-            }
-          }
-        }
-      } else {
-        for (let p = 1; p <= pagesNeeded; p++) {
-          if (cancellationToken?.isCancelled) break;
-          let obs;
-          switch (options.category) {
-            case 'trending':
-              obs = this.movieService.getTrendingMovies('week', p);
-              break;
-            case 'popular':
-              obs = this.movieService.getPopularMovies(p);
-              break;
-            case 'top_rated':
-              obs = this.movieService.getTopRatedMovies(p);
-              break;
-            case 'now_playing':
-              obs = this.movieService.getNowPlayingMovies(p);
-              break;
-            case 'upcoming':
-              obs = this.movieService.getUpcomingMovies(p);
-              break;
-            default:
-              obs = this.movieService.getPopularMovies(p);
-          }
-
-          try {
-            const pageData = await firstValueFrom(obs);
-            if (pageData?.results) {
-              for (const item of pageData.results) {
-                if (!candidateMovies.some(c => c.id === item.id)) {
-                  candidateMovies.push(item);
+      // Helper to fetch movies
+      const fetchMovies = async (category: string, count: number) => {
+        const pagesNeeded = Math.ceil(count / 20);
+        if (category === 'all') {
+          const fetchers = [
+            () => firstValueFrom(this.movieService.getTrendingMovies('week', 1)),
+            () => firstValueFrom(this.movieService.getPopularMovies(1)),
+            () => firstValueFrom(this.movieService.getTopRatedMovies(1)),
+            () => firstValueFrom(this.movieService.getNowPlayingMovies(1)),
+            () => firstValueFrom(this.movieService.getUpcomingMovies(1))
+          ];
+          const results = await Promise.allSettled(fetchers.map(f => f()));
+          for (const res of results) {
+            if (res.status === 'fulfilled' && res.value?.results) {
+              for (const item of res.value.results) {
+                if (!candidates.some(c => c.type === 'movie' && c.item.id === item.id)) {
+                  candidates.push({ item, type: 'movie' });
                 }
               }
             }
-          } catch (err) {
-            console.error(`Error fetching page ${p} for ${options.category}:`, err);
+          }
+        } else {
+          for (let p = 1; p <= pagesNeeded; p++) {
+            if (cancellationToken?.isCancelled) break;
+            let obs;
+            switch (category) {
+              case 'trending': obs = this.movieService.getTrendingMovies('week', p); break;
+              case 'popular': obs = this.movieService.getPopularMovies(p); break;
+              case 'top_rated': obs = this.movieService.getTopRatedMovies(p); break;
+              case 'now_playing': obs = this.movieService.getNowPlayingMovies(p); break;
+              case 'upcoming': obs = this.movieService.getUpcomingMovies(p); break;
+              default: obs = this.movieService.getPopularMovies(p);
+            }
+            try {
+              const res = await firstValueFrom(obs);
+              if (res?.results) {
+                for (const item of res.results) {
+                  if (!candidates.some(c => c.type === 'movie' && c.item.id === item.id)) {
+                    candidates.push({ item, type: 'movie' });
+                  }
+                }
+              }
+            } catch (err) {
+              console.error(`Error fetching movie page ${p}:`, err);
+            }
           }
         }
+      };
+
+      // Helper to fetch TV shows
+      const fetchTv = async (category: string, count: number) => {
+        const pagesNeeded = Math.ceil(count / 20);
+        if (category === 'all') {
+          const fetchers = [
+            () => firstValueFrom(this.movieService.getTrendingTv('week', 1)),
+            () => firstValueFrom(this.movieService.getPopularTv(1)),
+            () => firstValueFrom(this.movieService.getTopRatedTv(1)),
+            () => firstValueFrom(this.movieService.getOnAirTv(1)),
+            () => firstValueFrom(this.movieService.getAiringTodayTv(1))
+          ];
+          const results = await Promise.allSettled(fetchers.map(f => f()));
+          for (const res of results) {
+            if (res.status === 'fulfilled' && res.value?.results) {
+              for (const item of res.value.results) {
+                if (!candidates.some(c => c.type === 'tv' && c.item.id === item.id)) {
+                  candidates.push({ item, type: 'tv' });
+                }
+              }
+            }
+          }
+        } else {
+          for (let p = 1; p <= pagesNeeded; p++) {
+            if (cancellationToken?.isCancelled) break;
+            let obs;
+            switch (category) {
+              case 'trending': obs = this.movieService.getTrendingTv('week', p); break;
+              case 'popular': obs = this.movieService.getPopularTv(p); break;
+              case 'top_rated': obs = this.movieService.getTopRatedTv(p); break;
+              case 'now_playing':
+              case 'on_air': obs = this.movieService.getOnAirTv(p); break;
+              case 'upcoming':
+              case 'airing_today': obs = this.movieService.getAiringTodayTv(p); break;
+              default: obs = this.movieService.getPopularTv(p);
+            }
+            try {
+              const res = await firstValueFrom(obs);
+              if (res?.results) {
+                for (const item of res.results) {
+                  if (!candidates.some(c => c.type === 'tv' && c.item.id === item.id)) {
+                    candidates.push({ item, type: 'tv' });
+                  }
+                }
+              }
+            } catch (err) {
+              console.error(`Error fetching tv page ${p}:`, err);
+            }
+          }
+        }
+      };
+
+      if (targetMediaType === 'movie') {
+        await fetchMovies(options.category, options.limit);
+      } else if (targetMediaType === 'tv') {
+        await fetchTv(options.category, options.limit);
+      } else {
+        // 'all' = half movies, half tv
+        const half = Math.ceil(options.limit / 2);
+        await Promise.all([fetchMovies(options.category, half), fetchTv(options.category, half)]);
       }
 
-      const targetMovies = candidateMovies.slice(0, options.limit);
-      progress.total = targetMovies.length;
-      progress.message = `Found ${targetMovies.length} movies. Starting import process...`;
+      const targets = candidates.slice(0, options.limit);
+      progress.total = targets.length;
+      progress.message = `Found ${targets.length} items. Starting import process...`;
       emit();
 
-      // 3. Import each movie with delay
-      for (let i = 0; i < targetMovies.length; i++) {
+      // 3. Process each item
+      for (let i = 0; i < targets.length; i++) {
         if (cancellationToken?.isCancelled) {
           progress.status = 'cancelled';
-          progress.message = `Import stopped by user. Processed ${progress.current}/${progress.total} movies.`;
+          progress.message = `Import stopped by user. Processed ${progress.current}/${progress.total} items.`;
           emit();
           return progress;
         }
 
-        const movie = targetMovies[i];
+        const { item, type } = targets[i];
         progress.current = i + 1;
-        progress.title = movie.title || `Movie #${movie.id}`;
-        progress.posterPath = movie.poster_path;
+        const displayTitle = item.title || item.name || `${type === 'tv' ? 'Series' : 'Movie'} #${item.id}`;
+        progress.title = displayTitle;
+        progress.posterPath = item.poster_path;
 
         const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        const existingSet = type === 'tv' ? tvIds : movieIds;
 
-        if (options.skipExisting !== false && existingIds.has(movie.id.toString())) {
+        // Skip existing check
+        if (options.skipExisting !== false && existingSet.has(item.id.toString())) {
           progress.skippedCount++;
-          progress.message = `Skipped "${progress.title}" (already in library)`;
+          progress.message = `Skipped "${displayTitle}" (already in ${type} catalog)`;
           progress.logs.unshift({
-            title: progress.title,
+            title: `[${type.toUpperCase()}] ${displayTitle}`,
             status: 'skipped',
             time: timeStr
           });
@@ -257,36 +317,37 @@ export class AdminMediaService {
           continue;
         }
 
+        // Import
         try {
-          progress.message = `Importing "${progress.title}"...`;
+          progress.message = `Importing ${type === 'tv' ? 'Series' : 'Movie'} "${displayTitle}"...`;
           emit();
 
-          await this.importFromTmdb(movie.id, 'movie', {
+          await this.importFromTmdb(item.id, type, {
             featured: options.markFeatured,
             trending: options.markTrending,
             published: options.autoPublish ?? true
           });
 
-          existingIds.add(movie.id.toString());
+          existingSet.add(item.id.toString());
           progress.successCount++;
           progress.logs.unshift({
-            title: progress.title,
+            title: `[${type.toUpperCase()}] ${displayTitle}`,
             status: 'success',
             time: timeStr
           });
           emit();
         } catch (err: any) {
           progress.failedCount++;
-          progress.message = `Failed "${progress.title}": ${err.message || 'Error'}`;
+          progress.message = `Failed "${displayTitle}": ${err.message || 'Error'}`;
           progress.logs.unshift({
-            title: progress.title,
+            title: `[${type.toUpperCase()}] ${displayTitle}`,
             status: 'error',
             time: timeStr
           });
           emit();
         }
 
-        // Slight pause to respect TMDB API limits
+        // Polite delay for TMDB rate limits
         await new Promise(r => setTimeout(r, 60));
       }
 
@@ -294,8 +355,8 @@ export class AdminMediaService {
       progress.message = `Auto-import completed! ${progress.successCount} imported, ${progress.skippedCount} skipped, ${progress.failedCount} failed.`;
       emit();
 
-      await this.logAction('auto_import_movies', options.category, `Imported: ${progress.successCount}, Skipped: ${progress.skippedCount}, Failed: ${progress.failedCount}`);
-      await this.updateLastSyncStats(progress.successCount);
+      await this.logAction(`auto_import_${targetMediaType}`, options.category, `Imported: ${progress.successCount}, Skipped: ${progress.skippedCount}, Failed: ${progress.failedCount}`);
+      await this.updateLastSyncStats(progress.successCount, targetMediaType);
 
       return progress;
     } catch (err: any) {
@@ -306,30 +367,51 @@ export class AdminMediaService {
     }
   }
 
+  async autoImportMovies(
+    options: AutoImportOptions,
+    onProgress?: (progress: AutoImportProgress) => void,
+    cancellationToken?: { isCancelled: boolean }
+  ): Promise<AutoImportProgress> {
+    return this.autoImportMedia({ ...options, mediaType: 'movie' }, onProgress, cancellationToken);
+  }
+
+  async autoImportTv(
+    options: AutoImportOptions,
+    onProgress?: (progress: AutoImportProgress) => void,
+    cancellationToken?: { isCancelled: boolean }
+  ): Promise<AutoImportProgress> {
+    return this.autoImportMedia({ ...options, mediaType: 'tv' }, onProgress, cancellationToken);
+  }
+
   // ─── Auto Sync Settings ──────────────────────────────────────────
 
-  async getAutoSyncConfig(): Promise<AutoSyncConfig> {
-    const snap = await get(ref(this.db, 'auto_sync_movies'));
-    if (!snap.exists()) {
-      return {
-        enabled: false,
-        category: 'trending',
-        limit: 20
-      };
-    }
-    return snap.val();
+  async getAutoSyncConfig(mediaType: 'movie' | 'tv' = 'movie'): Promise<AutoSyncConfig> {
+    const key = mediaType === 'tv' ? 'auto_sync_tv' : 'auto_sync_movies';
+    const snap = await get(ref(this.db, key));
+    return this.zone.run(() => {
+      if (!snap.exists()) {
+        return {
+          enabled: false,
+          category: 'trending',
+          limit: 20
+        };
+      }
+      return snap.val();
+    });
   }
 
-  async saveAutoSyncConfig(config: AutoSyncConfig): Promise<void> {
-    await set(ref(this.db, 'auto_sync_movies'), config);
-    await this.logAction('save_auto_sync_config', config.category, `enabled=${config.enabled}, limit=${config.limit}`);
+  async saveAutoSyncConfig(config: AutoSyncConfig, mediaType: 'movie' | 'tv' = 'movie'): Promise<void> {
+    const key = mediaType === 'tv' ? 'auto_sync_tv' : 'auto_sync_movies';
+    await set(ref(this.db, key), config);
+    await this.logAction(`save_auto_sync_${mediaType}`, config.category, `enabled=${config.enabled}, limit=${config.limit}`);
   }
 
-  private async updateLastSyncStats(count: number): Promise<void> {
+  private async updateLastSyncStats(count: number, mediaType: string = 'movie'): Promise<void> {
     try {
-      const snap = await get(ref(this.db, 'auto_sync_movies'));
+      const key = mediaType === 'tv' ? 'auto_sync_tv' : 'auto_sync_movies';
+      const snap = await get(ref(this.db, key));
       if (snap.exists()) {
-        await update(ref(this.db, 'auto_sync_movies'), {
+        await update(ref(this.db, key), {
           lastSyncTimestamp: Date.now(),
           lastSyncCount: count
         });
@@ -341,20 +423,32 @@ export class AdminMediaService {
 
   async getServers(): Promise<StreamServerConfig[]> {
     const snap = await get(ref(this.db, 'stream_servers'));
-    if (!snap.exists()) return this.getDefaultServers();
-    return Object.values(snap.val() as Record<string, StreamServerConfig>)
-      .map(s => ({
-        ...s,
-        active: s.active ?? s.enabled ?? true,
-        enabled: s.enabled ?? s.active ?? true
-      }))
-      .sort((a, b) => (a.priority || 0) - (b.priority || 0));
+    const defaults = this.getDefaultServers();
+    const defaultsMap = new Map(defaults.map(d => [d.id, d]));
+    return this.zone.run(() => {
+      if (!snap.exists()) return defaults;
+      const raw = Object.values(snap.val() as Record<string, StreamServerConfig>);
+      return raw
+        .map(s => {
+          const def = defaultsMap.get(s.id);
+          return {
+            ...s,
+            urlTemplate: s.urlTemplate || def?.urlTemplate || 'https://vidsrc.me/embed/movie?tmdb={id}',
+            tvUrlTemplate: s.tvUrlTemplate || def?.tvUrlTemplate || 'https://vidsrc.me/embed/tv?tmdb={id}&season={s}&episode={e}',
+            active: s.active ?? s.enabled ?? true,
+            enabled: s.enabled ?? s.active ?? true
+          };
+        })
+        .sort((a, b) => (a.priority || 0) - (b.priority || 0));
+    });
   }
 
   async saveServer(server: StreamServerConfig): Promise<void> {
     const isAct = server.active ?? server.enabled ?? true;
     const payload: StreamServerConfig = {
       ...server,
+      urlTemplate: server.urlTemplate || 'https://vidsrc.me/embed/movie?tmdb={id}',
+      tvUrlTemplate: server.tvUrlTemplate || 'https://vidsrc.me/embed/tv?tmdb={id}&season={s}&episode={e}',
       active: isAct,
       enabled: isAct
     };
@@ -373,10 +467,44 @@ export class AdminMediaService {
 
   private getDefaultServers(): StreamServerConfig[] {
     return [
-      { id: 'vidsrc-me', name: 'VidSrc Prime', priority: 1, enabled: true, active: true, isDefault: true },
-      { id: 'vidsrc-cc', name: 'VidSrc CC', priority: 2, enabled: true, active: true },
-      { id: 'multiembed', name: 'MultiEmbed', priority: 3, enabled: true, active: true },
-      { id: 'autoembed', name: 'AutoEmbed', priority: 4, enabled: true, active: true, isBackup: true }
+      {
+        id: 'vidsrc-me',
+        name: 'VidSrc Prime (Server 1 - Default)',
+        urlTemplate: 'https://vidsrc.me/embed/movie?tmdb={id}',
+        tvUrlTemplate: 'https://vidsrc.me/embed/tv?tmdb={id}&season={s}&episode={e}',
+        priority: 1,
+        enabled: true,
+        active: true,
+        isDefault: true
+      },
+      {
+        id: 'vidsrc-cc',
+        name: 'VidSrc CC (Server 2)',
+        urlTemplate: 'https://vidsrc.cc/v2/embed/movie/{id}',
+        tvUrlTemplate: 'https://vidsrc.cc/v2/embed/tv/{id}/{s}/{e}',
+        priority: 2,
+        enabled: true,
+        active: true
+      },
+      {
+        id: 'multiembed',
+        name: 'MultiEmbed (Server 3)',
+        urlTemplate: 'https://multiembed.mov/?video_id={id}&tmdb=1',
+        tvUrlTemplate: 'https://multiembed.mov/?video_id={id}&tmdb=1&s={s}&e={e}',
+        priority: 3,
+        enabled: true,
+        active: true
+      },
+      {
+        id: 'autoembed',
+        name: 'AutoEmbed Fast (Server 4)',
+        urlTemplate: 'https://player.autoembed.cc/embed/movie/{id}',
+        tvUrlTemplate: 'https://player.autoembed.cc/embed/tv/{id}/{s}/{e}',
+        priority: 4,
+        enabled: true,
+        active: true,
+        isBackup: true
+      }
     ];
   }
 
@@ -384,8 +512,10 @@ export class AdminMediaService {
 
   async getCustomGenres(): Promise<any[]> {
     const snap = await get(ref(this.db, 'custom_genres'));
-    if (!snap.exists()) return [];
-    return Object.values(snap.val());
+    return this.zone.run(() => {
+      if (!snap.exists()) return [];
+      return Object.values(snap.val());
+    });
   }
 
   async saveCustomGenre(genre: any): Promise<void> {
@@ -401,7 +531,9 @@ export class AdminMediaService {
 
   async getHomepageConfig(): Promise<any> {
     const snap = await get(ref(this.db, 'homepage_config'));
-    return snap.exists() ? snap.val() : this.getDefaultHomepageConfig();
+    return this.zone.run(() => {
+      return snap.exists() ? snap.val() : this.getDefaultHomepageConfig();
+    });
   }
 
   async saveHomepageConfig(config: any): Promise<void> {
@@ -459,11 +591,13 @@ export class AdminMediaService {
 
   async getLogs(limit = 100): Promise<AdminLog[]> {
     const snap = await get(ref(this.db, 'admin_logs'));
-    if (!snap.exists()) return [];
-    return Object.entries(snap.val() as Record<string, AdminLog>)
-      .map(([id, log]) => ({ ...log, id }))
-      .sort((a, b) => b.timestamp - a.timestamp)
-      .slice(0, limit);
+    return this.zone.run(() => {
+      if (!snap.exists()) return [];
+      return Object.entries(snap.val() as Record<string, AdminLog>)
+        .map(([id, log]) => ({ ...log, id }))
+        .sort((a, b) => b.timestamp - a.timestamp)
+        .slice(0, limit);
+    });
   }
 
   // ─── Utils ───────────────────────────────────────────────────────

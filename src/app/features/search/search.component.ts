@@ -4,6 +4,7 @@ import { Router, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { BehaviorSubject, combineLatest, debounceTime, distinctUntilChanged, switchMap, of, map, Observable } from 'rxjs';
 import { MovieService } from '../../services/movie.service';
+import { AnalyticsService } from '../../services/analytics.service';
 import { MediaItem } from '../../models/media.model';
 
 @Component({
@@ -353,6 +354,7 @@ import { MediaItem } from '../../models/media.model';
 export class SearchComponent {
   private readonly movieService = inject(MovieService);
   private readonly router = inject(Router);
+  private readonly analytics = inject(AnalyticsService);
 
   readonly query = signal<string>('');
   readonly filterType = signal<'all' | 'movie' | 'tv'>('all');
@@ -376,6 +378,7 @@ export class SearchComponent {
     switchMap(q => {
       const clean = q.trim();
       if (!clean) return of([]);
+      this.analytics.trackSearch(clean).catch(() => {});
       return this.movieService.searchMulti(clean).pipe(map(res => res.results));
     })
   );

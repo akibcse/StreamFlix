@@ -49,6 +49,19 @@ export class AnalyticsService {
       mediaData.views = (mediaData.views || 0) + 1;
       mediaData.lastViewed = Date.now();
       await set(mediaRef, mediaData);
+
+      // Per-user watch history (for Visitor Dossier)
+      const { firstValueFrom } = await import('rxjs');
+      const user = await firstValueFrom(this.auth.currentUser$);
+      if (user?.uid) {
+        await push(ref(this.db, `user_activity/${user.uid}/history`), {
+          id: mediaId,
+          mediaType,
+          title,
+          timestamp: Date.now(),
+          watchedAt: Date.now()
+        });
+      }
     } catch { /* silent */ }
   }
 
@@ -73,6 +86,16 @@ export class AnalyticsService {
       existing.count = (existing.count || 0) + 1;
       existing.lastSearched = Date.now();
       await set(searchRef, existing);
+
+      // Per-user search history (for Visitor Dossier)
+      const { firstValueFrom } = await import('rxjs');
+      const user = await firstValueFrom(this.auth.currentUser$);
+      if (user?.uid) {
+        await push(ref(this.db, `user_activity/${user.uid}/searches`), {
+          query: query.trim(),
+          timestamp: Date.now()
+        });
+      }
     } catch { /* silent */ }
   }
 
@@ -125,13 +148,47 @@ export class AnalyticsService {
   }
 
   async getPopularContent(limit = 10): Promise<{ title: string; type: string; count: number }[]> {
+    // First try dedicated analytics/media collection
     const top = await this.getTopMedia(limit);
-    return top.map(m => ({ title: m.title, type: m.mediaType, count: m.views }));
+    if (top.length > 0) {
+      return top.map(m => ({ title: m.title, type: m.mediaType, count: m.views }));
+    }
+    // Fallback: aggregate from user_activity history across all users
+    try {
+      const snap = await get(ref(this.db, 'user_activity'));
+      if (!snap.exists()) return [];
+      const counts = new Map<string, { title: string; type: string; count: number }>();
+      const usersData = snap.val() as Record<string, any>;
+      for (const userData of Object.values(usersData)) {
+        const hist = userData?.history || {};
+        for (const item of Object.values(hist) as any[]) {
+          const key = `${item.mediaType || 'movie'}_${item.id}`;
+          const title = item.title || item.name || 'Untitled';
+          const type = item.mediaType || (item.name && !item.title ? 'tv' : 'movie');
+          const existing = counts.get(key);
+          if (existing) {
+            existing.count++;
+          } else {
+            counts.set(key, { title, type, count: 1 });
+          }
+        }
+      }
+      return [...counts.values()]
+        .sort((a, b) => b.count - a.count)
+        .slice(0, limit);
+    } catch { return []; }
   }
 
   async getRecentSearches(limit = 10): Promise<{ query: string; timestamp: number }[]> {
-    const s = await this.getTrendingSearches(limit);
-    return s.map(x => ({ query: x.query, timestamp: x.lastSearched }));
+    // First try dedicated analytics/searches collection
+    const searches = await this.getTrendingSearches(limit);
+    if (searches.length > 0) {
+      return searches
+        .sort((a, b) => b.lastSearched - a.lastSearched)
+        .slice(0, limit)
+        .map(x => ({ query: x.query, timestamp: x.lastSearched }));
+    }
+    return [];
   }
 
   async getTodayStats(): Promise<DailyStats> {

@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -218,6 +218,7 @@ export interface AdminGenreItem {
 export class AdminGenresComponent implements OnInit {
   private readonly movieService = inject(MovieService);
   private readonly adminMedia = inject(AdminMediaService);
+  private readonly cdr = inject(ChangeDetectorRef);
 
   selectedType: 'movie' | 'tv' = 'movie';
   genres: AdminGenreItem[] = [];
@@ -264,6 +265,7 @@ export class AdminGenresComponent implements OnInit {
       }));
 
     this.genres = [...matchingCustom, ...tmdbList];
+    this.cdr.detectChanges();
   }
 
   async addCustomGenre(): Promise<void> {

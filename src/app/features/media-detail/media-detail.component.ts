@@ -359,17 +359,30 @@ import { MediaDetails, MediaItem, MediaType, UserReview } from '../../models/med
     </ng-template>
   `,
   styles: [`
+    :host {
+      display: block;
+      width: 100%;
+      max-width: 100%;
+      overflow-x: clip;
+    }
     .detail-page {
       background: #0b0e14;
       color: #ffffff;
       min-height: 100vh;
       padding-bottom: 5rem;
+      width: 100%;
+      max-width: 100%;
+      overflow-x: clip;
+      box-sizing: border-box;
     }
     .backdrop-hero {
       position: relative;
       background-size: cover;
       background-position: center top;
-      padding: 2rem 1.5rem 4rem;
+      padding: clamp(1.25rem, 3vw, 2.5rem) clamp(1rem, 3vw, 1.5rem) clamp(2.5rem, 5vw, 4rem);
+      width: 100%;
+      max-width: 100%;
+      box-sizing: border-box;
     }
     .hero-overlay {
       position: absolute;
@@ -380,36 +393,52 @@ import { MediaDetails, MediaItem, MediaType, UserReview } from '../../models/med
     .hero-container {
       position: relative;
       z-index: 2;
+      width: 100%;
       max-width: 1440px;
       margin: 0 auto;
+      min-width: 0;
+      box-sizing: border-box;
     }
     .breadcrumbs {
       display: flex;
       align-items: center;
       gap: 0.5rem;
       color: #94a3b8;
-      font-size: 0.85rem;
-      margin-bottom: 2rem;
+      font-size: clamp(0.78rem, 2vw, 0.85rem);
+      margin-bottom: clamp(1rem, 2.5vw, 2rem);
+      flex-wrap: wrap;
+      word-break: break-word;
+      min-width: 0;
     }
     .breadcrumbs a {
       color: #cbd5e1;
       text-decoration: none;
+      white-space: nowrap;
     }
     .breadcrumbs a:hover { color: #a855f7; }
-    .breadcrumbs .current { color: #e2e8f0; font-weight: 500; }
+    .breadcrumbs .current {
+      color: #e2e8f0;
+      font-weight: 500;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 280px;
+      white-space: nowrap;
+    }
     .hero-content {
       display: grid;
-      grid-template-columns: 320px 1fr;
-      gap: 3rem;
+      grid-template-columns: minmax(0, 320px) minmax(0, 1fr);
+      gap: clamp(1.5rem, 3.5vw, 3rem);
       align-items: flex-start;
+      min-width: 0;
+      width: 100%;
     }
     @media (max-width: 900px) {
       .hero-content {
-        grid-template-columns: 1fr;
-        gap: 2rem;
+        grid-template-columns: minmax(0, 1fr);
+        gap: 1.75rem;
       }
       .poster-wrap {
-        max-width: 240px;
+        max-width: 220px;
         margin: 0 auto;
       }
     }
@@ -421,6 +450,8 @@ import { MediaDetails, MediaItem, MediaType, UserReview } from '../../models/med
       border: 1px solid rgba(255,255,255,0.1);
       aspect-ratio: 2/3;
       background: #1e293b;
+      width: 100%;
+      max-width: 100%;
     }
     .poster-img {
       width: 100%;
@@ -449,16 +480,19 @@ import { MediaDetails, MediaItem, MediaType, UserReview } from '../../models/med
       display: flex;
       flex-direction: column;
       gap: 1.25rem;
+      min-width: 0;
+      max-width: 100%;
+      overflow-wrap: break-word;
     }
     .header-tags {
       display: flex;
-      gap: 0.6rem;
+      gap: 0.5rem;
       flex-wrap: wrap;
     }
     .type-pill, .status-pill, .hd-pill {
-      font-size: 0.75rem;
+      font-size: 0.72rem;
       font-weight: 700;
-      padding: 0.3rem 0.75rem;
+      padding: 0.28rem 0.7rem;
       border-radius: 6px;
       text-transform: uppercase;
       letter-spacing: 0.05em;
@@ -478,35 +512,43 @@ import { MediaDetails, MediaItem, MediaType, UserReview } from '../../models/med
       border: 1px solid rgba(234, 179, 8, 0.3);
     }
     .media-title {
-      font-size: clamp(2.2rem, 5vw, 3.8rem);
+      font-size: clamp(1.8rem, 5vw, 3.8rem);
       font-weight: 900;
       color: #ffffff;
-      line-height: 1.1;
+      line-height: 1.15;
       letter-spacing: -0.02em;
+      word-break: break-word;
+      overflow-wrap: break-word;
+      margin: 0;
     }
     .tagline {
-      font-size: 1.1rem;
+      font-size: clamp(0.95rem, 2vw, 1.1rem);
       color: #94a3b8;
       font-style: italic;
+      word-break: break-word;
+      margin: 0;
     }
     .meta-row {
       display: flex;
       align-items: center;
-      gap: 1.5rem;
+      gap: 0.75rem 1.25rem;
       flex-wrap: wrap;
+      min-width: 0;
     }
     .meta-chip {
       display: flex;
       align-items: center;
       gap: 0.4rem;
       color: #cbd5e1;
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       font-weight: 500;
+      white-space: nowrap;
     }
     .genre-pills {
       display: flex;
       gap: 0.5rem;
       flex-wrap: wrap;
+      min-width: 0;
     }
     .genre-pill {
       background: rgba(255, 255, 255, 0.08);
@@ -514,9 +556,10 @@ import { MediaDetails, MediaItem, MediaType, UserReview } from '../../models/med
       color: #e2e8f0;
       padding: 0.35rem 0.85rem;
       border-radius: 20px;
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       text-decoration: none;
       transition: all 0.2s ease;
+      white-space: nowrap;
     }
     .genre-pill:hover {
       background: #6366f1;
@@ -531,14 +574,17 @@ import { MediaDetails, MediaItem, MediaType, UserReview } from '../../models/med
     .synopsis-box p {
       color: #cbd5e1;
       line-height: 1.7;
-      font-size: 1.05rem;
+      font-size: 0.98rem;
       max-width: 900px;
+      word-break: break-word;
+      overflow-wrap: break-word;
     }
     .action-buttons {
       display: flex;
-      gap: 1rem;
+      gap: 0.75rem;
       flex-wrap: wrap;
       margin-top: 0.5rem;
+      width: 100%;
     }
     .btn-watch {
       display: inline-flex;
@@ -546,16 +592,17 @@ import { MediaDetails, MediaItem, MediaType, UserReview } from '../../models/med
       gap: 0.65rem;
       background: linear-gradient(135deg, #6366f1, #a855f7);
       color: white;
-      font-size: 1.1rem;
+      font-size: 1.05rem;
       font-weight: 700;
-      padding: 0.95rem 2.2rem;
+      padding: 0.85rem 2rem;
       border-radius: 14px;
       text-decoration: none;
       box-shadow: 0 8px 25px rgba(99, 102, 241, 0.45);
       transition: all 0.25s ease;
+      cursor: pointer;
     }
     .btn-watch:hover {
-      transform: translateY(-3px);
+      transform: translateY(-2px);
       box-shadow: 0 12px 35px rgba(99, 102, 241, 0.6);
     }
     .icon-play { font-size: 1.2rem; }
@@ -566,9 +613,9 @@ import { MediaDetails, MediaItem, MediaType, UserReview } from '../../models/med
       background: rgba(255, 255, 255, 0.08);
       border: 1px solid rgba(255, 255, 255, 0.15);
       color: #ffffff;
-      padding: 0.85rem 1.4rem;
+      padding: 0.8rem 1.25rem;
       border-radius: 14px;
-      font-size: 0.95rem;
+      font-size: 0.92rem;
       font-weight: 600;
       cursor: pointer;
       transition: all 0.2s ease;
@@ -582,29 +629,68 @@ import { MediaDetails, MediaItem, MediaType, UserReview } from '../../models/med
       border-color: #a855f7;
       color: #d8b4fe;
     }
+    @media (max-width: 640px) {
+      .action-buttons {
+        gap: 0.5rem;
+      }
+      .btn-watch {
+        width: 100%;
+        justify-content: center;
+        padding: 0.9rem 1.5rem;
+        font-size: 1.05rem;
+      }
+      .btn-action {
+        flex: 1 1 calc(50% - 0.35rem);
+        justify-content: center;
+        padding: 0.75rem 0.75rem;
+        font-size: 0.85rem;
+      }
+    }
+    @media (max-width: 380px) {
+      .btn-action {
+        flex: 1 1 100%;
+      }
+    }
+
     .content-container {
+      width: 100%;
       max-width: 1440px;
       margin: 2rem auto 0;
-      padding: 0 1.5rem;
+      padding: 0 clamp(1rem, 3vw, 1.5rem);
+      box-sizing: border-box;
+      min-width: 0;
     }
     .detail-grid {
       display: grid;
-      grid-template-columns: 1fr 340px;
-      gap: 3rem;
+      grid-template-columns: minmax(0, 1fr) 340px;
+      gap: clamp(1.5rem, 3vw, 3rem);
+      min-width: 0;
+      width: 100%;
     }
     @media (max-width: 1024px) {
       .detail-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: minmax(0, 1fr);
       }
+    }
+    .main-column {
+      min-width: 0;
+      max-width: 100%;
+      overflow: hidden;
+    }
+    .side-column {
+      min-width: 0;
+      max-width: 100%;
     }
     .content-section {
       margin-bottom: 3.5rem;
+      min-width: 0;
+      max-width: 100%;
     }
     .section-title {
-      font-size: 1.5rem;
+      font-size: clamp(1.2rem, 3vw, 1.5rem);
       font-weight: 700;
       color: #ffffff;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1.25rem;
       border-left: 4px solid #6366f1;
       padding-left: 0.75rem;
     }
@@ -612,16 +698,21 @@ import { MediaDetails, MediaItem, MediaType, UserReview } from '../../models/med
       display: flex;
       gap: 1.25rem;
       overflow-x: auto;
+      width: 100%;
+      max-width: 100%;
       padding-bottom: 1rem;
       scrollbar-width: thin;
+      -webkit-overflow-scrolling: touch;
+      box-sizing: border-box;
     }
     .cast-card {
-      min-width: 130px;
-      max-width: 130px;
+      min-width: 120px;
+      max-width: 120px;
       text-decoration: none;
       color: inherit;
       cursor: pointer;
       transition: transform 0.2s;
+      flex-shrink: 0;
     }
     .cast-card:hover { transform: translateY(-4px); }
     .cast-img {
@@ -657,14 +748,22 @@ import { MediaDetails, MediaItem, MediaType, UserReview } from '../../models/med
     }
     .recommendations-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-      gap: 1.25rem;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 1rem;
+      min-width: 0;
+    }
+    @media (max-width: 520px) {
+      .recommendations-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.75rem;
+      }
     }
     .rec-card {
       text-decoration: none;
       color: inherit;
       cursor: pointer;
       transition: transform 0.2s;
+      min-width: 0;
     }
     .rec-card:hover { transform: translateY(-4px); }
     .rec-poster {
@@ -674,6 +773,7 @@ import { MediaDetails, MediaItem, MediaType, UserReview } from '../../models/med
       overflow: hidden;
       background: #1e293b;
       margin-bottom: 0.5rem;
+      width: 100%;
     }
     .rec-poster img {
       width: 100%;
@@ -703,6 +803,8 @@ import { MediaDetails, MediaItem, MediaType, UserReview } from '../../models/med
       display: flex;
       justify-content: space-between;
       align-items: center;
+      flex-wrap: wrap;
+      gap: 0.75rem;
       margin-bottom: 1.5rem;
     }
     .btn-write-review {
@@ -712,8 +814,9 @@ import { MediaDetails, MediaItem, MediaType, UserReview } from '../../models/med
       padding: 0.5rem 1.1rem;
       border-radius: 10px;
       cursor: pointer;
-      font-size: 0.9rem;
+      font-size: 0.88rem;
       transition: all 0.2s;
+      white-space: nowrap;
     }
     .btn-write-review:hover {
       background: #6366f1;
@@ -723,20 +826,26 @@ import { MediaDetails, MediaItem, MediaType, UserReview } from '../../models/med
       background: rgba(17, 24, 39, 0.8);
       border: 1px solid rgba(255,255,255,0.1);
       border-radius: 14px;
-      padding: 1.5rem;
+      padding: clamp(1rem, 3vw, 1.5rem);
       margin-bottom: 2rem;
+      min-width: 0;
     }
     .rating-input {
       display: flex;
       align-items: center;
       gap: 0.75rem;
+      flex-wrap: wrap;
       margin: 1rem 0;
+    }
+    .star-picker {
+      display: flex;
+      flex-wrap: wrap;
     }
     .star-picker button {
       background: none;
       border: none;
       color: #475569;
-      font-size: 1.4rem;
+      font-size: clamp(1.15rem, 3.5vw, 1.4rem);
       cursor: pointer;
       padding: 0 2px;
       transition: color 0.15s;
@@ -758,6 +867,7 @@ import { MediaDetails, MediaItem, MediaType, UserReview } from '../../models/med
       font-family: inherit;
       outline: none;
       resize: vertical;
+      box-sizing: border-box;
     }
     .form-control:focus {
       border-color: #6366f1;
@@ -767,6 +877,7 @@ import { MediaDetails, MediaItem, MediaType, UserReview } from '../../models/med
       justify-content: flex-end;
       gap: 0.75rem;
       margin-top: 1rem;
+      flex-wrap: wrap;
     }
     .btn-cancel {
       background: none;
@@ -788,23 +899,29 @@ import { MediaDetails, MediaItem, MediaType, UserReview } from '../../models/med
       display: flex;
       flex-direction: column;
       gap: 1.25rem;
+      min-width: 0;
     }
     .review-item {
       background: rgba(17, 24, 39, 0.6);
       border: 1px solid rgba(255,255,255,0.06);
       border-radius: 14px;
       padding: 1.25rem;
+      min-width: 0;
+      word-break: break-word;
     }
     .review-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
       margin-bottom: 0.75rem;
     }
     .rev-user {
       display: flex;
       align-items: center;
       gap: 0.75rem;
+      min-width: 0;
     }
     .user-avatar {
       width: 36px;
@@ -817,11 +934,12 @@ import { MediaDetails, MediaItem, MediaType, UserReview } from '../../models/med
       justify-content: center;
       font-weight: 700;
       font-size: 0.9rem;
+      flex-shrink: 0;
     }
     .rev-name { font-weight: 600; color: #ffffff; font-size: 0.95rem; }
     .rev-date { font-size: 0.75rem; color: #64748b; }
-    .rev-score { font-weight: 700; color: #fbbf24; }
-    .rev-content { color: #cbd5e1; line-height: 1.6; font-size: 0.95rem; }
+    .rev-score { font-weight: 700; color: #fbbf24; white-space: nowrap; }
+    .rev-content { color: #cbd5e1; line-height: 1.6; font-size: 0.95rem; word-break: break-word; }
     .empty-reviews {
       text-align: center;
       padding: 2.5rem;
@@ -833,9 +951,15 @@ import { MediaDetails, MediaItem, MediaType, UserReview } from '../../models/med
       background: rgba(17, 24, 39, 0.75);
       border: 1px solid rgba(255,255,255,0.08);
       border-radius: 16px;
-      padding: 1.5rem;
+      padding: clamp(1rem, 3vw, 1.5rem);
       position: sticky;
       top: 90px;
+      min-width: 0;
+    }
+    @media (max-width: 1024px) {
+      .info-card {
+        position: static !important;
+      }
     }
     .info-card h3 {
       font-size: 1.2rem;
@@ -848,6 +972,8 @@ import { MediaDetails, MediaItem, MediaType, UserReview } from '../../models/med
       display: flex;
       flex-direction: column;
       margin-bottom: 1rem;
+      min-width: 0;
+      word-break: break-word;
     }
     .side-item .lbl {
       font-size: 0.8rem;
@@ -860,6 +986,7 @@ import { MediaDetails, MediaItem, MediaType, UserReview } from '../../models/med
       color: #e2e8f0;
       font-weight: 500;
       margin-top: 0.2rem;
+      word-break: break-word;
     }
     .person-link {
       color: #a855f7;
@@ -876,34 +1003,37 @@ import { MediaDetails, MediaItem, MediaType, UserReview } from '../../models/med
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 1.5rem;
+      padding: 1rem;
+      box-sizing: border-box;
     }
     .trailer-modal {
-      width: 100%;
-      max-width: 900px;
+      width: min(900px, 96vw);
       background: #111827;
       border-radius: 16px;
       overflow: hidden;
       border: 1px solid rgba(255,255,255,0.1);
+      box-sizing: border-box;
     }
     .modal-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 1rem 1.5rem;
+      padding: 1rem clamp(1rem, 3vw, 1.5rem);
       border-bottom: 1px solid rgba(255,255,255,0.08);
     }
-    .modal-header h3 { margin: 0; font-size: 1.1rem; color: #ffffff; }
+    .modal-header h3 { margin: 0; font-size: clamp(0.95rem, 2.5vw, 1.1rem); color: #ffffff; word-break: break-word; }
     .btn-close {
       background: none;
       border: none;
       color: #94a3b8;
       font-size: 1.2rem;
       cursor: pointer;
+      padding: 0.25rem;
     }
     .video-wrapper {
       position: relative;
       aspect-ratio: 16/9;
+      width: 100%;
     }
     .video-wrapper iframe {
       width: 100%;
@@ -911,18 +1041,23 @@ import { MediaDetails, MediaItem, MediaType, UserReview } from '../../models/med
       border: none;
     }
     .share-modal {
-      width: 100%;
-      max-width: 440px;
+      width: min(440px, 94vw);
       background: #111827;
       border-radius: 16px;
-      padding: 1.5rem;
+      padding: clamp(1rem, 3vw, 1.5rem);
       border: 1px solid rgba(255,255,255,0.1);
+      box-sizing: border-box;
     }
     .share-options {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 0.75rem;
-      margin: 1.5rem 0;
+      margin: 1.25rem 0;
+    }
+    @media (max-width: 380px) {
+      .share-options {
+        grid-template-columns: 1fr;
+      }
     }
     .share-btn {
       padding: 0.75rem;
@@ -931,7 +1066,7 @@ import { MediaDetails, MediaItem, MediaType, UserReview } from '../../models/med
       color: white;
       font-weight: 600;
       cursor: pointer;
-      font-size: 0.9rem;
+      font-size: 0.88rem;
     }
     .share-btn.twitter { background: #1da1f2; }
     .share-btn.facebook { background: #1877f2; }
@@ -940,15 +1075,17 @@ import { MediaDetails, MediaItem, MediaType, UserReview } from '../../models/med
     .copy-box {
       display: flex;
       gap: 0.5rem;
+      min-width: 0;
     }
     .share-input {
       flex: 1;
+      min-width: 0;
       background: rgba(0,0,0,0.3);
       border: 1px solid rgba(255,255,255,0.1);
       border-radius: 8px;
       padding: 0.6rem 0.8rem;
       color: #94a3b8;
-      font-size: 0.85rem;
+      font-size: 0.82rem;
     }
     .btn-copy {
       background: #6366f1;
@@ -958,6 +1095,7 @@ import { MediaDetails, MediaItem, MediaType, UserReview } from '../../models/med
       border-radius: 8px;
       font-weight: 600;
       cursor: pointer;
+      white-space: nowrap;
     }
     .loading-state {
       min-height: 70vh;

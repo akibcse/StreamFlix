@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet, RouterModule, Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs';
@@ -874,7 +874,6 @@ import { AppUser } from './models/user.model';
     .mob-logout:hover { background: rgba(239,68,68,0.1); color: #fca5a5; }
     .page-body.admin-mode { padding-bottom: 0 !important; }
   `],
-  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppComponent implements OnInit {
   private readonly auth = inject(AuthService);

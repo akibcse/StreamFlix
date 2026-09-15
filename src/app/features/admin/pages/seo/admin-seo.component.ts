@@ -452,6 +452,7 @@ export class AdminSeoComponent implements OnInit, OnDestroy {
         if (s.globalSeoDescription) this.seo.defaultDescription = s.globalSeoDescription;
         if (s.globalOgImage) this.seo.ogImage = s.globalOgImage;
         if (s.siteUrl) this.seo.siteUrl = s.siteUrl;
+        this.cdr.detectChanges();
       }
     });
   }

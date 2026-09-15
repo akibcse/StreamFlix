@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../../../services/auth.service';
@@ -213,6 +213,8 @@ import { environment } from '../../../../../environments/environment';
             </div>
           </form>
         </div>
+      </div>
+
       <!-- USER TELEMETRY MODAL -->
       <div class="modal-backdrop" *ngIf="telemetryUser" (click)="closeTelemetryModal()">
         <div class="modal-card dossier-user-card" (click)="$event.stopPropagation()">
@@ -708,6 +710,7 @@ import { environment } from '../../../../../environments/environment';
 })
 export class AdminUsersComponent implements OnInit {
   private readonly auth = inject(AuthService);
+  private readonly cdr = inject(ChangeDetectorRef);
 
   readonly currentUser$ = this.auth.currentUser$;
 
@@ -727,10 +730,12 @@ export class AdminUsersComponent implements OnInit {
 
   openTelemetryModal(user: AppUser): void {
     this.telemetryUser = user;
+    this.cdr.detectChanges();
   }
 
   closeTelemetryModal(): void {
     this.telemetryUser = null;
+    this.cdr.detectChanges();
   }
 
   get adminCount(): number {
@@ -746,7 +751,10 @@ export class AdminUsersComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.auth.getAllUsers().subscribe(list => (this.users = list));
+    this.auth.getAllUsers().subscribe(list => {
+      this.users = list;
+      this.cdr.detectChanges();
+    });
   }
 
   isUserAdmin(user: AppUser): boolean {

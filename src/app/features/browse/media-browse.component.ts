@@ -1,8 +1,8 @@
-import { Component, ChangeDetectionStrategy, inject, signal, OnInit } from '@angular/core';
+import { Component, ChangeDetectionStrategy, ChangeDetectorRef, inject, signal, OnInit, OnDestroy, AfterViewChecked, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { Observable, switchMap, combineLatest, map } from 'rxjs';
+import { Observable, Subject, takeUntil, catchError, of } from 'rxjs';
 import { MovieService } from '../../services/movie.service';
 import { MediaItem, Genre, MediaType } from '../../models/media.model';
 
@@ -57,10 +57,10 @@ import { MediaItem, Genre, MediaType } from '../../models/media.model';
         </header>
 
         <!-- Media Grid -->
-        <main class="grid-section" *ngIf="mediaItems$ | async as items; else loadingTpl">
-          <div class="media-grid" *ngIf="items.length > 0; else emptyTpl">
+        <main class="grid-section">
+          <div class="media-grid" *ngIf="allItems().length > 0">
             <article
-              *ngFor="let item of items"
+              *ngFor="let item of allItems()"
               class="browse-card"
               (click)="navigateToMedia(item)"
             >
@@ -78,38 +78,27 @@ import { MediaItem, Genre, MediaType } from '../../models/media.model';
             </article>
           </div>
 
-          <!-- Pagination -->
-          <div class="pagination-bar" *ngIf="items.length > 0">
-            <button
-              class="page-btn"
-              (click)="changePage(currentPage() - 1)"
-              [disabled]="currentPage() <= 1"
-            >
-              ← Previous
-            </button>
-            <span class="page-indicator">Page {{ currentPage() }}</span>
-            <button
-              class="page-btn"
-              (click)="changePage(currentPage() + 1)"
-            >
-              Next →
-            </button>
-          </div>
-        </main>
-
-        <ng-template #emptyTpl>
-          <div class="empty-state">
-            <p>No titles found matching your filter criteria.</p>
-            <button class="btn-reset" (click)="resetFilters()">Reset Filters</button>
-          </div>
-        </ng-template>
-
-        <ng-template #loadingTpl>
-          <div class="loading-box">
+          <!-- Initial Loading -->
+          <div class="loading-box" *ngIf="isInitialLoading() && allItems().length === 0">
             <div class="spinner"></div>
             <p>Loading titles...</p>
           </div>
-        </ng-template>
+
+          <!-- Loading More -->
+          <div class="loading-more" *ngIf="isLoadingMore() && allItems().length > 0">
+            <div class="spinner"></div>
+            <p>Loading more titles...</p>
+          </div>
+
+          <!-- Infinite Scroll Sentinel -->
+          <div class="scroll-sentinel" #browseScrollSentinel></div>
+
+          <!-- Empty State -->
+          <div class="empty-state" *ngIf="!isInitialLoading() && allItems().length === 0">
+            <p>No titles found matching your filter criteria.</p>
+            <button class="btn-reset" (click)="resetFilters()">Reset Filters</button>
+          </div>
+        </main>
       </div>
     </div>
   `,
@@ -201,27 +190,6 @@ import { MediaItem, Genre, MediaType } from '../../models/media.model';
     .card-meta { padding: 0.85rem; display: flex; flex-direction: column; gap: 0.25rem; }
     .card-title { font-size: 0.92rem; font-weight: 600; color: #ffffff; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .card-year { font-size: 0.8rem; color: #94a3b8; }
-    .pagination-bar {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 1.5rem;
-      margin-top: 3rem;
-    }
-    .page-btn {
-      background: #151a24;
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      color: #ffffff;
-      padding: 0.6rem 1.25rem;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 0.9rem;
-      font-weight: 500;
-      transition: all 0.2s;
-    }
-    .page-btn:hover:not(:disabled) { background: #6366f1; border-color: #6366f1; }
-    .page-btn:disabled { opacity: 0.4; cursor: not-allowed; }
-    .page-indicator { color: #94a3b8; font-size: 0.95rem; font-weight: 600; }
     .empty-state { text-align: center; padding: 5rem 1rem; color: #94a3b8; }
     .btn-reset {
       margin-top: 1rem;
@@ -232,7 +200,7 @@ import { MediaItem, Genre, MediaType } from '../../models/media.model';
       border-radius: 8px;
       cursor: pointer;
     }
-    .loading-box { text-align: center; padding: 5rem 1rem; color: #94a3b8; }
+    .loading-box, .loading-more { text-align: center; padding: 3rem 1rem; color: #94a3b8; }
     .spinner {
       width: 40px; height: 40px;
       border: 3px solid rgba(99, 102, 241, 0.2);
@@ -241,25 +209,39 @@ import { MediaItem, Genre, MediaType } from '../../models/media.model';
       animation: spin 0.8s linear infinite;
       margin: 0 auto 1rem;
     }
+    .scroll-sentinel { height: 1px; width: 100%; }
     @keyframes spin { to { transform: rotate(360deg); } }
   `],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class MediaBrowseComponent implements OnInit {
+export class MediaBrowseComponent implements OnInit, OnDestroy, AfterViewChecked {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly movieService = inject(MovieService);
+  private readonly cdr = inject(ChangeDetectorRef);
+  private readonly destroy$ = new Subject<void>();
 
   readonly mediaType = signal<MediaType>('movie');
   readonly selectedGenre = signal<number | null>(null);
   readonly selectedSort = signal<string>('popularity.desc');
   readonly selectedYear = signal<number | null>(null);
-  readonly currentPage = signal<number>(1);
+
+  readonly allItems = signal<MediaItem[]>([]);
+  readonly isInitialLoading = signal<boolean>(false);
+  readonly isLoadingMore = signal<boolean>(false);
+
+  private currentPage = 1;
+  private totalPages = 500;
+  private isLoadingMoreFlag = false;
+
+  private scrollObserver: IntersectionObserver | null = null;
+  private sentinelConnected = false;
+
+  @ViewChild('browseScrollSentinel') browseScrollSentinel?: ElementRef<HTMLElement>;
 
   readonly years: number[] = Array.from({ length: 35 }, (_, i) => 2026 - i);
 
   genres$!: Observable<Genre[]>;
-  mediaItems$!: Observable<MediaItem[]>;
 
   ngOnInit(): void {
     this.route.url.subscribe(segments => {
@@ -272,63 +254,113 @@ export class MediaBrowseComponent implements OnInit {
       if (params['genre']) {
         this.selectedGenre.set(Number(params['genre']));
       }
+      this.fetchInitial();
     });
+  }
 
-    this.mediaItems$ = combineLatest([
-      this.route.url,
-      this.route.queryParams
-    ]).pipe(
-      switchMap(() =>
-        this.movieService.discover(this.mediaType(), {
-          genreId: this.selectedGenre() || undefined,
-          sortBy: this.selectedSort(),
-          year: this.selectedYear() || undefined,
-          page: this.currentPage()
-        })
-      ),
-      map(res => res.results)
+  ngAfterViewChecked(): void {
+    if (this.browseScrollSentinel?.nativeElement && !this.sentinelConnected) {
+      this.setupObserver();
+      this.sentinelConnected = true;
+    }
+    if (!this.browseScrollSentinel?.nativeElement) {
+      this.sentinelConnected = false;
+    }
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+    this.scrollObserver?.disconnect();
+  }
+
+  private setupObserver(): void {
+    this.scrollObserver?.disconnect();
+    this.scrollObserver = new IntersectionObserver(
+      entries => {
+        if (entries[0]?.isIntersecting) {
+          this.loadMoreItems();
+        }
+      },
+      { rootMargin: '400px' }
     );
+    if (this.browseScrollSentinel?.nativeElement) {
+      this.scrollObserver.observe(this.browseScrollSentinel.nativeElement);
+    }
+  }
+
+  private fetchInitial(): void {
+    this.currentPage = 1;
+    this.allItems.set([]);
+    this.isInitialLoading.set(true);
+    this.isLoadingMoreFlag = false;
+    this.cdr.markForCheck();
+
+    this.movieService.discover(this.mediaType(), {
+      genreId: this.selectedGenre() || undefined,
+      sortBy: this.selectedSort(),
+      year: this.selectedYear() || undefined,
+      page: 1
+    }).pipe(
+      takeUntil(this.destroy$),
+      catchError(() => of({ results: [] as MediaItem[], total_pages: 1, page: 1, total_results: 0 }))
+    ).subscribe(res => {
+      this.allItems.set(res.results || []);
+      this.totalPages = res.total_pages || 1;
+      this.currentPage = 1;
+      this.isInitialLoading.set(false);
+      this.cdr.markForCheck();
+    });
+  }
+
+  private loadMoreItems(): void {
+    if (this.isLoadingMoreFlag || this.currentPage >= this.totalPages) return;
+    this.isLoadingMoreFlag = true;
+    this.isLoadingMore.set(true);
+    this.cdr.markForCheck();
+
+    const nextPage = this.currentPage + 1;
+    this.movieService.discover(this.mediaType(), {
+      genreId: this.selectedGenre() || undefined,
+      sortBy: this.selectedSort(),
+      year: this.selectedYear() || undefined,
+      page: nextPage
+    }).pipe(
+      takeUntil(this.destroy$),
+      catchError(() => of({ results: [] as MediaItem[], total_pages: this.totalPages, page: nextPage, total_results: 0 }))
+    ).subscribe(res => {
+      const newItems = res.results || [];
+      if (newItems.length > 0) {
+        this.allItems.update(prev => [...prev, ...newItems]);
+        this.currentPage = nextPage;
+        this.totalPages = res.total_pages || this.totalPages;
+      }
+      this.isLoadingMoreFlag = false;
+      this.isLoadingMore.set(false);
+      this.cdr.markForCheck();
+    });
   }
 
   onGenreChange(id: number | null): void {
     this.selectedGenre.set(id);
-    this.currentPage.set(1);
-    this.refresh();
+    this.fetchInitial();
   }
 
   onSortChange(sort: string): void {
     this.selectedSort.set(sort);
-    this.currentPage.set(1);
-    this.refresh();
+    this.fetchInitial();
   }
 
   onYearChange(year: number | null): void {
     this.selectedYear.set(year);
-    this.currentPage.set(1);
-    this.refresh();
-  }
-
-  changePage(page: number): void {
-    this.currentPage.set(page);
-    this.refresh();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    this.fetchInitial();
   }
 
   resetFilters(): void {
     this.selectedGenre.set(null);
     this.selectedSort.set('popularity.desc');
     this.selectedYear.set(null);
-    this.currentPage.set(1);
-    this.refresh();
-  }
-
-  private refresh(): void {
-    this.mediaItems$ = this.movieService.discover(this.mediaType(), {
-      genreId: this.selectedGenre() || undefined,
-      sortBy: this.selectedSort(),
-      year: this.selectedYear() || undefined,
-      page: this.currentPage()
-    }).pipe(map(res => res.results));
+    this.fetchInitial();
   }
 
   getPosterUrl(path: string | null): string {

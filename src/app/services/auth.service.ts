@@ -1,4 +1,4 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable, inject, NgZone } from '@angular/core';
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -22,6 +22,7 @@ import { environment } from '../../environments/environment';
 })
 export class AuthService {
   private readonly firebase = inject(FirebaseService);
+  private readonly zone = inject(NgZone);
 
   private readonly currentUserSubject = new BehaviorSubject<AppUser | null>(null);
   public readonly currentUser$ = this.currentUserSubject.asObservable();
@@ -52,80 +53,82 @@ export class AuthService {
   }
 
   private initAuthState(): void {
-    onAuthStateChanged(this.firebase.auth, async (fbUser: FirebaseUser | null) => {
-      if (!fbUser) {
-        this.currentUserSubject.next(null);
-        this.loadingSubject.next(false);
-        return;
-      }
+    onAuthStateChanged(this.firebase.auth, (fbUser: FirebaseUser | null) => {
+      this.zone.run(async () => {
+        if (!fbUser) {
+          this.currentUserSubject.next(null);
+          this.loadingSubject.next(false);
+          return;
+        }
 
-      try {
-        const userRef = ref(this.firebase.db, `users/${fbUser.uid}`);
-        const snapshot = await get(userRef);
+        try {
+          const userRef = ref(this.firebase.db, `users/${fbUser.uid}`);
+          const snapshot = await get(userRef);
 
-        let appUser: AppUser;
-        const now = Date.now();
-        const emailLower = fbUser.email?.toLowerCase() || '';
-        const isAdminConfigured = environment.adminEmails?.map(e => e.toLowerCase()).includes(emailLower);
+          let appUser: AppUser;
+          const now = Date.now();
+          const emailLower = fbUser.email?.toLowerCase() || '';
+          const isAdminConfigured = environment.adminEmails?.map(e => e.toLowerCase()).includes(emailLower);
 
-        const telemetry = this.getClientTelemetry();
+          const telemetry = this.getClientTelemetry();
 
-        if (snapshot.exists()) {
-          const data = snapshot.val();
-          const role: 'admin' | 'user' = (isAdminConfigured || data.role === 'admin') ? 'admin' : 'user';
-          
-          appUser = {
-            uid: fbUser.uid,
-            email: fbUser.email,
-            displayName: fbUser.displayName || data.displayName || 'User',
-            photoURL: fbUser.photoURL || null,
-            role,
-            createdAt: data.createdAt || now,
-            lastLoginAt: now,
-            ...telemetry
-          };
+          if (snapshot.exists()) {
+            const data = snapshot.val();
+            const role: 'admin' | 'user' = (isAdminConfigured || data.role === 'admin') ? 'admin' : 'user';
+            
+            appUser = {
+              uid: fbUser.uid,
+              email: fbUser.email,
+              displayName: fbUser.displayName || data.displayName || 'User',
+              photoURL: fbUser.photoURL || null,
+              role,
+              createdAt: data.createdAt || now,
+              lastLoginAt: now,
+              ...telemetry
+            };
 
-          await update(userRef, {
-            lastLoginAt: now,
-            role: appUser.role,
-            displayName: appUser.displayName,
-            email: appUser.email,
-            ...telemetry
-          });
-        } else {
-          appUser = {
+            await update(userRef, {
+              lastLoginAt: now,
+              role: appUser.role,
+              displayName: appUser.displayName,
+              email: appUser.email,
+              ...telemetry
+            });
+          } else {
+            appUser = {
+              uid: fbUser.uid,
+              email: fbUser.email,
+              displayName: fbUser.displayName || 'User',
+              photoURL: fbUser.photoURL || null,
+              role: isAdminConfigured ? 'admin' : 'user',
+              createdAt: now,
+              lastLoginAt: now,
+              ...telemetry
+            };
+
+            await set(userRef, appUser);
+          }
+
+          this.currentUserSubject.next(appUser);
+        } catch (err) {
+          console.error('Error syncing user profile with database:', err);
+          const emailLower = fbUser.email?.toLowerCase() || '';
+          const isAdminConfigured = environment.adminEmails?.map(e => e.toLowerCase()).includes(emailLower);
+          const role: 'admin' | 'user' = isAdminConfigured ? 'admin' : 'user';
+
+          this.currentUserSubject.next({
             uid: fbUser.uid,
             email: fbUser.email,
             displayName: fbUser.displayName || 'User',
-            photoURL: fbUser.photoURL || null,
-            role: isAdminConfigured ? 'admin' : 'user',
-            createdAt: now,
-            lastLoginAt: now,
-            ...telemetry
-          };
-
-          await set(userRef, appUser);
+            photoURL: fbUser.photoURL,
+            role,
+            createdAt: Date.now(),
+            lastLoginAt: Date.now()
+          });
+        } finally {
+          this.loadingSubject.next(false);
         }
-
-        this.currentUserSubject.next(appUser);
-      } catch (err) {
-        console.error('Error syncing user profile with database:', err);
-        const emailLower = fbUser.email?.toLowerCase() || '';
-        const isAdminConfigured = environment.adminEmails?.map(e => e.toLowerCase()).includes(emailLower);
-        const role: 'admin' | 'user' = isAdminConfigured ? 'admin' : 'user';
-
-        this.currentUserSubject.next({
-          uid: fbUser.uid,
-          email: fbUser.email,
-          displayName: fbUser.displayName || 'User',
-          photoURL: fbUser.photoURL,
-          role,
-          createdAt: Date.now(),
-          lastLoginAt: Date.now()
-        });
-      } finally {
-        this.loadingSubject.next(false);
-      }
+      });
     });
   }
 
@@ -215,16 +218,18 @@ export class AuthService {
       const listener = onValue(
         usersRef,
         snapshot => {
-          if (snapshot.exists()) {
-            const data = snapshot.val();
-            const users: AppUser[] = Object.values(data);
-            users.sort((a, b) => b.createdAt - a.createdAt);
-            observer.next(users);
-          } else {
-            observer.next([]);
-          }
+          this.zone.run(() => {
+            if (snapshot.exists()) {
+              const data = snapshot.val();
+              const users: AppUser[] = Object.values(data);
+              users.sort((a, b) => b.createdAt - a.createdAt);
+              observer.next(users);
+            } else {
+              observer.next([]);
+            }
+          });
         },
-        error => observer.error(error)
+        error => this.zone.run(() => observer.error(error))
       );
 
       return () => off(usersRef, 'value', listener);

@@ -6,9 +6,16 @@
 
 html, body {
   height: 100%;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: clip;
   background-color: #0b0e14;
   color: #f1f5f9;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+img, video, iframe {
+  max-width: 100%;
 }

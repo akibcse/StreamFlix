@@ -12,23 +12,20 @@ const NAV_GROUPS = [
     { path: '/admin/analytics',   label: 'Analytics & Traffic', short: 'Analytics', icon: 'activity', color: '#10b981' },
     { path: '/admin/visitors',    label: 'Visitor Logs',        short: 'Visitors',  icon: 'eye',      color: '#06b6d4' },
   ]},
-  { group: 'Content CMS', items: [
-    { path: '/admin/movies',   label: 'Movies & Import',    short: 'Movies',  icon: 'film',   color: '#ec4899' },
-    { path: '/admin/tv',       label: 'TV Series',          short: 'TV',      icon: 'tv',     color: '#8b5cf6' },
+  { group: 'Content & Servers', items: [
     { path: '/admin/genres',   label: 'Genres & Tags',      short: 'Genres',  icon: 'tag',    color: '#f59e0b' },
     { path: '/admin/servers',  label: 'Streaming Servers',  short: 'Servers', icon: 'server', color: '#3b82f6' },
   ]},
   { group: 'Community', items: [
     { path: '/admin/users',    label: 'Users & Accounts',    short: 'Users',   icon: 'users',   color: '#14b8a6' },
     { path: '/admin/reviews',  label: 'Reviews Moderation',  short: 'Reviews', icon: 'message', color: '#f97316' },
-    { path: '/admin/roles',    label: 'Roles & Permissions', short: 'Roles',   icon: 'shield',  color: '#6366f1' },
   ]},
   { group: 'Configuration', items: [
     { path: '/admin/settings',      label: 'Site Settings',      short: 'Settings', icon: 'settings', color: '#64748b' },
     { path: '/admin/seo',           label: 'SEO & Metadata',     short: 'SEO',      icon: 'search',   color: '#0ea5e9' },
     { path: '/admin/ads',           label: 'Advertisements',     short: 'Ads',      icon: 'zap',      color: '#eab308' },
     { path: '/admin/notifications', label: 'Push Notifications', short: 'Notify',   icon: 'bell',     color: '#a855f7' },
-    { path: '/admin/logs',          label: 'System Logs',        short: 'Logs',     icon: 'file',     color: '#ef4444' },
+    { path: '/admin/logs',          label: 'Audit Trail',        short: 'Audit',    icon: 'file',     color: '#ef4444' },
   ]},
 ];
 
@@ -260,10 +257,10 @@ const ICONS: Record<string, string> = {
           <span class="tab-lbl">Home</span>
         </a>
 
-        <!-- 2. Movies CMS -->
-        <a routerLink="/admin/movies" routerLinkActive="tab-active" class="mob-tab" (click)="closeDrawers()">
-          <span class="tab-ico" [innerHTML]="svg('film', 20)"></span>
-          <span class="tab-lbl">Movies</span>
+        <!-- 2. Analytics -->
+        <a routerLink="/admin/analytics" routerLinkActive="tab-active" class="mob-tab" (click)="closeDrawers()">
+          <span class="tab-ico" [innerHTML]="svg('activity', 20)"></span>
+          <span class="tab-lbl">Analytics</span>
         </a>
 
         <!-- 3. Sidebar Drawer Trigger (Allows opening the full side panel from bottom bar) -->

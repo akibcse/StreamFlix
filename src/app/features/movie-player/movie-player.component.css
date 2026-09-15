@@ -1,6 +1,9 @@
 :host {
   display: block;
   min-height: 100vh;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: clip;
   background-color: #0b0e14;
   color: #f1f5f9;
   padding: 1.5rem 1rem 4rem;
@@ -8,11 +11,14 @@
 }
 
 .container {
+  width: 100%;
   max-width: 1280px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+  min-width: 0;
+  box-sizing: border-box;
 }
 
 /* Top Actions Bar */
@@ -213,6 +219,8 @@
   display: flex;
   align-items: center;
   gap: 0.75rem;
+  flex-wrap: wrap;
+  min-width: 0;
 }
 
 .btn-ep-nav {
@@ -224,6 +232,7 @@
   font-size: 0.85rem;
   cursor: pointer;
   transition: all 0.2s ease;
+  white-space: nowrap;
 }
 
 .btn-ep-nav:hover:not(:disabled) {
@@ -240,6 +249,7 @@
   font-size: 0.88rem;
   color: #94a3b8;
   font-weight: 500;
+  white-space: nowrap;
 }
 
 .episodes-title {
@@ -251,11 +261,12 @@
 
 .episodes-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
   gap: 1rem;
   max-height: 480px;
   overflow-y: auto;
   padding-right: 0.5rem;
+  min-width: 0;
 }
 
 .episode-card {
@@ -443,6 +454,8 @@
   flex-direction: column;
   gap: 0.75rem;
   margin-top: 0.5rem;
+  min-width: 0;
+  max-width: 100%;
 }
 
 .cast-scroll {
@@ -450,6 +463,10 @@
   gap: 1rem;
   overflow-x: auto;
   padding-bottom: 0.5rem;
+  width: 100%;
+  max-width: 100%;
+  -webkit-overflow-scrolling: touch;
+  box-sizing: border-box;
 }
 
 .cast-card {
@@ -813,4 +830,94 @@
 
 @keyframes spin {
   to { transform: rotate(360deg); }
+}
+
+/* Responsive Mobile Layout */
+@media (max-width: 900px) {
+  .details-card, .reviews-section, .series-controls {
+    padding: clamp(1rem, 3vw, 1.5rem);
+  }
+}
+
+@media (max-width: 768px) {
+  :host {
+    padding: 1rem 0.75rem 3.5rem;
+  }
+  .player-topbar {
+    gap: 0.75rem;
+  }
+  .quick-actions {
+    width: 100%;
+    justify-content: flex-start;
+    gap: 0.4rem;
+  }
+  .btn-icon-action, .btn-report {
+    padding: 0.4rem 0.65rem;
+    font-size: 0.8rem;
+  }
+  .server-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.6rem;
+    padding: 0.75rem 1rem;
+  }
+  .server-buttons {
+    width: 100%;
+  }
+  .series-controls-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+  .season-picker {
+    width: 100%;
+  }
+  .season-select {
+    flex: 1;
+    min-width: 0;
+  }
+  .episode-nav-buttons {
+    width: 100%;
+    justify-content: space-between;
+    gap: 0.5rem;
+  }
+  .current-ep-indicator {
+    font-size: 0.8rem;
+    text-align: center;
+  }
+  .episodes-grid {
+    grid-template-columns: 1fr;
+    max-height: 400px;
+  }
+  .modal-content {
+    width: min(900px, 95vw);
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .btn-ep-nav {
+    flex: 1 1 calc(50% - 0.25rem);
+    text-align: center;
+    justify-content: center;
+    padding: 0.5rem 0.6rem;
+    font-size: 0.78rem;
+  }
+  .current-ep-indicator {
+    width: 100%;
+    order: -1;
+    margin-bottom: 0.25rem;
+  }
+  .review-box-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  .review-header {
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+  .media-title {
+    font-size: 1.5rem;
+  }
 }

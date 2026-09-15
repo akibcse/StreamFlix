@@ -1,9 +1,10 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewChecked, inject, signal, ViewChild, ElementRef, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { MovieService } from '../../services/movie.service';
 import { SeoService } from '../../services/seo.service';
 import { MediaItem, MediaType } from '../../models/media.model';
+import { Subject, takeUntil, catchError, of } from 'rxjs';
 
 @Component({
   selector: 'app-genre-detail',
@@ -103,13 +104,14 @@ import { MediaItem, MediaType } from '../../models/media.model';
         <p>Try adjusting your filter options or browse other genres.</p>
       </div>
 
-      <!-- PAGINATION / LOAD MORE -->
-      <div class="load-more-wrap" *ngIf="!loading() && items().length > 0 && currentPage() < totalPages()">
-        <button class="btn-load-more" (click)="loadMore()" [disabled]="loadingMore()">
-          <span *ngIf="!loadingMore()">Load More {{ genreName() }}</span>
-          <span *ngIf="loadingMore()">Loading...</span>
-        </button>
+      <!-- Loading More Indicator -->
+      <div class="loading-more-box" *ngIf="loadingMore()">
+        <div class="mini-spinner"></div>
+        <span>Loading more titles...</span>
       </div>
+
+      <!-- Infinite Scroll Sentinel -->
+      <div class="scroll-sentinel" #genreDetailScrollSentinel></div>
     </div>
   `,
   styles: [`
@@ -381,12 +383,41 @@ import { MediaItem, MediaType } from '../../models/media.model';
       opacity: 0.5;
       cursor: not-allowed;
     }
-  `]
+    .loading-more-box {
+      padding: 2rem 1rem;
+      text-align: center;
+      color: #94a3b8;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.9rem;
+    }
+    .loading-more-box .mini-spinner {
+      width: 32px;
+      height: 32px;
+      border: 3px solid rgba(99, 102, 241, 0.2);
+      border-top-color: #6366f1;
+      border-radius: 50%;
+      animation: shimmer-spin 0.8s linear infinite;
+    }
+    @keyframes shimmer-spin { to { transform: rotate(360deg); } }
+    .scroll-sentinel { height: 1px; width: 100%; }
+  `],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class GenreDetailComponent implements OnInit {
+export class GenreDetailComponent implements OnInit, OnDestroy, AfterViewChecked {
   private readonly route = inject(ActivatedRoute);
   private readonly movieService = inject(MovieService);
   private readonly seoService = inject(SeoService);
+  private readonly cdr = inject(ChangeDetectorRef);
+  private readonly destroy$ = new Subject<void>();
+
+  private scrollObserver: IntersectionObserver | null = null;
+  private sentinelConnected = false;
+  private isLoadingMoreFlag = false;
+
+  @ViewChild('genreDetailScrollSentinel') scrollSentinel?: ElementRef<HTMLElement>;
 
   mediaType = signal<MediaType>('movie');
   genreId = signal<number>(0);
@@ -422,6 +453,37 @@ export class GenreDetailComponent implements OnInit {
     });
   }
 
+  ngAfterViewChecked(): void {
+    if (this.scrollSentinel?.nativeElement && !this.sentinelConnected) {
+      this.setupObserver();
+      this.sentinelConnected = true;
+    }
+    if (!this.scrollSentinel?.nativeElement) {
+      this.sentinelConnected = false;
+    }
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+    this.scrollObserver?.disconnect();
+  }
+
+  private setupObserver(): void {
+    this.scrollObserver?.disconnect();
+    this.scrollObserver = new IntersectionObserver(
+      entries => {
+        if (entries[0]?.isIntersecting) {
+          this.loadMore();
+        }
+      },
+      { rootMargin: '400px' }
+    );
+    if (this.scrollSentinel?.nativeElement) {
+      this.scrollObserver.observe(this.scrollSentinel.nativeElement);
+    }
+  }
+
   fetchTitles(): void {
     this.loading.set(true);
     this.movieService
@@ -436,14 +498,21 @@ export class GenreDetailComponent implements OnInit {
           this.items.set(res.results || []);
           this.totalPages.set(res.total_pages || 1);
           this.loading.set(false);
+          this.isLoadingMoreFlag = false;
+          this.cdr.markForCheck();
         },
-        error: () => this.loading.set(false)
+        error: () => {
+          this.loading.set(false);
+          this.cdr.markForCheck();
+        }
       });
   }
 
   loadMore(): void {
-    if (this.currentPage() >= this.totalPages() || this.loadingMore()) return;
+    if (this.currentPage() >= this.totalPages() || this.isLoadingMoreFlag) return;
+    this.isLoadingMoreFlag = true;
     this.loadingMore.set(true);
+    this.cdr.markForCheck();
     const nextPage = this.currentPage() + 1;
 
     this.movieService
@@ -453,13 +522,27 @@ export class GenreDetailComponent implements OnInit {
         year: this.selectedYear() || undefined,
         page: nextPage
       })
+      .pipe(
+        takeUntil(this.destroy$),
+        catchError(() => of({ results: [] as MediaItem[], total_pages: this.totalPages(), page: nextPage, total_results: 0 }))
+      )
       .subscribe({
         next: res => {
-          this.items.update(prev => [...prev, ...(res.results || [])]);
-          this.currentPage.set(nextPage);
+          const newItems = res.results || [];
+          if (newItems.length > 0) {
+            this.items.update(prev => [...prev, ...newItems]);
+            this.currentPage.set(nextPage);
+            this.totalPages.set(res.total_pages || this.totalPages());
+          }
+          this.isLoadingMoreFlag = false;
           this.loadingMore.set(false);
+          this.cdr.markForCheck();
         },
-        error: () => this.loadingMore.set(false)
+        error: () => {
+          this.isLoadingMoreFlag = false;
+          this.loadingMore.set(false);
+          this.cdr.markForCheck();
+        }
       });
   }
 
@@ -467,6 +550,7 @@ export class GenreDetailComponent implements OnInit {
     const val = (event.target as HTMLSelectElement).value;
     this.sortBy.set(val);
     this.currentPage.set(1);
+    this.isLoadingMoreFlag = false;
     this.fetchTitles();
   }
 
@@ -474,6 +558,7 @@ export class GenreDetailComponent implements OnInit {
     const val = (event.target as HTMLSelectElement).value;
     this.selectedYear.set(val ? Number(val) : null);
     this.currentPage.set(1);
+    this.isLoadingMoreFlag = false;
     this.fetchTitles();
   }
 

@@ -1,54 +1,124 @@
 <div class="home-page" *ngIf="catalog$ | async as catalog; else loadingTpl">
-  <!-- HERO SPOTLIGHT BILLBOARD -->
-  <header class="hero-billboard" *ngIf="catalog.featured as feat">
-    <div class="hero-backdrop-wrapper">
-      <img
-        [src]="getBackdropUrl(feat.backdrop_path)"
-        [alt]="feat.title || feat.name"
-        class="hero-backdrop-img"
-      />
-      <div class="hero-gradient-left"></div>
-      <div class="hero-gradient-bottom"></div>
-    </div>
-
-  <div class="hero-container">
-    <div class="hero-content">
-      <div class="hero-badge">
-        <span class="pulse-icon">🔥</span> #1 TRENDING TODAY
-      </div>
-
-      <h1 class="hero-title">{{ feat.title || feat.name }}</h1>
-
-      <div class="hero-meta">
-        <span class="rating-chip">⭐ {{ feat.vote_average | number:'1.1-1' }}</span>
-        <span class="meta-separator">•</span>
-        <span>{{ getReleaseYear(feat.release_date || feat.first_air_date) }}</span>
-        <span class="meta-separator">•</span>
-        <span class="hd-badge">4K ULTRA HD</span>
-      </div>
-
-      <p class="hero-overview">
-        {{ feat.overview }}
-      </p>
-
-      <div class="hero-actions">
-        <button
-          type="button"
-          class="btn-hero-play"
-          (click)="navigateToWatch(feat)"
-        >
-          <span class="play-icon">▶</span> Watch Now
-        </button>
-        <button
-          type="button"
-          class="btn-hero-info"
-          (click)="navigateToMedia(feat)"
-        >
-          ℹ️ Details & Episodes
-        </button>
+  <!-- HERO SPOTLIGHT BILLBOARD SLIDER (Auto-sliding) -->
+  <header
+    class="hero-billboard"
+    *ngIf="heroSlides().length as totalSlides"
+    (mouseenter)="pauseAutoSlide()"
+    (mouseleave)="resumeAutoSlide()"
+    (touchstart)="pauseAutoSlide()"
+    (touchend)="resumeAutoSlide()"
+    aria-label="Trending Hero Carousel"
+  >
+    <!-- Cross-fading Backdrops for Each Slide -->
+    <div class="hero-backdrops-container">
+      <div
+        *ngFor="let slide of heroSlides(); let i = index"
+        class="hero-backdrop-layer"
+        [class.active]="i === currentSlide()"
+      >
+        <img
+          [src]="getBackdropUrl(slide.backdrop_path)"
+          [alt]="slide.title || slide.name"
+          class="hero-backdrop-img"
+          [loading]="i === 0 ? 'eager' : 'lazy'"
+        />
+        <div class="hero-gradient-left"></div>
+        <div class="hero-gradient-bottom"></div>
       </div>
     </div>
-  </div>
+
+    <!-- Hero Content Container -->
+    <div class="hero-container">
+      <div class="hero-slides-wrapper">
+        <div
+          *ngFor="let feat of heroSlides(); let i = index"
+          class="hero-content-slide"
+          [class.active]="i === currentSlide()"
+        >
+          <div class="hero-badge">
+            <span class="pulse-icon">🔥</span> #{{ i + 1 }} TRENDING TODAY
+          </div>
+
+          <h1 class="hero-title">{{ feat.title || feat.name }}</h1>
+
+          <div class="hero-meta">
+            <span class="rating-chip">⭐ {{ feat.vote_average | number:'1.1-1' }}</span>
+            <span class="meta-separator">•</span>
+            <span>{{ getReleaseYear(feat.release_date || feat.first_air_date) }}</span>
+            <span class="meta-separator">•</span>
+            <span class="hd-badge">4K ULTRA HD</span>
+          </div>
+
+          <p class="hero-overview">
+            {{ feat.overview }}
+          </p>
+
+          <div class="hero-actions">
+            <button
+              type="button"
+              class="btn-hero-play"
+              (click)="navigateToWatch(feat)"
+            >
+              <span class="play-icon">▶</span> Watch Now
+            </button>
+            <button
+              type="button"
+              class="btn-hero-info"
+              (click)="navigateToMedia(feat)"
+            >
+              ℹ️ Details
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Navigation Arrows -->
+    <button
+      type="button"
+      class="hero-arrow-btn prev"
+      (click)="prevSlide()"
+      aria-label="Previous Slide"
+      title="Previous Trending Title"
+    >
+      ‹
+    </button>
+    <button
+      type="button"
+      class="hero-arrow-btn next"
+      (click)="nextSlide()"
+      aria-label="Next Slide"
+      title="Next Trending Title"
+    >
+      ›
+    </button>
+
+    <!-- Slide Indicators & Controls -->
+    <div class="hero-carousel-controls">
+      <div class="hero-dots">
+        <button
+          *ngFor="let s of heroSlides(); let i = index"
+          type="button"
+          class="hero-dot"
+          [class.active]="i === currentSlide()"
+          (click)="goToSlide(i)"
+          [attr.aria-label]="'Go to slide ' + (i + 1)"
+        >
+          <span class="dot-fill"></span>
+        </button>
+      </div>
+
+      <div class="hero-slide-counter">
+        <span class="curr-num">0{{ currentSlide() + 1 }}</span>
+        <span class="counter-sep">/</span>
+        <span class="total-num">0{{ heroSlides().length }}</span>
+      </div>
+    </div>
+
+    <!-- Auto-sliding progress indicator line -->
+    <div class="hero-auto-progress" [class.paused]="isAutoSlidePaused()">
+      <div class="hero-progress-fill"></div>
+    </div>
   </header>
 
   <div class="main-content">
@@ -76,8 +146,135 @@
       </div>
     </section>
 
+    <!-- GENRE FILTERED MOVIES (Shows 4-grid in one line on mobile view) -->
+    <section class="genre-results-section" id="genreResultsSection" *ngIf="selectedGenre() !== null">
+      <div class="genre-results-header">
+        <div class="genre-title-group">
+          <div class="genre-badge-pill">✨ Genre Spotlight</div>
+          <h2 class="genre-results-title">{{ getSelectedGenreName() }} Movies</h2>
+          <span class="genre-results-count" *ngIf="!isGenreLoading() && genreMovies().length">
+            ({{ genreMovies().length }} Titles)
+          </span>
+        </div>
+        <div class="genre-header-actions">
+          <button type="button" class="btn-clear-genre" (click)="filterByGenre(null)" title="Clear Genre Filter">
+            ✕ Clear Filter
+          </button>
+        </div>
+      </div>
+
+      <!-- Loading State -->
+      <div class="genre-loading" *ngIf="isGenreLoading() && !genreMovies().length">
+        <div class="mini-spinner"></div>
+        <span>Discovering top {{ getSelectedGenreName() }} movies...</span>
+      </div>
+
+      <!-- 4 Grid in One Line on Mobile view -->
+      <div class="genre-movies-grid" *ngIf="genreMovies().length">
+        <article
+          *ngFor="let m of genreMovies(); let i = index"
+          class="genre-media-card"
+          [style.animation-delay]="(i * 0.03) + 's'"
+          (click)="navigateToWatch(m)"
+        >
+          <div class="card-poster-box">
+            <img [src]="getPosterUrl(m.poster_path)" [alt]="m.title || m.name" loading="lazy" />
+            <div class="card-overlay">
+              <span class="play-bubble">▶</span>
+            </div>
+            <span class="card-rating" *ngIf="m.vote_average">
+              ⭐ {{ m.vote_average | number:'1.1-1' }}
+            </span>
+          </div>
+          <div class="card-info">
+            <h3 class="card-title">{{ m.title || m.name }}</h3>
+            <div class="card-sub">
+              <span>{{ getReleaseYear(m.release_date || m.first_air_date) }}</span>
+              <span class="type-badge">Movie</span>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <!-- See All Button (loads more via infinite scroll) -->
+      <div class="see-all-wrap" *ngIf="genreMovies().length && !showGenreAll()">
+        <button type="button" class="see-all-genre-btn" (click)="expandGenreAll()">
+          See All {{ getSelectedGenreName() }} Movies
+        </button>
+      </div>
+
+      <!-- Loading More Indicator -->
+      <div class="genre-loading-more" *ngIf="showGenreAll() && isGenreLoading() && genreMovies().length">
+        <div class="mini-spinner"></div>
+        <span>Loading more movies...</span>
+      </div>
+
+      <!-- Infinite Scroll Sentinel for Genre -->
+      <div class="scroll-sentinel" #genreScrollSentinel *ngIf="showGenreAll()"></div>
+
+      <!-- Empty State -->
+      <div class="genre-empty" *ngIf="!isGenreLoading() && !genreMovies().length">
+        <p>No titles found for {{ getSelectedGenreName() }}. Try another genre.</p>
+      </div>
+    </section>
+
+    <!-- ALL MOVIES SECTION (when "All" is selected in genre tab) -->
+    <section class="genre-results-section" id="allMoviesSection" *ngIf="selectedGenre() === null && allMovies().length">
+      <div class="genre-results-header">
+        <div class="genre-title-group">
+          <div class="genre-badge-pill">🎬 All Movies</div>
+          <h2 class="genre-results-title">Discover All Movies</h2>
+          <span class="genre-results-count">
+            ({{ allMovies().length }} Titles)
+          </span>
+        </div>
+      </div>
+
+      <div class="genre-movies-grid">
+        <article
+          *ngFor="let m of allMovies(); let i = index"
+          class="genre-media-card"
+          [style.animation-delay]="(i * 0.03) + 's'"
+          (click)="navigateToWatch(m)"
+        >
+          <div class="card-poster-box">
+            <img [src]="getPosterUrl(m.poster_path)" [alt]="m.title || m.name" loading="lazy" />
+            <div class="card-overlay">
+              <span class="play-bubble">▶</span>
+            </div>
+            <span class="card-rating" *ngIf="m.vote_average">
+              ⭐ {{ m.vote_average | number:'1.1-1' }}
+            </span>
+          </div>
+          <div class="card-info">
+            <h3 class="card-title">{{ m.title || m.name }}</h3>
+            <div class="card-sub">
+              <span>{{ getReleaseYear(m.release_date || m.first_air_date) }}</span>
+              <span class="type-badge">Movie</span>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <!-- See All Button (loads more via infinite scroll) -->
+      <div class="see-all-wrap" *ngIf="allMovies().length && !showAllMoviesExpanded()">
+        <button type="button" class="see-all-genre-btn" (click)="expandAllMovies()">
+          See All Movies
+        </button>
+      </div>
+
+      <!-- Loading More Indicator for All Movies -->
+      <div class="genre-loading-more" *ngIf="showAllMoviesExpanded() && isAllMoviesLoading()">
+        <div class="mini-spinner"></div>
+        <span>Loading more movies...</span>
+      </div>
+
+      <!-- Infinite Scroll Sentinel for All Movies -->
+      <div class="scroll-sentinel" #allMoviesScrollSentinel *ngIf="showAllMoviesExpanded()"></div>
+    </section>
+
     <!-- ROW 1: TRENDING MOVIES -->
-    <section class="media-row-section" *ngIf="catalog.trendingMovies.length">
+    <section class="media-row-section" *ngIf="selectedGenre() === null && catalog.trendingMovies.length">
       <div class="row-header">
         <div>
           <h2 class="row-title">🔥 Trending Movies</h2>
@@ -115,7 +312,7 @@
     </section>
 
     <!-- ROW 2: TRENDING TV SERIES -->
-    <section class="media-row-section" *ngIf="catalog.trendingTv.length">
+    <section class="media-row-section" *ngIf="selectedGenre() === null && catalog.trendingTv.length">
       <div class="row-header">
         <div>
           <h2 class="row-title">📺 Popular & Trending TV Shows</h2>
@@ -153,10 +350,10 @@
     </section>
 
     <!-- Ad Slot: home_interstitial -->
-    <app-ad-banner position="home_interstitial"></app-ad-banner>
+    <app-ad-banner *ngIf="selectedGenre() === null" position="home_interstitial"></app-ad-banner>
 
     <!-- ROW 3: TOP RATED CINEMA -->
-    <section class="media-row-section" *ngIf="catalog.topRatedMovies.length">
+    <section class="media-row-section" *ngIf="selectedGenre() === null && catalog.topRatedMovies.length">
       <div class="row-header">
         <div>
           <h2 class="row-title">⭐ Top Rated Masterpieces</h2>
@@ -193,7 +390,7 @@
     </section>
 
     <!-- ROW 4: POPULAR BLOCKBUSTERS -->
-    <section class="media-row-section" *ngIf="catalog.popularMovies.length">
+    <section class="media-row-section" *ngIf="selectedGenre() === null && catalog.popularMovies.length">
       <div class="row-header">
         <div>
           <h2 class="row-title">🍿 Most Watched Blockbusters</h2>
@@ -230,7 +427,7 @@
     </section>
 
     <!-- ROW 5: NOW PLAYING IN THEATRES -->
-    <section class="media-row-section" *ngIf="catalog.nowPlayingMovies.length">
+    <section class="media-row-section" *ngIf="selectedGenre() === null && catalog.nowPlayingMovies.length">
       <div class="row-header">
         <div>
           <h2 class="row-title">🎬 In Theatres Now</h2>
@@ -267,7 +464,7 @@
     </section>
 
     <!-- ROW 6: UPCOMING RELEASES -->
-    <section class="media-row-section" *ngIf="catalog.upcomingMovies.length">
+    <section class="media-row-section" *ngIf="selectedGenre() === null && catalog.upcomingMovies.length">
       <div class="row-header">
         <div>
           <h2 class="row-title">📅 Upcoming Anticipated Titles</h2>

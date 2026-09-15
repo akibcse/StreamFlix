@@ -1,16 +1,24 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { AuthService } from '../../../../services/auth.service';
 import { AdminMediaService } from '../../../../services/admin-media.service';
+import { MovieService } from '../../../../services/movie.service';
 import { AnalyticsService } from '../../../../services/analytics.service';
 import { VisitorLogService } from '../../../../services/visitor-log.service';
-import { AdminLog } from '../../../../models/media.model';
+import {
+  AdminLog,
+  AutoImportCategory,
+  AutoImportMediaType,
+  AutoImportOptions,
+  AutoImportProgress
+} from '../../../../models/media.model';
 
 @Component({
   selector: 'app-admin-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, FormsModule, RouterModule],
   template: `
     <div class="dashboard-wrap">
       <!-- WELCOME BANNER -->
@@ -20,11 +28,14 @@ import { AdminLog } from '../../../../models/media.model';
           <p>Here is what's happening on StreamFlix today.</p>
         </div>
         <div class="quick-buttons">
-          <a routerLink="/admin/movies" class="btn-quick primary">
-            <span>🎬</span> Import Movies
+          <a routerLink="/admin/analytics" class="btn-quick primary">
+            <span>📊</span> Analytics
           </a>
-          <a routerLink="/admin/notifications" class="btn-quick secondary">
-            <span>📢</span> Send Notification
+          <a routerLink="/admin/servers" class="btn-quick secondary">
+            <span>🖥️</span> Stream Servers
+          </a>
+          <a routerLink="/admin/notifications" class="btn-quick glow-btn">
+            <span>🔔</span> Push Notify
           </a>
         </div>
       </div>
@@ -73,7 +84,7 @@ import { AdminLog } from '../../../../models/media.model';
         <!-- RECENT AUDIT LOGS -->
         <div class="dash-card">
           <div class="card-header">
-            <h3>Recent System Logs</h3>
+            <h3>Recent Audit Trail</h3>
             <a routerLink="/admin/logs" class="link-more">View All →</a>
           </div>
 
@@ -149,6 +160,7 @@ import { AdminLog } from '../../../../models/media.model';
           </div>
         </div>
       </div>
+
     </div>
   `,
   styles: [`
@@ -197,12 +209,100 @@ import { AdminLog } from '../../../../models/media.model';
     .btn-quick.primary {
       background: linear-gradient(135deg, #6366f1, #a855f7);
       color: white;
+      border: none;
+      cursor: pointer;
     }
     .btn-quick.secondary {
       background: rgba(255, 255, 255, 0.08);
       color: white;
       border: 1px solid rgba(255, 255, 255, 0.12);
+      cursor: pointer;
     }
+    .btn-quick.glow-btn {
+      background: linear-gradient(135deg, #ec4899, #8b5cf6, #3b82f6);
+      color: white;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(139,92,246,0.4);
+      animation: glow 2.5s ease-in-out infinite alternate;
+    }
+    @keyframes glow {
+      from { box-shadow: 0 4px 16px rgba(139,92,246,0.4); }
+      to   { box-shadow: 0 6px 28px rgba(236,72,153,0.7); }
+    }
+    /* MODAL STYLES */
+    .modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); z-index: 1100; display: flex; align-items: center; justify-content: center; padding: 1.5rem; }
+    .modal-card { background: #111827; border: 1px solid rgba(255,255,255,0.12); border-radius: 18px; width: 100%; max-width: 680px; max-height: 90vh; overflow-y: auto; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.7); }
+    .auto-import-card { max-width: 700px; }
+    .modal-header { display: flex; justify-content: space-between; align-items: center; padding: 1.25rem 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.08); }
+    .modal-title-wrap { display: flex; flex-direction: column; gap: 0.2rem; }
+    .badge-accent { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.08em; color: #a855f7; font-weight: 700; }
+    .modal-header h3 { margin: 0; color: white; font-size: 1.25rem; font-weight: 700; }
+    .btn-close { background: none; border: none; color: #94a3b8; font-size: 1.3rem; cursor: pointer; padding: 4px 8px; border-radius: 6px; }
+    .modal-body { padding: 1.5rem; display: flex; flex-direction: column; gap: 1.25rem; }
+    .section-desc { color: #94a3b8; font-size: 0.88rem; line-height: 1.5; margin: 0; }
+    .form-group { display: flex; flex-direction: column; gap: 0.45rem; }
+    .form-label { font-size: 0.8rem; font-weight: 600; color: #cbd5e1; text-transform: uppercase; letter-spacing: 0.04em; }
+    .form-control { background: rgba(0,0,0,0.35); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 0.7rem 0.9rem; color: white; outline: none; width: 100%; font-size: 0.9rem; box-sizing: border-box; }
+    .media-type-grid { display: flex; gap: 0.65rem; }
+    .media-type-card { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 0.3rem; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 0.85rem; cursor: pointer; transition: all 0.15s; font-size: 1.4rem; }
+    .media-type-card strong { font-size: 0.82rem; color: #e2e8f0; }
+    .media-type-card:hover { background: rgba(255,255,255,0.06); }
+    .media-type-card.selected { background: rgba(139,92,246,0.18); border-color: #a855f7; box-shadow: 0 0 14px rgba(168,85,247,0.3); }
+    .category-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 0.6rem; }
+    .category-card { display: flex; align-items: center; gap: 0.65rem; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 0.65rem 0.85rem; cursor: pointer; transition: all 0.15s; }
+    .category-card:hover { background: rgba(255,255,255,0.06); }
+    .category-card.selected { background: rgba(139,92,246,0.18); border-color: #a855f7; }
+    .cat-icon { font-size: 1.2rem; }
+    .cat-text { display: flex; flex-direction: column; }
+    .cat-text strong { color: white; font-size: 0.83rem; }
+    .cat-text small { color: #94a3b8; font-size: 0.7rem; }
+    .limit-selector { display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; }
+    .btn-limit { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); color: #cbd5e1; padding: 0.6rem 1rem; border-radius: 10px; font-weight: 600; font-size: 0.85rem; cursor: pointer; }
+    .btn-limit.active { background: #6366f1; border-color: #818cf8; color: white; }
+    .custom-limit-input { width: 100px !important; text-align: center; }
+    .checkbox-label { display: flex; align-items: flex-start; gap: 0.75rem; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 10px; padding: 0.65rem 0.85rem; cursor: pointer; }
+    .checkbox-label input[type="checkbox"] { margin-top: 3px; accent-color: #8b5cf6; width: 15px; height: 15px; }
+    .checkbox-text { display: flex; flex-direction: column; }
+    .checkbox-text strong { color: #f1f5f9; font-size: 0.83rem; }
+    .checkbox-text small { color: #94a3b8; font-size: 0.72rem; }
+    .modal-footer { display: flex; justify-content: flex-end; gap: 0.75rem; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.06); }
+    .btn-auto-import-start { display: inline-flex; align-items: center; gap: 0.5rem; background: linear-gradient(135deg, #ec4899, #8b5cf6); color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 10px; font-weight: 700; font-size: 0.92rem; cursor: pointer; }
+    /* PROGRESS */
+    .progress-view { display: flex; flex-direction: column; gap: 1.25rem; }
+    .progress-header { display: flex; justify-content: space-between; align-items: center; }
+    .progress-title-status { display: flex; align-items: center; gap: 0.6rem; }
+    .progress-title-status h4 { margin: 0; color: white; font-size: 1rem; }
+    .status-indicator { width: 10px; height: 10px; border-radius: 50%; background: #64748b; }
+    .status-indicator.running { background: #3b82f6; box-shadow: 0 0 10px #3b82f6; animation: pulse2 1.5s infinite; }
+    .status-indicator.done { background: #22c55e; box-shadow: 0 0 10px #22c55e; }
+    .progress-percent-badge { background: rgba(139,92,246,0.2); border: 1px solid rgba(139,92,246,0.4); color: #c084fc; padding: 4px 10px; border-radius: 8px; font-weight: 700; font-size: 0.9rem; }
+    .progress-track { width: 100%; height: 10px; background: rgba(255,255,255,0.08); border-radius: 6px; overflow: hidden; }
+    .progress-fill { height: 100%; background: linear-gradient(90deg, #ec4899, #8b5cf6, #3b82f6); border-radius: 6px; transition: width 0.25s ease; }
+    .progress-fill.indeterminate { animation: indeterminate 1.5s infinite linear; width: 35% !important; }
+    .live-stats-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 0.75rem; }
+    .live-stat-card { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); border-radius: 10px; padding: 0.75rem; text-align: center; display: flex; flex-direction: column; gap: 0.2rem; }
+    .live-stat-card.success .stat-num { color: #4ade80; }
+    .live-stat-card.skipped .stat-num { color: #facc15; }
+    .live-stat-card.error .stat-num { color: #f87171; }
+    .stat-num { font-size: 1.35rem; font-weight: 800; }
+    .stat-name { font-size: 0.72rem; color: #94a3b8; }
+    .log-stream-wrap { background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.06); border-radius: 10px; overflow: hidden; }
+    .log-stream-body { max-height: 160px; overflow-y: auto; padding: 0.5rem; display: flex; flex-direction: column; gap: 0.3rem; }
+    .log-row { display: flex; align-items: center; gap: 0.5rem; font-size: 0.78rem; padding: 2px 6px; }
+    .log-time { color: #64748b; font-family: monospace; font-size: 0.7rem; }
+    .log-tag { font-size: 0.72rem; font-weight: 700; }
+    .log-row.log-success .log-tag { color: #4ade80; }
+    .log-row.log-skipped .log-tag { color: #facc15; }
+    .log-row.log-error .log-tag { color: #f87171; }
+    .log-title { color: #e2e8f0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .log-empty { color: #64748b; text-align: center; padding: 0.75rem; font-size: 0.8rem; }
+    .progress-actions { display: flex; justify-content: flex-end; }
+    .btn-cancel { background: rgba(239,68,68,0.2); border: 1px solid rgba(239,68,68,0.4); color: #fca5a5; padding: 0.65rem 1.25rem; border-radius: 10px; font-weight: 600; cursor: pointer; }
+    .btn-primary { background: linear-gradient(135deg,#22c55e,#16a34a); color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 10px; font-weight: 700; cursor: pointer; }
+    .btn-secondary { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); color: #e2e8f0; padding: 0.65rem 1.15rem; border-radius: 10px; cursor: pointer; }
+    @keyframes pulse2 { 0%,100% { opacity:1; } 50% { opacity:0.4; } }
+    @keyframes indeterminate { 0% { transform: translateX(-100%); } 100% { transform: translateX(350%); } }
     .metrics-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -401,6 +501,7 @@ export class AdminDashboardComponent implements OnInit {
   private readonly auth = inject(AuthService);
   private readonly adminMedia = inject(AdminMediaService);
   private readonly visitorLogs = inject(VisitorLogService);
+  private readonly cdr = inject(ChangeDetectorRef);
 
   totalUsers = 0;
   totalVisitors = 0;
@@ -409,11 +510,25 @@ export class AdminDashboardComponent implements OnInit {
   recentLogs: AdminLog[] = [];
 
   ngOnInit(): void {
-    this.auth.getAllUsers().subscribe(users => (this.totalUsers = users.length));
-    this.visitorLogs.getLogs().subscribe(logs => (this.totalVisitors = logs.length));
-
-    this.adminMedia.getAllOverrides().then(list => (this.totalOverrides = list.length));
-    this.adminMedia.getServers().then(servers => (this.activeServers = servers.filter(s => s.active).length));
-    this.adminMedia.getLogs(5).then(logs => (this.recentLogs = logs));
+    this.auth.getAllUsers().subscribe(users => {
+      this.totalUsers = users.length;
+      this.cdr.detectChanges();
+    });
+    this.visitorLogs.getLogs().subscribe(logs => {
+      this.totalVisitors = logs.length;
+      this.cdr.detectChanges();
+    });
+    this.adminMedia.getAllOverrides().then(list => {
+      this.totalOverrides = list.length;
+      this.cdr.detectChanges();
+    });
+    this.adminMedia.getServers().then(servers => {
+      this.activeServers = servers.filter(s => s.active).length;
+      this.cdr.detectChanges();
+    });
+    this.adminMedia.getLogs(5).then(logs => {
+      this.recentLogs = logs;
+      this.cdr.detectChanges();
+    });
   }
 }

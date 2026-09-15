@@ -18,6 +18,7 @@ import {
 } from '../../models/media.model';
 
 import { AdBannerComponent } from '../../shared/components/ad-banner.component';
+import { AnalyticsService } from '../../services/analytics.service';
 
 export interface StreamServer {
   id: string;
@@ -38,6 +39,7 @@ export class MoviePlayerComponent implements OnInit {
   private readonly movieService = inject(MovieService);
   private readonly activityService = inject(UserActivityService);
   private readonly auth = inject(AuthService);
+  private readonly analytics = inject(AnalyticsService);
   private readonly sanitizer = inject(DomSanitizer);
   private readonly cdr = inject(ChangeDetectorRef);
 
@@ -63,13 +65,13 @@ export class MoviePlayerComponent implements OnInit {
   }
 
   readonly servers: StreamServer[] = [
-    { id: 'multiembed', name: 'MultiEmbed (Server 1)' },
-    { id: 'vidsrc-me', name: 'VidSrc Prime (Server 2)' },
-    { id: 'vidsrc-cc', name: 'VidSrc CC (Server 3)' },
+    { id: 'vidsrc-me', name: 'VidSrc Prime (Server 1)' },
+    { id: 'vidsrc-cc', name: 'VidSrc CC (Server 2)' },
+    { id: 'multiembed', name: 'MultiEmbed (Server 3)' },
     { id: 'autoembed', name: 'AutoEmbed (Server 4)' }
   ];
 
-  readonly selectedServer = signal<string>('multiembed');
+  readonly selectedServer = signal<string>('vidsrc-me');
   readonly selectedSeason = signal<number>(1);
   readonly selectedEpisode = signal<number>(1);
   readonly showTrailerModal = signal<boolean>(false);
@@ -206,10 +208,13 @@ export class MoviePlayerComponent implements OnInit {
     const recordKey = `${media.id}_${s}_${e}`;
     if (this.lastRecordedKey !== recordKey) {
       this.lastRecordedKey = recordKey;
+      const mediaTitle = media.title || media.name || 'Untitled';
+      const type: MediaType = isTv ? 'tv' : 'movie';
+
       this.activityService.recordWatch({
         id: media.id,
-        mediaType: isTv ? 'tv' : 'movie',
-        title: media.title || media.name || 'Untitled',
+        mediaType: type,
+        title: mediaTitle,
         poster_path: media.poster_path,
         backdrop_path: media.backdrop_path,
         vote_average: media.vote_average,
@@ -219,6 +224,9 @@ export class MoviePlayerComponent implements OnInit {
         episode: isTv ? e : undefined,
         watchedAt: Date.now()
       });
+
+      // Track watch event for Top Watched Content analytics
+      this.analytics.trackWatchEvent(media.id, type, mediaTitle).catch(() => {});
     }
 
     return this.currentSafeUrl;

@@ -111,6 +111,22 @@
         <div class="toolbar-actions">
           <button
             type="button"
+            class="btn-toggle-all"
+            (click)="expandAllGroups()"
+            title="Expand all IP groups"
+          >
+            ▸ Expand All
+          </button>
+          <button
+            type="button"
+            class="btn-toggle-all"
+            (click)="collapseAllGroups()"
+            title="Collapse all IP groups to unique visitors only"
+          >
+            ▾ Collapse All
+          </button>
+          <button
+            type="button"
             class="btn-danger"
             (click)="clearAllLogs()"
             [disabled]="isClearing()"
@@ -143,7 +159,47 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let log of filteredLogs$ | async" class="log-row">
+              <ng-container *ngIf="logGroups$ | async as logGroups">
+                <ng-container *ngFor="let group of logGroups">
+                <!-- UNIQUE IP GROUP HEADER -->
+                <tr class="ip-group-header" [class.expanded]="isGroupExpanded(group.ip)" (click)="toggleGroup(group.ip)" title="Click to toggle access logs">
+                  <td colspan="5">
+                    <div class="ip-group-summary">
+                      <div class="ip-group-main">
+                        <span class="country-flag">{{ group.flag || '📍' }}</span>
+                        <span class="ip-addr" (click)="copyText(group.ip, 'IP Address'); $event.stopPropagation()" title="Click to copy IP">{{ group.ip }}</span>
+                        <span class="ip-type-badge" *ngIf="group.ipType">{{ group.ipType }}</span>
+                        <span class="visit-count-badge">🔄 {{ group.count }} {{ group.count === 1 ? 'Visit' : 'Visits' }}</span>
+                      </div>
+                      <div class="ip-group-loc" *ngIf="group.country || group.city">
+                        <strong>{{ group.country || 'Global' }}</strong>
+                        <span *ngIf="group.countryCode">({{ group.countryCode }})</span>
+                        <span *ngIf="group.city"> • {{ group.city }}</span>
+                        <span *ngIf="group.region">, {{ group.region }}</span>
+                        <a *ngIf="group.latitude && group.longitude"
+                           [href]="'https://www.google.com/maps?q=' + group.latitude + ',' + group.longitude"
+                           target="_blank" rel="noopener noreferrer" class="coord-link"
+                           title="View precise location on Google Maps">
+                          📍 {{ group.latitude | number:'1.2-4' }}, {{ group.longitude | number:'1.2-4' }} ↗
+                        </a>
+                      </div>
+                      <div class="ip-group-meta" *ngIf="group.isp || group.asn">
+                        <span class="isp-name" [title]="'ISP: ' + group.isp">⚡ {{ group.isp }}</span>
+                        <span class="asn-badge" *ngIf="group.asn">{{ group.asn }}</span>
+                      </div>
+                      <div class="ip-group-foot">
+                        <span>🕒 Last active: {{ getRelativeTime(group.lastSeen) }}</span>
+                        <span class="devices-summary" *ngIf="group.devicesLabel">💻 {{ group.devicesLabel }}</span>
+                        <span class="group-email" *ngIf="group.userEmail">👤 {{ group.userEmail }}</span>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="group-chevron-cell">
+                    <span class="group-chevron">{{ isGroupExpanded(group.ip) ? '▾' : '▸' }}</span>
+                  </td>
+                </tr>
+                <ng-container *ngIf="isGroupExpanded(group.ip)">
+                <tr *ngFor="let log of group.logs" class="log-row">
                 <!-- Time & User -->
                 <td>
                   <div class="time-user-cell">
@@ -270,15 +326,18 @@
                   </button>
                 </td>
               </tr>
+                </ng-container>
+                </ng-container>
 
-              <tr *ngIf="(filteredLogs$ | async)?.length === 0">
-                <td colspan="6" class="empty-state">
-                  <div class="empty-box">
-                    <span class="empty-icon">🛰️</span>
-                    <p>No telemetry records found matching "{{ searchQuery() }}"</p>
-                  </div>
-                </td>
-              </tr>
+                <tr *ngIf="logGroups.length === 0">
+                  <td colspan="6" class="empty-state">
+                    <div class="empty-box">
+                      <span class="empty-icon">🛰️</span>
+                      <p>No telemetry records found matching "{{ searchQuery() }}"</p>
+                    </div>
+                  </td>
+                </tr>
+              </ng-container>
             </tbody>
           </table>
         </div>
@@ -692,6 +751,43 @@
               <span class="row-val ua-text" [title]="log.userAgent">{{ log.userAgent }}</span>
             </div>
           </div>
+        </div>
+
+        <!-- 5. Watch History -->
+        <div class="dossier-section dossier-history-section" *ngIf="log.userId">
+          <div class="section-title-row">
+            <span class="section-icon">🎬</span>
+            <h3>Watch History <span class="hist-count">({{ selectedUserHistory().length }})</span></h3>
+          </div>
+          <div *ngIf="selectedUserHistory().length > 0; else noHistory" class="history-list">
+            <div *ngFor="let h of selectedUserHistory()" class="hist-item">
+              <span class="hist-type-badge" [class.badge-movie]="h.mediaType !== 'tv'" [class.badge-tv]="h.mediaType === 'tv'">
+                {{ h.mediaType === 'tv' ? '📺 TV' : '🎬 Movie' }}
+              </span>
+              <span class="hist-title">{{ h.title || h.name || 'Untitled' }}</span>
+              <span class="hist-time" *ngIf="h.watchedAt || h.timestamp">{{ (h.watchedAt || h.timestamp) | date:'dd MMM, HH:mm' }}</span>
+            </div>
+          </div>
+          <ng-template #noHistory>
+            <div class="hist-empty">No watch history recorded for this user.</div>
+          </ng-template>
+        </div>
+
+        <!-- 6. Search History -->
+        <div class="dossier-section dossier-history-section" *ngIf="log.userId">
+          <div class="section-title-row">
+            <span class="section-icon">🔍</span>
+            <h3>Search History <span class="hist-count">({{ selectedUserSearches().length }})</span></h3>
+          </div>
+          <div *ngIf="selectedUserSearches().length > 0; else noSearches" class="history-list">
+            <div *ngFor="let s of selectedUserSearches()" class="hist-item search-item">
+              <span class="search-q-tag">{{ s.query || s.q || 'Unknown' }}</span>
+              <span class="hist-time" *ngIf="s.timestamp">{{ s.timestamp | date:'dd MMM, HH:mm' }}</span>
+            </div>
+          </div>
+          <ng-template #noSearches>
+            <div class="hist-empty">No search history recorded for this user.</div>
+          </ng-template>
         </div>
       </div>
 

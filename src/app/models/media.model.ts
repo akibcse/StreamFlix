@@ -297,11 +297,13 @@ export interface MediaOverride {
   slug?: string;
 }
 
-export type AutoImportCategory = 'trending' | 'popular' | 'now_playing' | 'top_rated' | 'upcoming' | 'all';
+export type AutoImportCategory = 'trending' | 'popular' | 'now_playing' | 'top_rated' | 'upcoming' | 'on_air' | 'airing_today' | 'all';
+export type AutoImportMediaType = 'movie' | 'tv' | 'all';
 
 export interface AutoImportOptions {
   category: AutoImportCategory;
   limit: number;
+  mediaType?: AutoImportMediaType;
   skipExisting?: boolean;
   autoPublish?: boolean;
   markFeatured?: boolean;
@@ -416,6 +418,7 @@ export interface AdConfig {
   position: string;
   htmlCode: string;
   active: boolean;
+  notes?: string;
 }
 
 // ─── Notifications ───────────────────────────────────────────────────
