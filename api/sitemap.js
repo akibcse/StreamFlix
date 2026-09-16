@@ -9,7 +9,7 @@ const https = require('https');
 const TMDB_API_KEY = 'a7711beafce9089f9791fc2a4c3a2b60';
 const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
 const FIREBASE_RTDB_URL = 'https://streamflixbdd-default-rtdb.firebaseio.com';
-const FALLBACK_SITE_URL = 'https://ott.akibhasan.online';
+const FALLBACK_SITE_URL = 'https://streamflixbd.vercel.app';
 
 function fetchJson(url) {
   return new Promise((resolve) => {
@@ -41,19 +41,27 @@ function escapeXml(unsafe) {
 }
 
 function formatDate(d) {
+  const todayStr = new Date().toISOString().split('T')[0];
+  if (!d) return todayStr;
   try {
-    const date = d ? new Date(d) : new Date();
-    if (isNaN(date.getTime())) return new Date().toISOString().split('T')[0];
+    const date = new Date(d);
+    if (isNaN(date.getTime())) return todayStr;
+    const year = date.getUTCFullYear();
+    // Valid lastmod for Google: cannot be a historical pre-web release date (e.g. 1957, 1952)
+    // and cannot be in the future. Clamped strictly between 2024 and today.
+    if (year < 2024 || date.getTime() > Date.now()) {
+      return todayStr;
+    }
     return date.toISOString().split('T')[0];
   } catch {
-    return new Date().toISOString().split('T')[0];
+    return todayStr;
   }
 }
 
 module.exports = async function handler(req, res) {
   const today = formatDate();
 
-  // 1. Determine site base URL
+  // 1. Determine site base URL dynamically from request headers
   let baseUrl = FALLBACK_SITE_URL;
   try {
     const host = req.headers['x-forwarded-host'] || req.headers.host;

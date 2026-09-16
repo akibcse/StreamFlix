@@ -366,6 +366,7 @@ export interface SiteSettings {
   globalSeoDescription?: string;
   globalOgImage?: string;
   robotsTxt?: string;
+  adsEnabled?: boolean;
 }
 
 export const DEFAULT_SITE_SETTINGS: SiteSettings = {
@@ -392,7 +393,8 @@ export const DEFAULT_SITE_SETTINGS: SiteSettings = {
   globalSeoTitle: 'StreamFlix — Watch Movies & TV Series',
   globalSeoDescription: 'Stream thousands of movies and TV series in HD. Free online streaming with multiple servers.',
   globalOgImage: '',
-  robotsTxt: 'User-agent: *\nAllow: /'
+  robotsTxt: 'User-agent: *\nAllow: /',
+  adsEnabled: true
 };
 
 // ─── Ads ────────────────────────────────────────────────────────────

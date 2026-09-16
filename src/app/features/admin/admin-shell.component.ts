@@ -4,6 +4,7 @@ import { RouterModule, Router, NavigationEnd } from '@angular/router';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { AuthService } from '../../services/auth.service';
 import { SettingsService } from '../../services/settings.service';
+import { ChatService } from '../../services/chat.service';
 import { Subscription, filter } from 'rxjs';
 
 const NAV_GROUPS = [
@@ -19,6 +20,7 @@ const NAV_GROUPS = [
   { group: 'Community', items: [
     { path: '/admin/users',    label: 'Users & Accounts',    short: 'Users',   icon: 'users',   color: '#14b8a6' },
     { path: '/admin/reviews',  label: 'Reviews Moderation',  short: 'Reviews', icon: 'message', color: '#f97316' },
+    { path: '/admin/chat',     label: 'Live Chat',           short: 'Chat',    icon: 'chat',    color: '#10b981' },
   ]},
   { group: 'Configuration', items: [
     { path: '/admin/settings',      label: 'Site Settings',      short: 'Settings', icon: 'settings', color: '#64748b' },
@@ -43,6 +45,7 @@ const ICONS: Record<string, string> = {
   settings:    '<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>',
   search:      '<circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>',
   zap:         '<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>',
+  chat:        '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><circle cx="9" cy="10" r="1"/><circle cx="12" cy="10" r="1"/><circle cx="15" cy="10" r="1"/>',
   bell:        '<path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/>',
   file:        '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/>',
   more:        '<circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/>',
@@ -102,6 +105,9 @@ const ICONS: Record<string, string> = {
                (click)="closeDrawers()">
               <span class="n-icon" [innerHTML]="svg(item.icon, 18)"></span>
               <span class="n-label" *ngIf="!collapsed">{{ item.label }}</span>
+              <ng-container *ngIf="item.path === '/admin/chat' && (chatUnread$ | async) as cnt">
+                <span class="nav-unread-badge" *ngIf="cnt > 0">{{ cnt }}</span>
+              </ng-container>
               <span class="n-tip" *ngIf="collapsed">{{ item.label }}</span>
             </a>
           </ng-container>
@@ -471,6 +477,15 @@ const ICONS: Record<string, string> = {
     .n-icon { width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
     .nav-item.active .n-icon { color: #818cf8; }
     .n-label { flex: 1; overflow: hidden; text-overflow: ellipsis; }
+    .nav-unread-badge {
+      background: #10b981; color: white;
+      font-size: 0.62rem; font-weight: 800;
+      min-width: 18px; height: 18px; border-radius: 100px;
+      display: flex; align-items: center; justify-content: center;
+      padding: 0 4px; flex-shrink: 0;
+      animation: badgePop 0.3s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    @keyframes badgePop { from { transform: scale(0); } to { transform: scale(1); } }
 
     /* Tooltip on collapsed desktop sidebar */
     .n-tip {
@@ -905,11 +920,14 @@ const ICONS: Record<string, string> = {
 export class AdminShellComponent implements OnInit, OnDestroy {
   private readonly auth = inject(AuthService);
   private readonly settingsService = inject(SettingsService);
+  private readonly chatService = inject(ChatService);
   private readonly router = inject(Router);
   private readonly sanitizer = inject(DomSanitizer);
   private readonly iconCache = new Map<string, SafeHtml>();
   private sub?: Subscription;
   private routerSub?: Subscription;
+
+  readonly chatUnread$ = this.chatService.adminUnreadCount$;
 
   readonly navGroups = NAV_GROUPS;
 

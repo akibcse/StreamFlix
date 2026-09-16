@@ -11,7 +11,7 @@ const https = require('https');
 const TMDB_API_KEY = 'a7711beafce9089f9791fc2a4c3a2b60';
 const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
 const FIREBASE_RTDB_URL = 'https://streamflixbdd-default-rtdb.firebaseio.com';
-const FALLBACK_SITE_URL = 'https://ott.akibhasan.online';
+const FALLBACK_SITE_URL = 'https://streamflixbd.vercel.app';
 
 function fetchJson(url) {
   return new Promise((resolve) => {
@@ -43,12 +43,20 @@ function escapeXml(unsafe) {
 }
 
 function formatDate(d) {
+  const todayStr = new Date().toISOString().split('T')[0];
+  if (!d) return todayStr;
   try {
-    const date = d ? new Date(d) : new Date();
-    if (isNaN(date.getTime())) return new Date().toISOString().split('T')[0];
+    const date = new Date(d);
+    if (isNaN(date.getTime())) return todayStr;
+    const year = date.getUTCFullYear();
+    // Valid lastmod for Google: cannot be a historical pre-web release date (e.g. 1957, 1952)
+    // and cannot be in the future. Clamped strictly between 2024 and today.
+    if (year < 2024 || date.getTime() > Date.now()) {
+      return todayStr;
+    }
     return date.toISOString().split('T')[0];
   } catch {
-    return new Date().toISOString().split('T')[0];
+    return todayStr;
   }
 }
 
@@ -56,16 +64,8 @@ async function generateSitemap() {
   console.log('🚀 Generating dynamic sitemap.xml...');
   const today = formatDate();
 
-  // 1. Fetch site domain from Firebase or fallback
-  let baseUrl = FALLBACK_SITE_URL;
-  try {
-    const settings = await fetchJson(`${FIREBASE_RTDB_URL}/site_settings.json`);
-    if (settings && settings.siteUrl) {
-      baseUrl = settings.siteUrl.replace(/\/+$/, '');
-    }
-  } catch (e) {
-    console.warn('[Sitemap] Could not fetch remote settings, using default domain');
-  }
+  // 1. Determine site base URL (from process.env.SITE_URL or FALLBACK_SITE_URL)
+  let baseUrl = (process.env.SITE_URL || FALLBACK_SITE_URL).replace(/\/+$/, '');
   console.log(`🌐 Base URL: ${baseUrl}`);
 
   const urls = new Map(); // key: path, val: { loc, lastmod, changefreq, priority, image, title }

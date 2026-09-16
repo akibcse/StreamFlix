@@ -17,7 +17,6 @@ import {
   UserReview
 } from '../../models/media.model';
 
-import { AdBannerComponent } from '../../shared/components/ad-banner.component';
 import { AnalyticsService } from '../../services/analytics.service';
 
 export interface StreamServer {
@@ -28,7 +27,7 @@ export interface StreamServer {
 @Component({
   selector: 'app-movie-player',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule, AdBannerComponent],
+  imports: [CommonModule, RouterModule, FormsModule],
   templateUrl: './movie-player.component.html',
   styleUrls: ['./movie-player.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush

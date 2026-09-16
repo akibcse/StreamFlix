@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { SettingsService } from '../../../../services/settings.service';
 import { AdminMediaService } from '../../../../services/admin-media.service';
+import { AdCooldownService, CooldownInfo } from '../../../../services/ad-cooldown.service';
 import { AdConfig } from '../../../../models/media.model';
 
 const ADSTERRA_PRESETS: Omit<AdConfig, 'id'>[] = [
@@ -83,9 +84,10 @@ const POSITION_LABELS: Record<string, string> = {
   player_top: 'Player Top Banner',
   player_bottom: 'Player Bottom Banner',
   home_interstitial: 'Home / Body Interstitial',
+  visitor_interstitial: 'Visitor 30s Interstitial (Once per 24h)',
   sidebar: 'Sidebar',
-  popunder: 'Popunder Script (Head)',
-  social_bar: 'Social Bar (Body End)',
+  popunder: 'Popunder Script',
+  social_bar: 'Social Bar',
   smartlink: 'Smartlink',
 };
 
@@ -98,7 +100,7 @@ const POSITION_LABELS: Record<string, string> = {
       <div class="page-header">
         <div>
           <h1>📣 Advertisement Management</h1>
-          <p>Manage all Adsterra ad units for StreamFlix. Popunder & Social Bar are globally injected in HTML. Configure, toggle, and preview all banner placements.</p>
+          <p>Control global ad status, individual ad units, and the 30-second visitor interstitial. Visitors view ads once for 30s and receive a 24-hour ad-free experience on their device.</p>
         </div>
         <div class="header-actions">
           <button class="btn-preload" (click)="preloadAdsterra()" [disabled]="saving">
@@ -116,16 +118,50 @@ const POSITION_LABELS: Record<string, string> = {
       <div *ngIf="successMsg" class="alert-success">✓ {{ successMsg }}</div>
       <div *ngIf="errorMsg" class="alert-error">⚠️ {{ errorMsg }}</div>
 
-      <!-- GLOBAL INJECTION NOTICE -->
-      <div class="global-notice">
-        <div class="notice-icon">🌍</div>
-        <div class="notice-body">
-          <strong>Global Scripts (Always Active)</strong>
-          <p>The <strong>Popunder</strong> script is injected in <code>&lt;head&gt;</code> and the <strong>Social Bar</strong> is injected before <code>&lt;/body&gt;</code> directly in <code>index.html</code> — they fire on every page load automatically.</p>
+      <!-- MASTER ADS KILL SWITCH -->
+      <div class="master-switch-card" [class.master-off]="!adsGloballyEnabled">
+        <div class="ms-left">
+          <div class="ms-icon">{{ adsGloballyEnabled ? '🟢' : '🛑' }}</div>
+          <div class="ms-body">
+            <h3>{{ adsGloballyEnabled ? 'MASTER ADS STATUS: ENABLED (LIVE)' : 'MASTER ADS STATUS: DISABLED (ALL OFF)' }}</h3>
+            <p *ngIf="adsGloballyEnabled">All active ads and the 30-second visitor ad are active. Eligible visitors see the 30s ad once, then ads are suppressed for 24 hours.</p>
+            <p *ngIf="!adsGloballyEnabled">All ads, banners, and visitor modals are turned completely OFF sitewide. No visitor will see any ads.</p>
+          </div>
         </div>
-        <div class="notice-chips">
-          <span class="chip chip-green">✅ Popunder Active</span>
-          <span class="chip chip-cyan">✅ Social Bar Active</span>
+        <div class="ms-actions">
+          <button
+            class="btn-master-toggle"
+            [class.btn-danger]="adsGloballyEnabled"
+            [class.btn-success]="!adsGloballyEnabled"
+            (click)="toggleGlobalAds()"
+            [disabled]="saving"
+          >
+            {{ adsGloballyEnabled ? '🛑 Turn OFF All Ads Sitewide' : '🟢 Turn ON All Ads Sitewide' }}
+          </button>
+        </div>
+      </div>
+
+      <!-- 24-HOUR COOLDOWN & TESTING TOOL -->
+      <div class="cooldown-test-card">
+        <div class="ct-left">
+          <span class="ct-icon">🛡️</span>
+          <div class="ct-body">
+            <span class="ct-title">This Device's 24-Hour Ad Status:</span>
+            <span *ngIf="cooldownInfo.active" class="status-pill pill-active">
+              ✅ 24h Cooldown Active ({{ cooldownInfo.remainingFormatted }} remaining) — Ads hidden on this device
+            </span>
+            <span *ngIf="!cooldownInfo.active" class="status-pill pill-expired">
+              ⏳ Ready — 30s visitor ad will trigger when visiting site
+            </span>
+          </div>
+        </div>
+        <div class="ct-actions">
+          <button class="btn-cooldown-action" (click)="resetDeviceCooldown()" title="Clears this device's cooldown so you can test the 30s visitor ad">
+            🔄 Reset Cooldown (Test 30s Ad)
+          </button>
+          <button class="btn-cooldown-action secondary" (click)="triggerDeviceCooldown()" title="Simulates 24h cooldown on this device">
+            ⏱️ Trigger 24h Cooldown
+          </button>
         </div>
       </div>
 
@@ -170,12 +206,13 @@ const POSITION_LABELS: Record<string, string> = {
             <div class="form-row">
               <label>Placement Position</label>
               <select [(ngModel)]="ad.position" class="form-control">
+                <option value="visitor_interstitial">Visitor 30s Interstitial (Once per 24h)</option>
                 <option value="player_top">Player Top Banner — Above Video Player</option>
                 <option value="player_bottom">Player Bottom Banner — Below Video Player</option>
                 <option value="home_interstitial">Home / Interstitial — Between Media Rows</option>
                 <option value="sidebar">Sidebar Rectangle</option>
-                <option value="popunder">Popunder Script (Head)</option>
-                <option value="social_bar">Social Bar (Body End)</option>
+                <option value="popunder">Popunder Script</option>
+                <option value="social_bar">Social Bar</option>
                 <option value="smartlink">Smartlink Hyperlink</option>
               </select>
             </div>
@@ -337,6 +374,102 @@ const POSITION_LABELS: Record<string, string> = {
     }
     .code-area { font-family: monospace; font-size: 0.78rem; resize: vertical; }
 
+    /* Master Switch Card */
+    .master-switch-card {
+      background: linear-gradient(135deg, rgba(34, 197, 94, 0.12) 0%, rgba(15, 23, 42, 0.8) 100%);
+      border: 1px solid rgba(34, 197, 94, 0.35);
+      border-radius: 14px;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+    .master-switch-card.master-off {
+      background: linear-gradient(135deg, rgba(239, 68, 68, 0.12) 0%, rgba(15, 23, 42, 0.8) 100%);
+      border-color: rgba(239, 68, 68, 0.35);
+    }
+    .ms-left { display: flex; align-items: center; gap: 1rem; }
+    .ms-icon { font-size: 2rem; }
+    .ms-body h3 { margin: 0 0 0.3rem 0; font-size: 1.05rem; font-weight: 800; letter-spacing: 0.03em; color: #ffffff; }
+    .ms-body p { margin: 0; font-size: 0.85rem; color: #94a3b8; max-width: 600px; line-height: 1.4; }
+    .btn-master-toggle {
+      padding: 0.7rem 1.4rem;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+      font-family: inherit;
+      transition: all 0.2s;
+    }
+    .btn-master-toggle.btn-danger {
+      background: rgba(239, 68, 68, 0.2);
+      border: 1px solid #ef4444;
+      color: #fca5a5;
+    }
+    .btn-master-toggle.btn-danger:hover {
+      background: #ef4444;
+      color: #ffffff;
+      box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4);
+    }
+    .btn-master-toggle.btn-success {
+      background: #22c55e;
+      color: #ffffff;
+      box-shadow: 0 4px 15px rgba(34, 197, 94, 0.3);
+    }
+    .btn-master-toggle.btn-success:hover {
+      background: #16a34a;
+    }
+
+    /* Cooldown Testing Tool */
+    .cooldown-test-card {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 0.9rem 1.25rem;
+      margin-bottom: 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .ct-left { display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; }
+    .ct-icon { font-size: 1.3rem; }
+    .ct-body { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
+    .ct-title { font-size: 0.85rem; font-weight: 700; color: #cbd5e1; }
+    .status-pill {
+      font-size: 0.76rem;
+      padding: 0.25rem 0.65rem;
+      border-radius: 999px;
+      font-weight: 600;
+    }
+    .pill-active { background: rgba(34, 197, 94, 0.15); color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.3); }
+    .pill-expired { background: rgba(245, 158, 11, 0.15); color: #fcd34d; border: 1px solid rgba(245, 158, 11, 0.3); }
+    .ct-actions { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+    .btn-cooldown-action {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #e2e8f0;
+      padding: 0.4rem 0.8rem;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.2s;
+    }
+    .btn-cooldown-action:hover { background: rgba(255, 255, 255, 0.15); color: #ffffff; }
+    .btn-cooldown-action.secondary {
+      background: rgba(99, 102, 241, 0.15);
+      border-color: rgba(99, 102, 241, 0.3);
+      color: #a5b4fc;
+    }
+    .btn-cooldown-action.secondary:hover { background: rgba(99, 102, 241, 0.3); }
+
     .alert-success { background: rgba(34,197,94,0.15); color: #4ade80; padding: 0.75rem 1rem; border-radius: 10px; border: 1px solid rgba(34,197,94,0.25); }
     .alert-error { background: rgba(239,68,68,0.15); color: #f87171; padding: 0.75rem 1rem; border-radius: 10px; border: 1px solid rgba(239,68,68,0.25); }
     .empty-state { text-align: center; padding: 3rem 2rem; color: #64748b; display: flex; flex-direction: column; align-items: center; gap: 0.75rem; }
@@ -345,17 +478,35 @@ const POSITION_LABELS: Record<string, string> = {
 })
 export class AdminAdsComponent implements OnInit, OnDestroy {
   private readonly settings = inject(SettingsService);
+  private readonly adCooldown = inject(AdCooldownService);
   private readonly ngZone = inject(NgZone);
   private readonly cdr = inject(ChangeDetectorRef);
   private readonly adminMedia = inject(AdminMediaService);
   private sub?: Subscription;
+  private settingsSub?: Subscription;
 
   ads: AdConfig[] = [];
+  adsGloballyEnabled = true;
+  cooldownInfo: CooldownInfo = {
+    active: false,
+    remainingSeconds: 0,
+    remainingFormatted: '0h 0m',
+    cooldownUntil: null,
+    lastViewedAt: null
+  };
+
   saving = false;
   successMsg = '';
   errorMsg = '';
 
   ngOnInit(): void {
+    this.cooldownInfo = this.adCooldown.getCooldownInfo();
+
+    this.settingsSub = this.settings.settings$.subscribe(s => {
+      this.adsGloballyEnabled = s.adsEnabled !== false;
+      this.cdr.detectChanges();
+    });
+
     this.sub = this.settings.ads$.subscribe(list => {
       if (!this.saving) {
         this.ads = list.map(a => ({ ...a }));
@@ -366,6 +517,42 @@ export class AdminAdsComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.sub?.unsubscribe();
+    this.settingsSub?.unsubscribe();
+  }
+
+  async toggleGlobalAds(): Promise<void> {
+    this.saving = true;
+    const nextState = !this.adsGloballyEnabled;
+    try {
+      await this.settings.setAdsGloballyEnabled(nextState);
+      this.adsGloballyEnabled = nextState;
+      await this.adminMedia.logAction('toggle_ads', 'global', `Set global ads status to ${nextState ? 'ENABLED' : 'DISABLED'}`);
+      this.successMsg = nextState ? '🟢 All ads enabled sitewide!' : '🛑 All ads have been turned OFF sitewide!';
+      this.saving = false;
+      this.cdr.detectChanges();
+      setTimeout(() => { this.successMsg = ''; this.cdr.detectChanges(); }, 4000);
+    } catch (e: any) {
+      this.errorMsg = e?.message || 'Failed to update global ads status.';
+      this.saving = false;
+      this.cdr.detectChanges();
+      setTimeout(() => { this.errorMsg = ''; this.cdr.detectChanges(); }, 4000);
+    }
+  }
+
+  resetDeviceCooldown(): void {
+    this.adCooldown.resetCooldown();
+    this.cooldownInfo = this.adCooldown.getCooldownInfo();
+    this.successMsg = '🔄 Device cooldown reset! The 30s visitor ad will now trigger when you open the site.';
+    this.cdr.detectChanges();
+    setTimeout(() => { this.successMsg = ''; this.cdr.detectChanges(); }, 4000);
+  }
+
+  triggerDeviceCooldown(): void {
+    this.adCooldown.startCooldown(24);
+    this.cooldownInfo = this.adCooldown.getCooldownInfo();
+    this.successMsg = '⏱️ 24-hour device cooldown started! Ads are now suppressed on this device for 24 hours.';
+    this.cdr.detectChanges();
+    setTimeout(() => { this.successMsg = ''; this.cdr.detectChanges(); }, 4000);
   }
 
   getPositionLabel(pos: string): string {

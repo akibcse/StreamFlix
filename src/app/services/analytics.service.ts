@@ -228,6 +228,26 @@ export class AnalyticsService {
     } catch { return []; }
   }
 
+  /** Fetch a specific user's watch history (admin use) */
+  async getUserWatchHistory(uid: string): Promise<{ id?: number; mediaId?: number; mediaType?: string; title?: string; name?: string; timestamp?: number; watchedAt?: number }[]> {
+    try {
+      const snap = await get(ref(this.db, `user_activity/${uid}/history`));
+      if (!snap.exists()) return [];
+      return Object.values(snap.val() as Record<string, any>)
+        .sort((a, b) => (b.timestamp || b.watchedAt || 0) - (a.timestamp || a.watchedAt || 0));
+    } catch { return []; }
+  }
+
+  /** Fetch a specific user's search history (admin use) */
+  async getUserSearchHistory(uid: string): Promise<{ query: string; timestamp: number }[]> {
+    try {
+      const snap = await get(ref(this.db, `user_activity/${uid}/searches`));
+      if (!snap.exists()) return [];
+      return Object.values(snap.val() as Record<string, any>)
+        .sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+    } catch { return []; }
+  }
+
   async getRecentSearches(limit = 10): Promise<{ query: string; timestamp: number }[]> {
     // First try dedicated analytics/searches collection
     const searches = await this.getTrendingSearches(limit);

@@ -277,27 +277,66 @@
 
 .data-table {
   width: 100%;
+  min-width: 980px;
   border-collapse: collapse;
+  table-layout: fixed;
   text-align: left;
 }
 
 .data-table th {
-  background: rgba(255, 255, 255, 0.03);
-  padding: 1rem 1.15rem;
-  font-size: 0.8rem;
+  background: rgba(255, 255, 255, 0.04);
+  padding: 0.9rem 1rem;
+  font-size: 0.78rem;
   font-weight: 700;
   color: #94a3b8;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 2px solid rgba(255, 255, 255, 0.08);
   white-space: nowrap;
+  box-sizing: border-box;
+}
+
+.th-sortable {
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.2s ease;
+}
+
+.th-sortable:hover {
+  background: rgba(99, 102, 241, 0.12);
+  color: #ffffff;
+}
+
+.th-sortable.sorted {
+  color: #818cf8;
+  background: rgba(99, 102, 241, 0.15);
+  border-bottom-color: #6366f1;
+}
+
+.th-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.4rem;
+}
+
+.th-center {
+  justify-content: center;
+}
+
+.sort-indicator {
+  font-size: 0.75rem;
+  color: #818cf8;
+  font-weight: 800;
 }
 
 .data-table td {
-  padding: 0.95rem 1.15rem;
+  padding: 0.85rem 1rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.04);
   font-size: 0.88rem;
-  vertical-align: top;
+  vertical-align: middle;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
 .log-row:hover,
@@ -305,12 +344,44 @@
   background: rgba(99, 102, 241, 0.03);
 }
 
+.child-log-row td {
+  background: rgba(15, 23, 42, 0.4);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+  vertical-align: top;
+}
+
+.child-log-row:hover td {
+  background: rgba(99, 102, 241, 0.07);
+}
+
+.child-cell {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.45rem;
+}
+
+.child-indent-glyph {
+  color: #818cf8;
+  font-size: 1.1rem;
+  font-weight: 700;
+  line-height: 1;
+  margin-top: 1px;
+  flex-shrink: 0;
+}
+
+.child-time-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
 /* Time & User Cell */
 .time-user-cell {
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
-  min-width: 140px;
+  min-width: 0;
 }
 
 .cell-time {
@@ -353,7 +424,7 @@
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
-  min-width: 180px;
+  min-width: 0;
 }
 
 .ip-top-row {
@@ -429,7 +500,7 @@
   display: flex;
   flex-direction: column;
   gap: 0.2rem;
-  min-width: 180px;
+  min-width: 0;
 }
 
 .geo-primary {
@@ -494,27 +565,42 @@
 
 /* Unique IP Group Header */
 .ip-group-header td {
-  background: linear-gradient(135deg, rgba(99, 102, 241, 0.18), rgba(56, 189, 248, 0.1));
-  border-left: 3px solid #6366f1;
-  padding: 0.9rem 1rem;
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.88), rgba(15, 23, 42, 0.94));
+  border-top: 1px solid rgba(99, 102, 241, 0.2);
+  border-bottom: 1px solid rgba(99, 102, 241, 0.2);
   cursor: pointer;
-  transition: background 0.2s ease, border-left-color 0.2s ease;
+  transition: all 0.2s ease;
+  vertical-align: middle;
 }
 
-.ip-group-header td:hover {
-  background: linear-gradient(135deg, rgba(99, 102, 241, 0.28), rgba(56, 189, 248, 0.16));
-  border-left-color: #a5b4fc;
+.ip-group-header:hover td {
+  background: linear-gradient(135deg, rgba(37, 52, 77, 0.95), rgba(18, 28, 48, 0.98));
 }
 
 .ip-group-header.expanded td {
-  border-left-color: #34d399;
+  background: linear-gradient(135deg, rgba(30, 58, 138, 0.35), rgba(15, 23, 42, 0.95));
+  border-bottom: 1px solid rgba(56, 189, 248, 0.3);
 }
 
-.ip-group-summary {
+.visits-cell {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 0.25rem;
+  align-items: flex-start;
+}
+
+.expand-hint {
+  font-size: 0.72rem;
+  color: #818cf8;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.group-actions-wrap {
+  display: flex;
   align-items: center;
-  gap: 0.4rem 1.5rem;
+  justify-content: center;
+  gap: 0.4rem;
 }
 
 .group-chevron-cell {
@@ -537,7 +623,7 @@
   transition: transform 0.2s ease, background 0.2s ease;
 }
 
-.ip-group-header.expanded .group-chevron {
+.group-chevron.expanded {
   background: rgba(52, 211, 153, 0.2);
   border-color: rgba(52, 211, 153, 0.4);
   color: #34d399;
@@ -613,7 +699,7 @@
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
-  min-width: 180px;
+  min-width: 0;
 }
 
 .device-header {

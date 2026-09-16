@@ -148,195 +148,290 @@
       <div class="table-card">
         <div class="table-responsive">
           <table class="data-table">
+            <colgroup>
+              <col style="width: 17%; min-width: 160px;">
+              <col style="width: 22%; min-width: 200px;">
+              <col style="width: 20%; min-width: 180px;">
+              <col style="width: 20%; min-width: 180px;">
+              <col style="width: 12%; min-width: 120px;">
+              <col style="width: 9%; min-width: 90px;">
+            </colgroup>
             <thead>
               <tr>
-                <th>Time & User</th>
-                <th>IP & ISP Provider</th>
-                <th>Precise Location</th>
-                <th>Device, OS & Display</th>
-                <th>Path Visited</th>
-                <th style="text-align: center;">Action</th>
+                <th class="th-sortable" (click)="toggleSort('time')" [class.sorted]="sortColumn === 'time'" title="Click to sort by Time">
+                  <div class="th-inner">
+                    <span>Time & User</span>
+                    <span class="sort-indicator">{{ getSortIcon('time') }}</span>
+                  </div>
+                </th>
+                <th class="th-sortable" (click)="toggleSort('ip')" [class.sorted]="sortColumn === 'ip'" title="Click to sort by IP">
+                  <div class="th-inner">
+                    <span>IP & ISP Provider</span>
+                    <span class="sort-indicator">{{ getSortIcon('ip') }}</span>
+                  </div>
+                </th>
+                <th class="th-sortable" (click)="toggleSort('location')" [class.sorted]="sortColumn === 'location'" title="Click to sort by Location">
+                  <div class="th-inner">
+                    <span>Precise Location</span>
+                    <span class="sort-indicator">{{ getSortIcon('location') }}</span>
+                  </div>
+                </th>
+                <th class="th-sortable" (click)="toggleSort('device')" [class.sorted]="sortColumn === 'device'" title="Click to sort by Device">
+                  <div class="th-inner">
+                    <span>Device & System</span>
+                    <span class="sort-indicator">{{ getSortIcon('device') }}</span>
+                  </div>
+                </th>
+                <th class="th-sortable" (click)="toggleSort('visits')" [class.sorted]="sortColumn === 'visits'" title="Click to sort by Visits">
+                  <div class="th-inner">
+                    <span>Visits / Path</span>
+                    <span class="sort-indicator">{{ getSortIcon('visits') }}</span>
+                  </div>
+                </th>
+                <th class="th-action" style="text-align: center;">
+                  <div class="th-inner th-center">
+                    <span>Action</span>
+                  </div>
+                </th>
               </tr>
             </thead>
             <tbody>
               <ng-container *ngIf="logGroups$ | async as logGroups">
                 <ng-container *ngFor="let group of logGroups">
-                <!-- UNIQUE IP GROUP HEADER -->
-                <tr class="ip-group-header" [class.expanded]="isGroupExpanded(group.ip)" (click)="toggleGroup(group.ip)" title="Click to toggle access logs">
-                  <td colspan="5">
-                    <div class="ip-group-summary">
-                      <div class="ip-group-main">
-                        <span class="country-flag">{{ group.flag || '📍' }}</span>
-                        <span class="ip-addr" (click)="copyText(group.ip, 'IP Address'); $event.stopPropagation()" title="Click to copy IP">{{ group.ip }}</span>
-                        <span class="ip-type-badge" *ngIf="group.ipType">{{ group.ipType }}</span>
-                        <span class="visit-count-badge">🔄 {{ group.count }} {{ group.count === 1 ? 'Visit' : 'Visits' }}</span>
-                      </div>
-                      <div class="ip-group-loc" *ngIf="group.country || group.city">
-                        <strong>{{ group.country || 'Global' }}</strong>
-                        <span *ngIf="group.countryCode">({{ group.countryCode }})</span>
-                        <span *ngIf="group.city"> • {{ group.city }}</span>
-                        <span *ngIf="group.region">, {{ group.region }}</span>
-                        <a *ngIf="group.latitude && group.longitude"
-                           [href]="'https://www.google.com/maps?q=' + group.latitude + ',' + group.longitude"
-                           target="_blank" rel="noopener noreferrer" class="coord-link"
-                           title="View precise location on Google Maps">
-                          📍 {{ group.latitude | number:'1.2-4' }}, {{ group.longitude | number:'1.2-4' }} ↗
-                        </a>
-                      </div>
-                      <div class="ip-group-meta" *ngIf="group.isp || group.asn">
-                        <span class="isp-name" [title]="'ISP: ' + group.isp">⚡ {{ group.isp }}</span>
-                        <span class="asn-badge" *ngIf="group.asn">{{ group.asn }}</span>
-                      </div>
-                      <div class="ip-group-foot">
-                        <span>🕒 Last active: {{ getRelativeTime(group.lastSeen) }}</span>
-                        <span class="devices-summary" *ngIf="group.devicesLabel">💻 {{ group.devicesLabel }}</span>
-                        <span class="group-email" *ngIf="group.userEmail">👤 {{ group.userEmail }}</span>
-                      </div>
-                    </div>
-                  </td>
-                  <td class="group-chevron-cell" style="text-align: center;">
-                    <div class="group-actions-wrap">
-                      <button
-                        type="button"
-                        class="btn-inspect-mini"
-                        (click)="openLogDetails(group.logs[0]); $event.stopPropagation()"
-                        title="Inspect Visitor Telemetry Dossier"
-                      >
-                        🔍 Inspect
-                      </button>
-                      <span class="group-chevron">{{ isGroupExpanded(group.ip) ? '▾' : '▸' }}</span>
-                    </div>
-                  </td>
-                </tr>
-                <ng-container *ngIf="isGroupExpanded(group.ip)">
-                <tr *ngFor="let log of group.logs" class="log-row">
-                <!-- Time & User -->
-                <td>
-                  <div class="time-user-cell">
-                    <span class="cell-time">{{ log.dateStr || formatDate(log.timestamp) }}</span>
-                    <span class="time-relative" *ngIf="log.timestamp">{{ getRelativeTime(log.timestamp) }}</span>
-                    <div class="user-identity">
-                      <span class="user-tag" [class.user-logged-in]="log.userId">
-                        <ng-container *ngIf="log.userId">👤 {{ log.userEmail || 'Member' }}</ng-container>
-                        <ng-container *ngIf="!log.userId">👻 Guest</ng-container>
-                      </span>
-                    </div>
-                  </div>
-                </td>
-
-                <!-- IP & ISP Provider -->
-                <td>
-                  <div class="ip-isp-cell">
-                    <div class="ip-top-row">
-                      <span class="ip-addr" (click)="copyText(log.ip, 'IP Address')" title="Click to copy IP">
-                        {{ log.ip }}
-                      </span>
-                      <span class="ip-type-badge" *ngIf="log.ipType">{{ log.ipType }}</span>
-                    </div>
-                    <!-- ISP & ASN -->
-                    <div class="isp-info" *ngIf="log.isp || log.org">
-                      <span class="isp-name" [title]="'ISP: ' + (log.isp || log.org)">
-                        ⚡ {{ log.isp || log.org }}
-                      </span>
-                      <span class="asn-badge" *ngIf="log.asn" title="Autonomous System Number">
-                        {{ log.asn }}
-                      </span>
-                    </div>
-                    <div class="net-speed" *ngIf="log.connectionType || log.downlink">
-                      <span class="net-type">{{ log.connectionType }}</span>
-                      <span *ngIf="log.downlink" class="downlink-text">• {{ log.downlink }}</span>
-                    </div>
-                  </div>
-                </td>
-
-                <!-- Precise Location -->
-                <td>
-                  <div class="location-cell">
-                    <div class="geo-primary">
-                      <span class="country-flag">{{ log.flag || '📍' }}</span>
-                      <strong class="country-name">{{ log.country || 'Global' }}</strong>
-                      <span class="country-code" *ngIf="log.countryCode">({{ log.countryCode }})</span>
-                    </div>
-                    <div class="geo-secondary" *ngIf="log.city || log.region">
-                      <span *ngIf="log.city">{{ log.city }}</span>
-                      <span *ngIf="log.city && log.region">, </span>
-                      <span *ngIf="log.region">{{ log.region }}</span>
-                      <span class="postal-tag" *ngIf="log.postal">📮 {{ log.postal }}</span>
-                    </div>
-                    <div class="geo-coords" *ngIf="log.latitude && log.longitude">
-                      <a
-                        [href]="'https://www.google.com/maps?q=' + log.latitude + ',' + log.longitude"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        class="coord-link"
-                        title="View precise location on Google Maps"
-                      >
-                        📍 {{ log.latitude | number:'1.2-4' }}, {{ log.longitude | number:'1.2-4' }} ↗
-                      </a>
-                    </div>
-                    <div class="geo-tz" *ngIf="log.timezone">
-                      <span class="tz-text">🕒 {{ log.timezone }}</span>
-                    </div>
-                  </div>
-                </td>
-
-                <!-- Device, OS & Display -->
-                <td>
-                  <div class="device-cell">
-                    <div class="device-header">
-                      <span class="device-icon">
-                        <ng-container [ngSwitch]="log.device">
-                          <span *ngSwitchCase="'Mobile'">📱</span>
-                          <span *ngSwitchCase="'Tablet'">📟</span>
-                          <span *ngSwitchCase="'Smart TV'">📺</span>
-                          <span *ngSwitchDefault>💻</span>
-                        </ng-container>
-                      </span>
-                      <span class="device-badge" [class.device-mobile]="log.device === 'Mobile'" [class.device-tablet]="log.device === 'Tablet'">
-                        {{ log.device }}
-                      </span>
-                      <span class="device-model" *ngIf="log.deviceModel && log.deviceModel !== 'General'">
-                        {{ log.deviceModel }}
-                      </span>
-                    </div>
-                    <div class="os-browser-text">
-                      <span class="os-name">{{ log.os }}</span>
-                      <span class="dot-sep">•</span>
-                      <span class="browser-name">{{ log.browser }}</span>
-                    </div>
-                    <div class="display-hardware">
-                      <span class="screen-size" *ngIf="log.screenResolution">
-                        🖥️ {{ log.screenResolution }}<span *ngIf="log.pixelRatio && log.pixelRatio > 1"> ({{ log.pixelRatio }}x)</span>
-                      </span>
-                      <span class="hw-spec" *ngIf="log.cpuCores">
-                        ⚙️ {{ log.cpuCores }} Cores<span *ngIf="log.ram"> • {{ log.ram }}</span>
-                      </span>
-                    </div>
-                  </div>
-                </td>
-
-                <!-- Path Visited -->
-                <td>
-                  <div class="path-cell">
-                    <a [routerLink]="log.path" class="path-link" target="_blank" [title]="'Open ' + log.path">
-                      {{ log.path }}
-                    </a>
-                  </div>
-                </td>
-
-                <!-- Action Button -->
-                <td style="text-align: center;">
-                  <button
-                    type="button"
-                    class="btn-inspect"
-                    (click)="openLogDetails(log)"
-                    title="Inspect Full Telemetry Dossier"
+                  <!-- UNIQUE IP GROUP HEADER (Row 1 of Group) -->
+                  <tr
+                    class="ip-group-header"
+                    [class.expanded]="isGroupExpanded(group.ip)"
+                    (click)="toggleGroup(group.ip)"
+                    title="Click row to toggle {{ group.count }} access log entries"
                   >
-                    🔍 Inspect
-                  </button>
-                </td>
-              </tr>
-                </ng-container>
+                    <!-- Col 1: Time & User -->
+                    <td>
+                      <div class="time-user-cell">
+                        <span class="cell-time">{{ group.lastSeen ? (group.lastSeen | date:'short') : 'N/A' }}</span>
+                        <span class="time-relative" *ngIf="group.lastSeen">{{ getRelativeTime(group.lastSeen) }}</span>
+                        <div class="user-identity">
+                          <span class="user-tag" [class.user-logged-in]="group.userEmail">
+                            {{ group.userEmail ? '👤 ' + group.userEmail : '👥 Unique Visitor' }}
+                          </span>
+                        </div>
+                      </div>
+                    </td>
+
+                    <!-- Col 2: IP & ISP Provider -->
+                    <td>
+                      <div class="ip-isp-cell">
+                        <div class="ip-top-row">
+                          <span class="country-flag">{{ group.flag || '📍' }}</span>
+                          <span class="ip-addr" (click)="copyText(group.ip, 'IP Address'); $event.stopPropagation()" title="Click to copy IP">
+                            {{ group.ip }}
+                          </span>
+                          <span class="ip-type-badge" *ngIf="group.ipType">{{ group.ipType }}</span>
+                        </div>
+                        <div class="isp-info" *ngIf="group.isp || group.asn">
+                          <span class="isp-name" [title]="'ISP: ' + group.isp">⚡ {{ group.isp || 'Unknown ISP' }}</span>
+                          <span class="asn-badge" *ngIf="group.asn">{{ group.asn }}</span>
+                        </div>
+                      </div>
+                    </td>
+
+                    <!-- Col 3: Precise Location -->
+                    <td>
+                      <div class="location-cell">
+                        <div class="geo-primary">
+                          <strong class="country-name">{{ group.country || 'Global' }}</strong>
+                          <span class="country-code" *ngIf="group.countryCode">({{ group.countryCode }})</span>
+                        </div>
+                        <div class="geo-secondary" *ngIf="group.city || group.region">
+                          <span>{{ group.city || '' }}{{ group.city && group.region ? ', ' : '' }}{{ group.region || '' }}</span>
+                        </div>
+                        <div class="geo-coords" *ngIf="group.latitude && group.longitude">
+                          <a
+                            [href]="'https://www.google.com/maps?q=' + group.latitude + ',' + group.longitude"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="coord-link"
+                            (click)="$event.stopPropagation()"
+                            title="View precise location on Google Maps"
+                          >
+                            📍 {{ group.latitude | number:'1.2-4' }}, {{ group.longitude | number:'1.2-4' }} ↗
+                          </a>
+                        </div>
+                      </div>
+                    </td>
+
+                    <!-- Col 4: Device, OS & Display -->
+                    <td>
+                      <div class="device-cell">
+                        <div class="device-header">
+                          <span class="device-icon">💻</span>
+                          <span class="devices-summary" [title]="group.devicesLabel">
+                            {{ group.devicesLabel || 'Desktop / Browser' }}
+                          </span>
+                        </div>
+                      </div>
+                    </td>
+
+                    <!-- Col 5: Visits & Path -->
+                    <td>
+                      <div class="visits-cell">
+                        <span class="visit-count-badge">🔄 {{ group.count }} {{ group.count === 1 ? 'Log' : 'Logs' }}</span>
+                        <span class="expand-hint">
+                          {{ isGroupExpanded(group.ip) ? '▲ Hide logs' : '▼ View logs' }}
+                        </span>
+                      </div>
+                    </td>
+
+                    <!-- Col 6: Action Button -->
+                    <td class="group-chevron-cell" style="text-align: center;">
+                      <div class="group-actions-wrap">
+                        <button
+                          type="button"
+                          class="btn-inspect-mini"
+                          (click)="openLogDetails(group.logs[0]); $event.stopPropagation()"
+                          title="Inspect Visitor Telemetry Dossier"
+                        >
+                          🔍 Dossier
+                        </button>
+                        <span class="group-chevron" [class.expanded]="isGroupExpanded(group.ip)">
+                          {{ isGroupExpanded(group.ip) ? '▾' : '▸' }}
+                        </span>
+                      </div>
+                    </td>
+                  </tr>
+
+                  <!-- EXPANDED LOG ROWS (Child rows under each group) -->
+                  <ng-container *ngIf="isGroupExpanded(group.ip)">
+                    <tr *ngFor="let log of group.logs" class="log-row child-log-row">
+                      <!-- Col 1: Time & User -->
+                      <td>
+                        <div class="time-user-cell child-cell">
+                          <span class="child-indent-glyph">↳</span>
+                          <div class="child-time-wrap">
+                            <span class="cell-time">{{ log.dateStr || (log.timestamp ? (log.timestamp | date:'short') : 'N/A') }}</span>
+                            <span class="time-relative" *ngIf="log.timestamp">{{ getRelativeTime(log.timestamp) }}</span>
+                            <div class="user-identity">
+                              <span class="user-tag" [class.user-logged-in]="log.userId">
+                                <ng-container *ngIf="log.userId">👤 {{ log.userEmail || 'Member' }}</ng-container>
+                                <ng-container *ngIf="!log.userId">👻 Guest</ng-container>
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+
+                      <!-- Col 2: IP & ISP Provider -->
+                      <td>
+                        <div class="ip-isp-cell">
+                          <div class="ip-top-row">
+                            <span class="ip-addr" (click)="copyText(log.ip, 'IP Address')" title="Click to copy IP">
+                              {{ log.ip }}
+                            </span>
+                            <span class="ip-type-badge" *ngIf="log.ipType">{{ log.ipType }}</span>
+                          </div>
+                          <div class="isp-info" *ngIf="log.isp || log.org">
+                            <span class="isp-name" [title]="'ISP: ' + (log.isp || log.org)">
+                              ⚡ {{ log.isp || log.org }}
+                            </span>
+                            <span class="asn-badge" *ngIf="log.asn" title="Autonomous System Number">
+                              {{ log.asn }}
+                            </span>
+                          </div>
+                          <div class="net-speed" *ngIf="log.connectionType || log.downlink">
+                            <span class="net-type">{{ log.connectionType }}</span>
+                            <span *ngIf="log.downlink" class="downlink-text">• {{ log.downlink }}</span>
+                          </div>
+                        </div>
+                      </td>
+
+                      <!-- Col 3: Precise Location -->
+                      <td>
+                        <div class="location-cell">
+                          <div class="geo-primary">
+                            <span class="country-flag">{{ log.flag || '📍' }}</span>
+                            <strong class="country-name">{{ log.country || 'Global' }}</strong>
+                            <span class="country-code" *ngIf="log.countryCode">({{ log.countryCode }})</span>
+                          </div>
+                          <div class="geo-secondary" *ngIf="log.city || log.region">
+                            <span *ngIf="log.city">{{ log.city }}</span>
+                            <span *ngIf="log.city && log.region">, </span>
+                            <span *ngIf="log.region">{{ log.region }}</span>
+                            <span class="postal-tag" *ngIf="log.postal">📮 {{ log.postal }}</span>
+                          </div>
+                          <div class="geo-coords" *ngIf="log.latitude && log.longitude">
+                            <a
+                              [href]="'https://www.google.com/maps?q=' + log.latitude + ',' + log.longitude"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              class="coord-link"
+                              title="View precise location on Google Maps"
+                            >
+                              📍 {{ log.latitude | number:'1.2-4' }}, {{ log.longitude | number:'1.2-4' }} ↗
+                            </a>
+                          </div>
+                          <div class="geo-tz" *ngIf="log.timezone">
+                            <span class="tz-text">🕒 {{ log.timezone }}</span>
+                          </div>
+                        </div>
+                      </td>
+
+                      <!-- Col 4: Device, OS & Display -->
+                      <td>
+                        <div class="device-cell">
+                          <div class="device-header">
+                            <span class="device-icon">
+                              <ng-container [ngSwitch]="log.device">
+                                <span *ngSwitchCase="'Mobile'">📱</span>
+                                <span *ngSwitchCase="'Tablet'">📟</span>
+                                <span *ngSwitchCase="'Smart TV'">📺</span>
+                                <span *ngSwitchDefault>💻</span>
+                              </ng-container>
+                            </span>
+                            <span class="device-badge" [class.device-mobile]="log.device === 'Mobile'" [class.device-tablet]="log.device === 'Tablet'">
+                              {{ log.device }}
+                            </span>
+                            <span class="device-model" *ngIf="log.deviceModel && log.deviceModel !== 'General'">
+                              {{ log.deviceModel }}
+                            </span>
+                          </div>
+                          <div class="os-browser-text">
+                            <span class="os-name">{{ log.os }}</span>
+                            <span class="dot-sep">•</span>
+                            <span class="browser-name">{{ log.browser }}</span>
+                          </div>
+                          <div class="display-hardware">
+                            <span class="screen-size" *ngIf="log.screenResolution">
+                              🖥️ {{ log.screenResolution }}<span *ngIf="log.pixelRatio && log.pixelRatio > 1"> ({{ log.pixelRatio }}x)</span>
+                            </span>
+                            <span class="hw-spec" *ngIf="log.cpuCores">
+                              ⚙️ {{ log.cpuCores }} Cores<span *ngIf="log.ram"> • {{ log.ram }}</span>
+                            </span>
+                          </div>
+                        </div>
+                      </td>
+
+                      <!-- Col 5: Path Visited -->
+                      <td>
+                        <div class="path-cell">
+                          <a [routerLink]="log.path" class="path-link" target="_blank" [title]="'Open ' + log.path">
+                            {{ log.path }}
+                          </a>
+                        </div>
+                      </td>
+
+                      <!-- Col 6: Action Button -->
+                      <td style="text-align: center;">
+                        <button
+                          type="button"
+                          class="btn-inspect"
+                          (click)="openLogDetails(log)"
+                          title="Inspect Full Telemetry Dossier"
+                        >
+                          🔍 Inspect
+                        </button>
+                      </td>
+                    </tr>
+                  </ng-container>
                 </ng-container>
 
                 <tr *ngIf="logGroups.length === 0">

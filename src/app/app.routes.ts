@@ -201,6 +201,11 @@ export const routes: Routes = [
         path: 'visitors',
         loadComponent: () => import('./features/admin/admin.component').then(m => m.AdminComponent),
         title: 'Admin — Visitor Logs'
+      },
+      {
+        path: 'chat',
+        loadComponent: () => import('./features/admin/pages/chat/admin-chat.component').then(m => m.AdminChatComponent),
+        title: 'Admin — Live Chat'
       }
     ]
   },

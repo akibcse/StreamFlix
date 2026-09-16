@@ -2,8 +2,9 @@ import { Injectable, inject, NgZone } from '@angular/core';
 import { getDatabase, ref, set, get, push, update, remove, onValue } from 'firebase/database';
 import { FirebaseService } from './firebase.service';
 import { AuthService } from './auth.service';
+import { AdCooldownService } from './ad-cooldown.service';
 import { SiteSettings, DEFAULT_SITE_SETTINGS, AdConfig } from '../models/media.model';
-import { BehaviorSubject, Observable, map } from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest, map } from 'rxjs';
 
 /**
  * Utility to deeply sanitize an object so it has no `undefined` properties,
@@ -53,6 +54,7 @@ export const DEFAULT_ADS: AdConfig[] = [
 export class SettingsService {
   private readonly firebase = inject(FirebaseService);
   private readonly auth = inject(AuthService);
+  private readonly adCooldown = inject(AdCooldownService);
   private readonly ngZone = inject(NgZone);
   private readonly db = this.firebase.db;
 
@@ -117,9 +119,8 @@ export class SettingsService {
           this._ads$.next(list);
           this.cacheAds(list);
         } else {
-          this._ads$.next(DEFAULT_ADS);
-          this.cacheAds(DEFAULT_ADS);
-          this.saveAllAds(DEFAULT_ADS).catch(() => {});
+          this._ads$.next([]);
+          this.cacheAds([]);
         }
       });
     }, error => {
@@ -278,9 +279,23 @@ export class SettingsService {
     });
   }
 
+  async setAdsGloballyEnabled(enabled: boolean): Promise<void> {
+    await this.updateField('adsEnabled', enabled);
+  }
+
+  isAdsGloballyEnabled(): boolean {
+    return this.settings.adsEnabled !== false;
+  }
+
   getAdsByPosition(position: string): Observable<AdConfig[]> {
-    return this.ads$.pipe(
-      map(ads => ads.filter(a => a.active && a.position === position && !!a.htmlCode.trim()))
+    return combineLatest([this.ads$, this.settings$, this.adCooldown.cooldownActive$]).pipe(
+      map(([ads, settings, isCooldown]) => {
+        // Global kill-switch: if adsEnabled is explicitly false, return nothing
+        if (settings.adsEnabled === false) return [];
+        // Device 24-hour cooldown: if user has active cooldown, return nothing
+        if (isCooldown) return [];
+        return ads.filter(a => a.active && a.position === position && !!a.htmlCode.trim());
+      })
     );
   }
 

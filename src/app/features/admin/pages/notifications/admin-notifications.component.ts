@@ -359,8 +359,44 @@ export class AdminNotificationsComponent implements OnInit {
   };
 
   ngOnInit(): void {
+    this.initServiceWorker();
     this.checkPushPermission();
     this.loadSent();
+  }
+
+  private initServiceWorker(): void {
+    if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js').catch(err => {
+        console.warn('SW registration warning:', err);
+      });
+    }
+  }
+
+  private async triggerBrowserNotification(title: string, options?: NotificationOptions): Promise<void> {
+    if (typeof Notification === 'undefined' || Notification.permission !== 'granted') return;
+
+    // 1. Try ServiceWorkerRegistration.showNotification (required on mobile Chrome & standard across PWA/modern web)
+    if (typeof navigator !== 'undefined' && 'serviceWorker' in navigator) {
+      try {
+        let registration = await navigator.serviceWorker.getRegistration();
+        if (!registration) {
+          registration = await navigator.serviceWorker.register('/sw.js').catch(() => undefined);
+        }
+        if (registration && typeof registration.showNotification === 'function') {
+          await registration.showNotification(title, options);
+          return;
+        }
+      } catch (swErr) {
+        console.warn('ServiceWorker showNotification fallback warning:', swErr);
+      }
+    }
+
+    // 2. Safe fallback to window.Notification constructor
+    try {
+      new Notification(title, options);
+    } catch (notifErr) {
+      console.warn('Native Notification constructor not supported or illegal in this context:', notifErr);
+    }
   }
 
   checkPushPermission(): void {
@@ -379,7 +415,7 @@ export class AdminNotificationsComponent implements OnInit {
     this.pushPermission = perm;
     if (perm === 'granted') {
       this.successMsg = '🔔 Browser push notifications enabled!';
-      new Notification('StreamFlix Admin', {
+      await this.triggerBrowserNotification('StreamFlix Admin', {
         body: 'Push notifications are now enabled. You will receive live alerts.',
         icon: '/logo-icon.png'
       });
@@ -390,9 +426,9 @@ export class AdminNotificationsComponent implements OnInit {
     setTimeout(() => { this.successMsg = ''; this.errorMsg = ''; this.cdr.detectChanges(); }, 4000);
   }
 
-  testPushNotification(): void {
+  async testPushNotification(): Promise<void> {
     if (typeof Notification === 'undefined' || Notification.permission !== 'granted') return;
-    new Notification('StreamFlix Test Notification 🎬', {
+    await this.triggerBrowserNotification('StreamFlix Test Notification 🎬', {
       body: 'This is a test push notification from the StreamFlix Admin Panel.',
       icon: '/logo-icon.png',
       tag: 'test-push'
@@ -422,9 +458,9 @@ export class AdminNotificationsComponent implements OnInit {
 
       await this.notificationService.sendBroadcastNotification(payload);
 
-      // Fire native browser push notification if permission granted
+      // Fire browser push notification via ServiceWorker / safe fallback
       if (this.sendBrowserPush && typeof Notification !== 'undefined' && Notification.permission === 'granted') {
-        new Notification(`📢 ${payload.title}`, {
+        await this.triggerBrowserNotification(`📢 ${payload.title}`, {
           body: payload.message,
           icon: '/logo-icon.png',
           tag: `broadcast-${Date.now()}`

@@ -27,6 +27,7 @@ import {
 import { MovieService } from '../../services/movie.service';
 import { MediaItem, Genre } from '../../models/media.model';
 import { AdBannerComponent } from '../../shared/components/ad-banner.component';
+import { AdTriggerService } from '../../services/ad-trigger.service';
 
 interface HomeCatalog {
   featured: MediaItem | null;
@@ -53,6 +54,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewChecked {
   private readonly movieService = inject(MovieService);
   private readonly router = inject(Router);
   private readonly cdr = inject(ChangeDetectorRef);
+  private readonly adTrigger = inject(AdTriggerService);
 
   private readonly destroy$ = new Subject<void>();
   private readonly refresh$ = new Subject<void>();
@@ -463,7 +465,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewChecked {
     rowElement.scrollBy({ left: scrollAmount, behavior: 'smooth' });
   }
 
-  /** Navigate directly to the player (play button / card click) */
+  /** Navigate directly to the player — triggers ad modal first if cooldown not active */
   navigateToWatch(item: MediaItem): void {
     if (typeof window !== 'undefined') {
       window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
@@ -471,12 +473,15 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewChecked {
       document.body.scrollTop = 0;
     }
     const type = item.media_type || (item.first_air_date ? 'tv' : 'movie');
-    this.router.navigate([`/${type}`, item.id, 'watch']);
+    // Store pending navigation so modal can resume it after ad completes
+    (window as any).__pendingAdNav = [`/${type}`, item.id, 'watch'];
+    this.adTrigger.triggerAd();
   }
 
-  /** Navigate to media detail page (info button) */
+  /** Navigate to media detail page — triggers ad modal first if cooldown not active */
   navigateToMedia(item: MediaItem): void {
     const type = item.media_type || (item.first_air_date ? 'tv' : 'movie');
-    this.router.navigate([`/${type}`, item.id]);
+    (window as any).__pendingAdNav = [`/${type}`, item.id];
+    this.adTrigger.triggerAd();
   }
 }

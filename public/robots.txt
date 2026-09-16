@@ -14,4 +14,4 @@ Disallow: /forgot-password
 Disallow: /search?*
 
 # Direct Google and search engines to sitemap
-Sitemap: https://ott.akibhasan.online/sitemap.xml
+Sitemap: https://streamflixbd.vercel.app/sitemap.xml

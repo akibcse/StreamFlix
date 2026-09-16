@@ -7,11 +7,13 @@ import { VisitorLogService } from './services/visitor-log.service';
 import { UserActivityService } from './services/user-activity.service';
 import { SettingsService } from './services/settings.service';
 import { AppUser } from './models/user.model';
+import { VisitorAdModalComponent } from './shared/components/visitor-ad-modal.component';
+import { LiveChatWidgetComponent } from './shared/components/live-chat-widget.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, RouterModule],
+  imports: [CommonModule, RouterOutlet, RouterModule, VisitorAdModalComponent, LiveChatWidgetComponent],
   template: `
     <!-- TOP ANNOUNCEMENT BANNER -->
     <aside
@@ -219,6 +221,12 @@ import { AppUser } from './models/user.model';
         <span class="tab-text">My List</span>
       </a>
     </nav>
+
+    <!-- 30-SECOND VISITOR AD MODAL (Triggered by movie card clicks, once in 24h per device) -->
+    <app-visitor-ad-modal *ngIf="!isAdminRoute()"></app-visitor-ad-modal>
+
+    <!-- LIVE CHAT WIDGET (Bottom-right floating bubble for all pages except admin) -->
+    <app-live-chat-widget *ngIf="!isAdminRoute()"></app-live-chat-widget>
   `,
   styles: [`
     :host {
@@ -887,16 +895,51 @@ export class AppComponent implements OnInit {
 
   readonly announcementDismissed = signal<boolean>(false);
   readonly isAdminRoute = signal<boolean>(false);
+  readonly isHomePage = signal<boolean>(false);
   mobileNavOpen = false;
 
   ngOnInit(): void {
     this.visitorService.startTracking();
-    this.isAdminRoute.set(this.router.url.startsWith('/admin'));
+
+    if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js').catch(() => { /* silent */ });
+    }
+
+    const updateRouteState = (url: string) => {
+      const clean = (url || '').split('?')[0].split('#')[0];
+      const isHome = clean === '/' || clean === '';
+      this.isHomePage.set(isHome);
+      this.isAdminRoute.set(clean.startsWith('/admin'));
+      if (clean.startsWith('/admin') || !isHome) {
+        this.cleanupRogueAdNodes();
+      }
+    };
+
+    updateRouteState(this.router.url);
+
     this.router.events.pipe(
       filter((e): e is NavigationEnd => e instanceof NavigationEnd)
     ).subscribe(e => {
-      this.isAdminRoute.set(e.urlAfterRedirects.startsWith('/admin'));
+      updateRouteState(e.urlAfterRedirects || e.url);
     });
+  }
+
+  private cleanupRogueAdNodes(): void {
+    if (typeof document === 'undefined') return;
+    try {
+      // Remove rogue iframes or containers injected outside component boundaries
+      const rogueSelectors = [
+        'div[id^="container-c9d044db8"]',
+        'iframe[src*="highrevenueformat"]',
+        'iframe[src*="profitableratecpmnetwork"]',
+        'iframe[src*="quge5"]',
+        'div[id*="adsterra"]',
+        'div[id*="atContainer"]'
+      ];
+      rogueSelectors.forEach(sel => {
+        document.querySelectorAll(sel).forEach(el => el.remove());
+      });
+    } catch { /* silent */ }
   }
 
   getBrandFirst(siteName?: string): string {

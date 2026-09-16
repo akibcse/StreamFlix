@@ -2,6 +2,7 @@ import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../../../services/auth.service';
+import { AnalyticsService } from '../../../../services/analytics.service';
 import { AppUser } from '../../../../models/user.model';
 import { environment } from '../../../../../environments/environment';
 
@@ -112,6 +113,15 @@ import { environment } from '../../../../../environments/environment';
                     title="Inspect Login Telemetry, ISP & Location"
                   >
                     🛰️
+                  </button>
+
+                  <!-- HISTORY BUTTON -->
+                  <button
+                    class="btn-action-history"
+                    (click)="openHistoryModal(u)"
+                    title="View Watch & Search History"
+                  >
+                    📺 History
                   </button>
 
                   <!-- ROLE TOGGLE BUTTON -->
@@ -326,6 +336,84 @@ import { environment } from '../../../../../environments/environment';
           </div>
         </div>
       </div>
+
+      <!-- USER HISTORY MODAL -->
+      <div class="modal-backdrop" *ngIf="historyUser" (click)="closeHistoryModal()">
+        <div class="modal-card history-modal-card" (click)="$event.stopPropagation()">
+          <div class="modal-header">
+            <div class="modal-title-row">
+              <span class="modal-icon">📺</span>
+              <h3>Activity History — {{ historyUser.displayName || historyUser.email }}</h3>
+            </div>
+            <button class="btn-modal-close" (click)="closeHistoryModal()">✕</button>
+          </div>
+
+          <!-- Tab bar -->
+          <div class="history-tabs">
+            <button
+              class="history-tab"
+              [class.active]="historyTab === 'watch'"
+              (click)="historyTab = 'watch'"
+            >🎬 Watch History ({{ watchHistory.length }})</button>
+            <button
+              class="history-tab"
+              [class.active]="historyTab === 'search'"
+              (click)="historyTab = 'search'"
+            >🔍 Search History ({{ searchHistory.length }})</button>
+          </div>
+
+          <!-- Loading spinner -->
+          <div class="history-loading" *ngIf="historyLoading">
+            <div class="spinner-ring"></div>
+            <span>Loading history...</span>
+          </div>
+
+          <!-- Watch History Tab -->
+          <div class="history-body" *ngIf="!historyLoading && historyTab === 'watch'">
+            <div class="history-empty" *ngIf="watchHistory.length === 0">
+              <span class="empty-icon">📭</span>
+              <p>No watch history found for this user.</p>
+            </div>
+            <div class="history-list" *ngIf="watchHistory.length > 0">
+              <div class="history-item" *ngFor="let item of watchHistory">
+                <div class="history-item-icon">
+                  {{ item.mediaType === 'tv' ? '📺' : '🎬' }}
+                </div>
+                <div class="history-item-info">
+                  <span class="history-item-title">{{ item.title || item.name || 'Untitled' }}</span>
+                  <div class="history-item-meta">
+                    <span class="type-pill">{{ item.mediaType === 'tv' ? 'TV Series' : 'Movie' }}</span>
+                    <span class="history-item-time">{{ (item.timestamp || item.watchedAt) | date:'medium' }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Search History Tab -->
+          <div class="history-body" *ngIf="!historyLoading && historyTab === 'search'">
+            <div class="history-empty" *ngIf="searchHistory.length === 0">
+              <span class="empty-icon">📭</span>
+              <p>No search history found for this user.</p>
+            </div>
+            <div class="history-list" *ngIf="searchHistory.length > 0">
+              <div class="history-item" *ngFor="let item of searchHistory">
+                <div class="history-item-icon">🔍</div>
+                <div class="history-item-info">
+                  <span class="history-item-title">{{ item.query }}</span>
+                  <div class="history-item-meta">
+                    <span class="history-item-time">{{ item.timestamp | date:'medium' }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="modal-actions">
+            <button type="button" class="btn-cancel" (click)="closeHistoryModal()">Close</button>
+          </div>
+        </div>
+      </div>
     </div>
   `,
   styles: [`
@@ -519,6 +607,132 @@ import { environment } from '../../../../../environments/environment';
     }
     .btn-action-telemetry:hover { background: #10b981; color: white; }
 
+    .btn-action-history {
+      background: rgba(168, 85, 247, 0.12);
+      border: 1px solid rgba(168, 85, 247, 0.3);
+      color: #c084fc;
+      padding: 0.35rem 0.65rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.78rem;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+    .btn-action-history:hover { background: #a855f7; color: white; }
+
+    .history-modal-card { max-width: 640px !important; }
+    .history-tabs {
+      display: flex;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(0, 0, 0, 0.2);
+    }
+    .history-tab {
+      flex: 1;
+      padding: 0.85rem 1rem;
+      background: none;
+      border: none;
+      color: #94a3b8;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      border-bottom: 2px solid transparent;
+    }
+    .history-tab:hover { color: #ffffff; background: rgba(255, 255, 255, 0.03); }
+    .history-tab.active {
+      color: #a855f7;
+      border-bottom-color: #a855f7;
+      background: rgba(168, 85, 247, 0.08);
+    }
+    .history-loading {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 1rem;
+      gap: 0.75rem;
+      color: #94a3b8;
+      font-size: 0.9rem;
+    }
+    .spinner-ring {
+      width: 32px;
+      height: 32px;
+      border: 3px solid rgba(168, 85, 247, 0.2);
+      border-top-color: #a855f7;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    .history-body {
+      padding: 1rem 1.25rem;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+    .history-empty {
+      text-align: center;
+      padding: 2.5rem 1rem;
+      color: #94a3b8;
+    }
+    .history-empty .empty-icon { font-size: 2rem; display: block; margin-bottom: 0.5rem; }
+    .history-empty p { margin: 0; font-size: 0.9rem; }
+    .history-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .history-item {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      padding: 0.75rem 0.9rem;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 10px;
+      transition: background 0.15s;
+    }
+    .history-item:hover {
+      background: rgba(255, 255, 255, 0.06);
+    }
+    .history-item-icon {
+      font-size: 1.3rem;
+      flex-shrink: 0;
+    }
+    .history-item-info {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      flex: 1;
+      min-width: 0;
+    }
+    .history-item-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #f1f5f9;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .history-item-meta {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 0.75rem;
+    }
+    .type-pill {
+      background: rgba(99, 102, 241, 0.18);
+      color: #a5b4fc;
+      padding: 1px 7px;
+      border-radius: 4px;
+      font-weight: 600;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+    }
+    .history-item-time {
+      color: #64748b;
+    }
+
     .user-ip-cell { display: flex; flex-direction: column; gap: 2px; }
     .user-ip-text { font-family: monospace; font-size: 0.82rem; color: #ffffff; font-weight: 600; }
     .user-isp-text { font-size: 0.74rem; color: #38bdf8; max-width: 140px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -710,6 +924,7 @@ import { environment } from '../../../../../environments/environment';
 })
 export class AdminUsersComponent implements OnInit {
   private readonly auth = inject(AuthService);
+  private readonly analytics = inject(AnalyticsService);
   private readonly cdr = inject(ChangeDetectorRef);
 
   readonly currentUser$ = this.auth.currentUser$;
@@ -720,6 +935,12 @@ export class AdminUsersComponent implements OnInit {
   errorMsg = '';
 
   telemetryUser: AppUser | null = null;
+  historyUser: AppUser | null = null;
+  historyTab: 'watch' | 'search' = 'watch';
+  historyLoading = false;
+  watchHistory: { id?: number; mediaId?: number; mediaType?: string; title?: string; name?: string; timestamp?: number; watchedAt?: number }[] = [];
+  searchHistory: { query: string; timestamp: number }[] = [];
+
   editingUser: AppUser | null = null;
   editForm: { displayName: string; email: string; role: 'admin' | 'user' } = {
     displayName: '',
@@ -735,6 +956,36 @@ export class AdminUsersComponent implements OnInit {
 
   closeTelemetryModal(): void {
     this.telemetryUser = null;
+    this.cdr.detectChanges();
+  }
+
+  async openHistoryModal(user: AppUser): Promise<void> {
+    this.historyUser = user;
+    this.historyTab = 'watch';
+    this.historyLoading = true;
+    this.watchHistory = [];
+    this.searchHistory = [];
+    this.cdr.detectChanges();
+
+    try {
+      const [watch, search] = await Promise.all([
+        this.analytics.getUserWatchHistory(user.uid),
+        this.analytics.getUserSearchHistory(user.uid)
+      ]);
+      this.watchHistory = watch || [];
+      this.searchHistory = search || [];
+    } catch (e) {
+      console.error('Failed to load user history:', e);
+    } finally {
+      this.historyLoading = false;
+      this.cdr.detectChanges();
+    }
+  }
+
+  closeHistoryModal(): void {
+    this.historyUser = null;
+    this.watchHistory = [];
+    this.searchHistory = [];
     this.cdr.detectChanges();
   }
 

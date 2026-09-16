@@ -2,285 +2,305 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
-    <loc>https://ott.akibhasan.online/</loc>
-    <lastmod>2026-09-07</lastmod>
+    <loc>https://streamflixbd.vercel.app/</loc>
+    <lastmod>2026-09-16</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/movies</loc>
-    <lastmod>2026-09-07</lastmod>
+    <loc>https://streamflixbd.vercel.app/movies</loc>
+    <lastmod>2026-09-16</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/tv</loc>
-    <lastmod>2026-09-07</lastmod>
+    <loc>https://streamflixbd.vercel.app/tv</loc>
+    <lastmod>2026-09-16</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/trending</loc>
-    <lastmod>2026-09-07</lastmod>
+    <loc>https://streamflixbd.vercel.app/trending</loc>
+    <lastmod>2026-09-16</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/popular</loc>
-    <lastmod>2026-09-07</lastmod>
+    <loc>https://streamflixbd.vercel.app/popular</loc>
+    <lastmod>2026-09-16</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/top-rated</loc>
-    <lastmod>2026-09-07</lastmod>
+    <loc>https://streamflixbd.vercel.app/top-rated</loc>
+    <lastmod>2026-09-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/upcoming</loc>
-    <lastmod>2026-09-07</lastmod>
+    <loc>https://streamflixbd.vercel.app/upcoming</loc>
+    <lastmod>2026-09-16</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/search</loc>
-    <lastmod>2026-09-07</lastmod>
+    <loc>https://streamflixbd.vercel.app/search</loc>
+    <lastmod>2026-09-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/genre/movie/28/Action</loc>
-    <lastmod>2026-09-07</lastmod>
+    <loc>https://streamflixbd.vercel.app/genre/movie/28/Action</loc>
+    <lastmod>2026-09-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/genre/movie/12/Adventure</loc>
-    <lastmod>2026-09-07</lastmod>
+    <loc>https://streamflixbd.vercel.app/genre/movie/12/Adventure</loc>
+    <lastmod>2026-09-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/genre/movie/16/Animation</loc>
-    <lastmod>2026-09-07</lastmod>
+    <loc>https://streamflixbd.vercel.app/genre/movie/16/Animation</loc>
+    <lastmod>2026-09-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/genre/movie/35/Comedy</loc>
-    <lastmod>2026-09-07</lastmod>
+    <loc>https://streamflixbd.vercel.app/genre/movie/35/Comedy</loc>
+    <lastmod>2026-09-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/genre/movie/80/Crime</loc>
-    <lastmod>2026-09-07</lastmod>
+    <loc>https://streamflixbd.vercel.app/genre/movie/80/Crime</loc>
+    <lastmod>2026-09-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/genre/movie/99/Documentary</loc>
-    <lastmod>2026-09-07</lastmod>
+    <loc>https://streamflixbd.vercel.app/genre/movie/99/Documentary</loc>
+    <lastmod>2026-09-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/genre/movie/18/Drama</loc>
-    <lastmod>2026-09-07</lastmod>
+    <loc>https://streamflixbd.vercel.app/genre/movie/18/Drama</loc>
+    <lastmod>2026-09-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/genre/movie/10751/Family</loc>
-    <lastmod>2026-09-07</lastmod>
+    <loc>https://streamflixbd.vercel.app/genre/movie/10751/Family</loc>
+    <lastmod>2026-09-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/genre/movie/14/Fantasy</loc>
-    <lastmod>2026-09-07</lastmod>
+    <loc>https://streamflixbd.vercel.app/genre/movie/14/Fantasy</loc>
+    <lastmod>2026-09-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/genre/movie/36/History</loc>
-    <lastmod>2026-09-07</lastmod>
+    <loc>https://streamflixbd.vercel.app/genre/movie/36/History</loc>
+    <lastmod>2026-09-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/genre/movie/27/Horror</loc>
-    <lastmod>2026-09-07</lastmod>
+    <loc>https://streamflixbd.vercel.app/genre/movie/27/Horror</loc>
+    <lastmod>2026-09-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/genre/movie/10402/Music</loc>
-    <lastmod>2026-09-07</lastmod>
+    <loc>https://streamflixbd.vercel.app/genre/movie/10402/Music</loc>
+    <lastmod>2026-09-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/genre/movie/9648/Mystery</loc>
-    <lastmod>2026-09-07</lastmod>
+    <loc>https://streamflixbd.vercel.app/genre/movie/9648/Mystery</loc>
+    <lastmod>2026-09-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/genre/movie/10749/Romance</loc>
-    <lastmod>2026-09-07</lastmod>
+    <loc>https://streamflixbd.vercel.app/genre/movie/10749/Romance</loc>
+    <lastmod>2026-09-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/genre/movie/878/Science%20Fiction</loc>
-    <lastmod>2026-09-07</lastmod>
+    <loc>https://streamflixbd.vercel.app/genre/movie/878/Science%20Fiction</loc>
+    <lastmod>2026-09-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/genre/movie/10770/TV%20Movie</loc>
-    <lastmod>2026-09-07</lastmod>
+    <loc>https://streamflixbd.vercel.app/genre/movie/10770/TV%20Movie</loc>
+    <lastmod>2026-09-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/genre/movie/53/Thriller</loc>
-    <lastmod>2026-09-07</lastmod>
+    <loc>https://streamflixbd.vercel.app/genre/movie/53/Thriller</loc>
+    <lastmod>2026-09-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/genre/movie/10752/War</loc>
-    <lastmod>2026-09-07</lastmod>
+    <loc>https://streamflixbd.vercel.app/genre/movie/10752/War</loc>
+    <lastmod>2026-09-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/genre/movie/37/Western</loc>
-    <lastmod>2026-09-07</lastmod>
+    <loc>https://streamflixbd.vercel.app/genre/movie/37/Western</loc>
+    <lastmod>2026-09-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/genre/tv/10759/Action%20%26%20Adventure</loc>
-    <lastmod>2026-09-07</lastmod>
+    <loc>https://streamflixbd.vercel.app/genre/tv/10759/Action%20%26%20Adventure</loc>
+    <lastmod>2026-09-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/genre/tv/16/Animation</loc>
-    <lastmod>2026-09-07</lastmod>
+    <loc>https://streamflixbd.vercel.app/genre/tv/16/Animation</loc>
+    <lastmod>2026-09-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/genre/tv/35/Comedy</loc>
-    <lastmod>2026-09-07</lastmod>
+    <loc>https://streamflixbd.vercel.app/genre/tv/35/Comedy</loc>
+    <lastmod>2026-09-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/genre/tv/80/Crime</loc>
-    <lastmod>2026-09-07</lastmod>
+    <loc>https://streamflixbd.vercel.app/genre/tv/80/Crime</loc>
+    <lastmod>2026-09-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/genre/tv/99/Documentary</loc>
-    <lastmod>2026-09-07</lastmod>
+    <loc>https://streamflixbd.vercel.app/genre/tv/99/Documentary</loc>
+    <lastmod>2026-09-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/genre/tv/18/Drama</loc>
-    <lastmod>2026-09-07</lastmod>
+    <loc>https://streamflixbd.vercel.app/genre/tv/18/Drama</loc>
+    <lastmod>2026-09-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/genre/tv/10751/Family</loc>
-    <lastmod>2026-09-07</lastmod>
+    <loc>https://streamflixbd.vercel.app/genre/tv/10751/Family</loc>
+    <lastmod>2026-09-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/genre/tv/10762/Kids</loc>
-    <lastmod>2026-09-07</lastmod>
+    <loc>https://streamflixbd.vercel.app/genre/tv/10762/Kids</loc>
+    <lastmod>2026-09-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/genre/tv/9648/Mystery</loc>
-    <lastmod>2026-09-07</lastmod>
+    <loc>https://streamflixbd.vercel.app/genre/tv/9648/Mystery</loc>
+    <lastmod>2026-09-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/genre/tv/10763/News</loc>
-    <lastmod>2026-09-07</lastmod>
+    <loc>https://streamflixbd.vercel.app/genre/tv/10763/News</loc>
+    <lastmod>2026-09-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/genre/tv/10764/Reality</loc>
-    <lastmod>2026-09-07</lastmod>
+    <loc>https://streamflixbd.vercel.app/genre/tv/10764/Reality</loc>
+    <lastmod>2026-09-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/genre/tv/10765/Sci-Fi%20%26%20Fantasy</loc>
-    <lastmod>2026-09-07</lastmod>
+    <loc>https://streamflixbd.vercel.app/genre/tv/10765/Sci-Fi%20%26%20Fantasy</loc>
+    <lastmod>2026-09-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/genre/tv/10766/Soap</loc>
-    <lastmod>2026-09-07</lastmod>
+    <loc>https://streamflixbd.vercel.app/genre/tv/10766/Soap</loc>
+    <lastmod>2026-09-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/genre/tv/10767/Talk</loc>
-    <lastmod>2026-09-07</lastmod>
+    <loc>https://streamflixbd.vercel.app/genre/tv/10767/Talk</loc>
+    <lastmod>2026-09-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/genre/tv/10768/War%20%26%20Politics</loc>
-    <lastmod>2026-09-07</lastmod>
+    <loc>https://streamflixbd.vercel.app/genre/tv/10768/War%20%26%20Politics</loc>
+    <lastmod>2026-09-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/genre/tv/37/Western</loc>
-    <lastmod>2026-09-07</lastmod>
+    <loc>https://streamflixbd.vercel.app/genre/tv/37/Western</loc>
+    <lastmod>2026-09-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/movie/1386315</loc>
-    <lastmod>2026-09-03</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/uxCaBoYXsDC4A0SqTm3SISj0OwK.jpg</image:loc>
-      <image:title>The Runner</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/movie/1386315/watch</loc>
-    <lastmod>2026-09-03</lastmod>
+    <loc>https://streamflixbd.vercel.app/movie/1101383</loc>
+    <lastmod>2026-08-12</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/uxCaBoYXsDC4A0SqTm3SISj0OwK.jpg</image:loc>
-      <image:title>Watch The Runner Online Free</image:title>
+      <image:loc>https://image.tmdb.org/t/p/w780/fYXqpgPmHMphSF2W30GbTeJVIa5.jpg</image:loc>
+      <image:title>The End of Oak Street</image:title>
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/movie/969681</loc>
+    <loc>https://streamflixbd.vercel.app/movie/1101383/watch</loc>
+    <lastmod>2026-08-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/fYXqpgPmHMphSF2W30GbTeJVIa5.jpg</image:loc>
+      <image:title>Watch The End of Oak Street Online Free</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/movie/1423191</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/i7UyjfPio0VFHB9rBUZSFyhOoM8.jpg</image:loc>
+      <image:title>Resident Evil</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/movie/1423191/watch</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/i7UyjfPio0VFHB9rBUZSFyhOoM8.jpg</image:loc>
+      <image:title>Watch Resident Evil Online Free</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/movie/969681</loc>
     <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -290,7 +310,7 @@
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/movie/969681/watch</loc>
+    <loc>https://streamflixbd.vercel.app/movie/969681/watch</loc>
     <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -300,7 +320,27 @@
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/movie/1368337</loc>
+    <loc>https://streamflixbd.vercel.app/movie/1108427</loc>
+    <lastmod>2026-07-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/gaet1xQ2nxrG0V1Ep9T20ZMNEIC.jpg</image:loc>
+      <image:title>Moana</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/movie/1108427/watch</loc>
+    <lastmod>2026-07-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/gaet1xQ2nxrG0V1Ep9T20ZMNEIC.jpg</image:loc>
+      <image:title>Watch Moana Online Free</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/movie/1368337</loc>
     <lastmod>2026-07-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -310,7 +350,7 @@
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/movie/1368337/watch</loc>
+    <loc>https://streamflixbd.vercel.app/movie/1368337/watch</loc>
     <lastmod>2026-07-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -320,87 +360,7 @@
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/movie/1204680</loc>
-    <lastmod>2026-08-20</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/orkLtdgMGiO9rTVMqJ1kKwrnup1.jpg</image:loc>
-      <image:title>Coyote vs. Acme</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/movie/1204680/watch</loc>
-    <lastmod>2026-08-20</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/orkLtdgMGiO9rTVMqJ1kKwrnup1.jpg</image:loc>
-      <image:title>Watch Coyote vs. Acme Online Free</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/movie/1339713</loc>
-    <lastmod>2026-05-13</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/bRwnj8WEKBCvmfeUNOukJPwB43K.jpg</image:loc>
-      <image:title>Obsession</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/movie/1339713/watch</loc>
-    <lastmod>2026-05-13</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/bRwnj8WEKBCvmfeUNOukJPwB43K.jpg</image:loc>
-      <image:title>Watch Obsession Online Free</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/movie/860508</loc>
-    <lastmod>2026-08-27</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/6UqflU8Qqkz7Dq4swJPqs0ZJjY4.jpg</image:loc>
-      <image:title>The Whisper Man</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/movie/860508/watch</loc>
-    <lastmod>2026-08-27</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/6UqflU8Qqkz7Dq4swJPqs0ZJjY4.jpg</image:loc>
-      <image:title>Watch The Whisper Man Online Free</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/movie/1108427</loc>
-    <lastmod>2026-07-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/zKVgiv5qHCvCLT4A2ymJi5QeXDH.jpg</image:loc>
-      <image:title>Moana</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/movie/1108427/watch</loc>
-    <lastmod>2026-07-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/zKVgiv5qHCvCLT4A2ymJi5QeXDH.jpg</image:loc>
-      <image:title>Watch Moana Online Free</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/movie/1137844</loc>
+    <loc>https://streamflixbd.vercel.app/movie/1137844</loc>
     <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -410,7 +370,7 @@
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/movie/1137844/watch</loc>
+    <loc>https://streamflixbd.vercel.app/movie/1137844/watch</loc>
     <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -420,7 +380,187 @@
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/movie/1083381</loc>
+    <loc>https://streamflixbd.vercel.app/movie/1302904</loc>
+    <lastmod>2026-09-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/ogwQOLbCfncjvBhFb5l0OmQH8KC.jpg</image:loc>
+      <image:title>Practical Magic 2</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/movie/1302904/watch</loc>
+    <lastmod>2026-09-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/ogwQOLbCfncjvBhFb5l0OmQH8KC.jpg</image:loc>
+      <image:title>Watch Practical Magic 2 Online Free</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/movie/1339713</loc>
+    <lastmod>2026-05-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/bRwnj8WEKBCvmfeUNOukJPwB43K.jpg</image:loc>
+      <image:title>Obsession</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/movie/1339713/watch</loc>
+    <lastmod>2026-05-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/bRwnj8WEKBCvmfeUNOukJPwB43K.jpg</image:loc>
+      <image:title>Watch Obsession Online Free</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/movie/1204680</loc>
+    <lastmod>2026-08-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/vhv7lBWYM0DUuNU2a0V7Rhq21dD.jpg</image:loc>
+      <image:title>Coyote vs. Acme</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/movie/1204680/watch</loc>
+    <lastmod>2026-08-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/vhv7lBWYM0DUuNU2a0V7Rhq21dD.jpg</image:loc>
+      <image:title>Watch Coyote vs. Acme Online Free</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/movie/1440098</loc>
+    <lastmod>2026-09-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/6rpvddXbaQPOi0fB2HKWbZ3uUSg.jpg</image:loc>
+      <image:title>Drawn Together</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/movie/1440098/watch</loc>
+    <lastmod>2026-09-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/6rpvddXbaQPOi0fB2HKWbZ3uUSg.jpg</image:loc>
+      <image:title>Watch Drawn Together Online Free</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/movie/1300968</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/ffJaYMtB6v1TrvkyhCOqwqCKm0o.jpg</image:loc>
+      <image:title>The Hunger Games: Sunrise on the Reaping</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/movie/1300968/watch</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/ffJaYMtB6v1TrvkyhCOqwqCKm0o.jpg</image:loc>
+      <image:title>Watch The Hunger Games: Sunrise on the Reaping Online Free</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/movie/1433367</loc>
+    <lastmod>2026-08-06</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/46q8z1TbbVcF8uhRHsvt5s0h2SH.jpg</image:loc>
+      <image:title>One Night Only</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/movie/1433367/watch</loc>
+    <lastmod>2026-08-06</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/46q8z1TbbVcF8uhRHsvt5s0h2SH.jpg</image:loc>
+      <image:title>Watch One Night Only Online Free</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/movie/1058424</loc>
+    <lastmod>2026-07-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/1n37BJchWHLiSYQkuFxe5KjB951.jpg</image:loc>
+      <image:title>Hope</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/movie/1058424/watch</loc>
+    <lastmod>2026-07-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/1n37BJchWHLiSYQkuFxe5KjB951.jpg</image:loc>
+      <image:title>Watch Hope Online Free</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/movie/1124142</loc>
+    <lastmod>2026-08-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/3iVDCDS1VwHIm95PjWEPwsfdhaf.jpg</image:loc>
+      <image:title>The Rivals of Amziah King</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/movie/1124142/watch</loc>
+    <lastmod>2026-08-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/3iVDCDS1VwHIm95PjWEPwsfdhaf.jpg</image:loc>
+      <image:title>Watch The Rivals of Amziah King Online Free</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/movie/1386315</loc>
+    <lastmod>2026-09-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/uxCaBoYXsDC4A0SqTm3SISj0OwK.jpg</image:loc>
+      <image:title>The Runner</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/movie/1386315/watch</loc>
+    <lastmod>2026-09-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/uxCaBoYXsDC4A0SqTm3SISj0OwK.jpg</image:loc>
+      <image:title>Watch The Runner Online Free</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/movie/1083381</loc>
     <lastmod>2026-05-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -430,7 +570,7 @@
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/movie/1083381/watch</loc>
+    <loc>https://streamflixbd.vercel.app/movie/1083381/watch</loc>
     <lastmod>2026-05-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -440,7 +580,7 @@
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/movie/1288445</loc>
+    <loc>https://streamflixbd.vercel.app/movie/1288445</loc>
     <lastmod>2026-08-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -450,7 +590,7 @@
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/movie/1288445/watch</loc>
+    <loc>https://streamflixbd.vercel.app/movie/1288445/watch</loc>
     <lastmod>2026-08-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -460,227 +600,67 @@
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/movie/1480574</loc>
-    <lastmod>2026-08-28</lastmod>
+    <loc>https://streamflixbd.vercel.app/movie/1365884</loc>
+    <lastmod>2026-08-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/glALx6QaIgw1u4joXsnfHTjWi6D.jpg</image:loc>
-      <image:title>Just Play Dead</image:title>
+      <image:loc>https://image.tmdb.org/t/p/w780/p4SvSFIkjCs4y0C7yAcYP9XNmP2.jpg</image:loc>
+      <image:title>Call My Agent! The Movie</image:title>
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/movie/1480574/watch</loc>
-    <lastmod>2026-08-28</lastmod>
+    <loc>https://streamflixbd.vercel.app/movie/1365884/watch</loc>
+    <lastmod>2026-08-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/glALx6QaIgw1u4joXsnfHTjWi6D.jpg</image:loc>
-      <image:title>Watch Just Play Dead Online Free</image:title>
+      <image:loc>https://image.tmdb.org/t/p/w780/p4SvSFIkjCs4y0C7yAcYP9XNmP2.jpg</image:loc>
+      <image:title>Watch Call My Agent! The Movie Online Free</image:title>
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/movie/1423191</loc>
+    <loc>https://streamflixbd.vercel.app/movie/1185806</loc>
+    <lastmod>2026-07-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/qnin56Syy5rbG7KCaxWY7SPuy6p.jpg</image:loc>
+      <image:title>PAW Patrol: The Dino Movie</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/movie/1185806/watch</loc>
+    <lastmod>2026-07-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/qnin56Syy5rbG7KCaxWY7SPuy6p.jpg</image:loc>
+      <image:title>Watch PAW Patrol: The Dino Movie Online Free</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/movie/1003596</loc>
     <lastmod>2026-09-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/qku2uWSoJ9amQV5MWo1Eek29iji.jpg</image:loc>
-      <image:title>Resident Evil</image:title>
+      <image:loc>https://image.tmdb.org/t/p/w780/jzPwsojjFStf5lR5Nm07w2hH56G.jpg</image:loc>
+      <image:title>Avengers: Doomsday</image:title>
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/movie/1423191/watch</loc>
+    <loc>https://streamflixbd.vercel.app/movie/1003596/watch</loc>
     <lastmod>2026-09-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/qku2uWSoJ9amQV5MWo1Eek29iji.jpg</image:loc>
-      <image:title>Watch Resident Evil Online Free</image:title>
+      <image:loc>https://image.tmdb.org/t/p/w780/jzPwsojjFStf5lR5Nm07w2hH56G.jpg</image:loc>
+      <image:title>Watch Avengers: Doomsday Online Free</image:title>
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/movie/1084244</loc>
-    <lastmod>2026-06-17</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/sfQtVlIHljToOwYjhe21KPGzZWK.jpg</image:loc>
-      <image:title>Toy Story 5</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/movie/1084244/watch</loc>
-    <lastmod>2026-06-17</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/sfQtVlIHljToOwYjhe21KPGzZWK.jpg</image:loc>
-      <image:title>Watch Toy Story 5 Online Free</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/movie/1514026</loc>
-    <lastmod>2026-08-27</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/6Lh4ZlsAISFQFVfLZ90sE9ycVnN.jpg</image:loc>
-      <image:title>Buddy</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/movie/1514026/watch</loc>
-    <lastmod>2026-08-27</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/6Lh4ZlsAISFQFVfLZ90sE9ycVnN.jpg</image:loc>
-      <image:title>Watch Buddy Online Free</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/movie/1288059</loc>
-    <lastmod>2026-07-29</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/pR7SIX3AwqdoD96OI44oLG98e7g.jpg</image:loc>
-      <image:title>I Want Your Sex</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/movie/1288059/watch</loc>
-    <lastmod>2026-07-29</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/pR7SIX3AwqdoD96OI44oLG98e7g.jpg</image:loc>
-      <image:title>Watch I Want Your Sex Online Free</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/movie/1081003</loc>
-    <lastmod>2026-06-24</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/uhzRnTW4DM13UQBvZP3eVNzQTuz.jpg</image:loc>
-      <image:title>Supergirl</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/movie/1081003/watch</loc>
-    <lastmod>2026-06-24</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/uhzRnTW4DM13UQBvZP3eVNzQTuz.jpg</image:loc>
-      <image:title>Watch Supergirl Online Free</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/movie/1315772</loc>
-    <lastmod>2026-06-24</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/4LwvU9SZc8QQzW1X1FAPhNbXnEU.jpg</image:loc>
-      <image:title>Minions &amp; Monsters</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/movie/1315772/watch</loc>
-    <lastmod>2026-06-24</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/4LwvU9SZc8QQzW1X1FAPhNbXnEU.jpg</image:loc>
-      <image:title>Watch Minions &amp; Monsters Online Free</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/movie/1101412</loc>
-    <lastmod>2026-09-01</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/sY65bOZcjQqO6VdpOXLN5VcW61e.jpg</image:loc>
-      <image:title>Fall 2: Deadpoint</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/movie/1101412/watch</loc>
-    <lastmod>2026-09-01</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/sY65bOZcjQqO6VdpOXLN5VcW61e.jpg</image:loc>
-      <image:title>Watch Fall 2: Deadpoint Online Free</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/movie/1302904</loc>
-    <lastmod>2026-09-09</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/7jCV8dkRFK3DGJ4dTqlvrMTFPwZ.jpg</image:loc>
-      <image:title>Practical Magic 2</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/movie/1302904/watch</loc>
-    <lastmod>2026-09-09</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/7jCV8dkRFK3DGJ4dTqlvrMTFPwZ.jpg</image:loc>
-      <image:title>Watch Practical Magic 2 Online Free</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/movie/1384216</loc>
-    <lastmod>2026-08-26</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/5O616X9vmRzQdB68PHzBewPittd.jpg</image:loc>
-      <image:title>The Dog Stars</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/movie/1384216/watch</loc>
-    <lastmod>2026-08-26</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/5O616X9vmRzQdB68PHzBewPittd.jpg</image:loc>
-      <image:title>Watch The Dog Stars Online Free</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/movie/1285366</loc>
-    <lastmod>2024-07-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/3r0O6BW9USoZ9mteCVyNKMQriRL.jpg</image:loc>
-      <image:title>Shape of My Heart</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/movie/1285366/watch</loc>
-    <lastmod>2024-07-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/3r0O6BW9USoZ9mteCVyNKMQriRL.jpg</image:loc>
-      <image:title>Watch Shape of My Heart Online Free</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/movie/1375646</loc>
+    <loc>https://streamflixbd.vercel.app/movie/1375646</loc>
     <lastmod>2026-05-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -690,7 +670,7 @@
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/movie/1375646/watch</loc>
+    <loc>https://streamflixbd.vercel.app/movie/1375646/watch</loc>
     <lastmod>2026-05-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -700,27 +680,27 @@
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/movie/1516698</loc>
-    <lastmod>2026-08-26</lastmod>
+    <loc>https://streamflixbd.vercel.app/movie/1294189</loc>
+    <lastmod>2026-09-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/3PWJqDfygN0YNNjWsDUOXclCp3h.jpg</image:loc>
-      <image:title>The Last Sunrise</image:title>
+      <image:loc>https://image.tmdb.org/t/p/w780/eSS5mvSG84UUuvtbHel5Yu3Wik4.jpg</image:loc>
+      <image:title>The Mongoose</image:title>
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/movie/1516698/watch</loc>
-    <lastmod>2026-08-26</lastmod>
+    <loc>https://streamflixbd.vercel.app/movie/1294189/watch</loc>
+    <lastmod>2026-09-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/3PWJqDfygN0YNNjWsDUOXclCp3h.jpg</image:loc>
-      <image:title>Watch The Last Sunrise Online Free</image:title>
+      <image:loc>https://image.tmdb.org/t/p/w780/eSS5mvSG84UUuvtbHel5Yu3Wik4.jpg</image:loc>
+      <image:title>Watch The Mongoose Online Free</image:title>
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/movie/1393326</loc>
+    <loc>https://streamflixbd.vercel.app/movie/1393326</loc>
     <lastmod>2026-04-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -730,7 +710,7 @@
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/movie/1393326/watch</loc>
+    <loc>https://streamflixbd.vercel.app/movie/1393326/watch</loc>
     <lastmod>2026-04-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -740,27 +720,27 @@
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/movie/1621552</loc>
-    <lastmod>2026-08-21</lastmod>
+    <loc>https://streamflixbd.vercel.app/movie/1285366</loc>
+    <lastmod>2024-07-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/alpf5v4UqSFawPmG9RX03Or4BDk.jpg</image:loc>
-      <image:title>Facing El Chapo</image:title>
+      <image:loc>https://image.tmdb.org/t/p/w780/3r0O6BW9USoZ9mteCVyNKMQriRL.jpg</image:loc>
+      <image:title>Shape of My Heart</image:title>
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/movie/1621552/watch</loc>
-    <lastmod>2026-08-21</lastmod>
+    <loc>https://streamflixbd.vercel.app/movie/1285366/watch</loc>
+    <lastmod>2024-07-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/alpf5v4UqSFawPmG9RX03Or4BDk.jpg</image:loc>
-      <image:title>Watch Facing El Chapo Online Free</image:title>
+      <image:loc>https://image.tmdb.org/t/p/w780/3r0O6BW9USoZ9mteCVyNKMQriRL.jpg</image:loc>
+      <image:title>Watch Shape of My Heart Online Free</image:title>
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/movie/1506560</loc>
+    <loc>https://streamflixbd.vercel.app/movie/1506560</loc>
     <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -770,7 +750,7 @@
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/movie/1506560/watch</loc>
+    <loc>https://streamflixbd.vercel.app/movie/1506560/watch</loc>
     <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -780,87 +760,127 @@
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/movie/1213243</loc>
+    <loc>https://streamflixbd.vercel.app/movie/1084244</loc>
+    <lastmod>2026-06-17</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/sfQtVlIHljToOwYjhe21KPGzZWK.jpg</image:loc>
+      <image:title>Toy Story 5</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/movie/1084244/watch</loc>
+    <lastmod>2026-06-17</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/sfQtVlIHljToOwYjhe21KPGzZWK.jpg</image:loc>
+      <image:title>Watch Toy Story 5 Online Free</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/movie/1408162</loc>
+    <lastmod>2026-08-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/mLsvCffzpxxDwC7yVLJSLLjgzoq.jpg</image:loc>
+      <image:title>Vishwanath &amp; Sons</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/movie/1408162/watch</loc>
+    <lastmod>2026-08-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/mLsvCffzpxxDwC7yVLJSLLjgzoq.jpg</image:loc>
+      <image:title>Watch Vishwanath &amp; Sons Online Free</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/movie/1482547</loc>
+    <lastmod>2026-08-31</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/cO7J0XSVKPlAjUCMWC7DVBn1Py2.jpg</image:loc>
+      <image:title>Zip Wire</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/movie/1482547/watch</loc>
+    <lastmod>2026-08-31</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/cO7J0XSVKPlAjUCMWC7DVBn1Py2.jpg</image:loc>
+      <image:title>Watch Zip Wire Online Free</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/movie/264980</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/1WGq9cMuj09tnTJ5wdkINOJff04.jpg</image:loc>
+      <image:title>Loves of a French Pussycat</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/movie/264980/watch</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/1WGq9cMuj09tnTJ5wdkINOJff04.jpg</image:loc>
+      <image:title>Watch Loves of a French Pussycat Online Free</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/movie/1516698</loc>
     <lastmod>2026-08-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/oiIPU4lvnI0Ag2K9cyAi44eCaoE.jpg</image:loc>
-      <image:title>Toxic: A Fairy Tale for Grown-ups</image:title>
+      <image:loc>https://image.tmdb.org/t/p/w780/3PWJqDfygN0YNNjWsDUOXclCp3h.jpg</image:loc>
+      <image:title>The Last Sunrise</image:title>
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/movie/1213243/watch</loc>
+    <loc>https://streamflixbd.vercel.app/movie/1516698/watch</loc>
     <lastmod>2026-08-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/oiIPU4lvnI0Ag2K9cyAi44eCaoE.jpg</image:loc>
-      <image:title>Watch Toxic: A Fairy Tale for Grown-ups Online Free</image:title>
+      <image:loc>https://image.tmdb.org/t/p/w780/3PWJqDfygN0YNNjWsDUOXclCp3h.jpg</image:loc>
+      <image:title>Watch The Last Sunrise Online Free</image:title>
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/movie/1514682</loc>
-    <lastmod>2026-07-29</lastmod>
+    <loc>https://streamflixbd.vercel.app/movie/30723</loc>
+    <lastmod>2026-09-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/7bOuu1SRALGwsG2fLCTvRkCmQBj.jpg</image:loc>
-      <image:title>Above &amp; Below</image:title>
+      <image:loc>https://image.tmdb.org/t/p/w780/kONbgktPKsm3EMj3MiES0IP8BRr.jpg</image:loc>
+      <image:title>Cavegirl</image:title>
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/movie/1514682/watch</loc>
-    <lastmod>2026-07-29</lastmod>
+    <loc>https://streamflixbd.vercel.app/movie/30723/watch</loc>
+    <lastmod>2026-09-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/7bOuu1SRALGwsG2fLCTvRkCmQBj.jpg</image:loc>
-      <image:title>Watch Above &amp; Below Online Free</image:title>
+      <image:loc>https://image.tmdb.org/t/p/w780/kONbgktPKsm3EMj3MiES0IP8BRr.jpg</image:loc>
+      <image:title>Watch Cavegirl Online Free</image:title>
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/movie/1323244</loc>
-    <lastmod>2026-08-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/oLld47ZT1I3iecM3OWhIphohQUJ.jpg</image:loc>
-      <image:title>Rage of Stars</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/movie/1323244/watch</loc>
-    <lastmod>2026-08-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/oLld47ZT1I3iecM3OWhIphohQUJ.jpg</image:loc>
-      <image:title>Watch Rage of Stars Online Free</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/movie/1560520</loc>
-    <lastmod>2026-06-23</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/360qdtu2hLnqMu8SVHMywn420w1.jpg</image:loc>
-      <image:title>Batman: Knightfall Part 1: Knightfall</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/movie/1560520/watch</loc>
-    <lastmod>2026-06-23</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/360qdtu2hLnqMu8SVHMywn420w1.jpg</image:loc>
-      <image:title>Watch Batman: Knightfall Part 1: Knightfall Online Free</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/movie/1232569</loc>
+    <loc>https://streamflixbd.vercel.app/movie/1232569</loc>
     <lastmod>2026-07-22</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -870,7 +890,7 @@
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/movie/1232569/watch</loc>
+    <loc>https://streamflixbd.vercel.app/movie/1232569/watch</loc>
     <lastmod>2026-07-22</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -880,267 +900,87 @@
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/movie/1130948</loc>
-    <lastmod>2026-04-23</lastmod>
+    <loc>https://streamflixbd.vercel.app/movie/1315772</loc>
+    <lastmod>2026-06-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/rsHEVjzxU8cxz1sm3vboj99daNv.jpg</image:loc>
-      <image:title>Rosebush Pruning</image:title>
+      <image:loc>https://image.tmdb.org/t/p/w780/4LwvU9SZc8QQzW1X1FAPhNbXnEU.jpg</image:loc>
+      <image:title>Minions &amp; Monsters</image:title>
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/movie/1130948/watch</loc>
-    <lastmod>2026-04-23</lastmod>
+    <loc>https://streamflixbd.vercel.app/movie/1315772/watch</loc>
+    <lastmod>2026-06-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/rsHEVjzxU8cxz1sm3vboj99daNv.jpg</image:loc>
-      <image:title>Watch Rosebush Pruning Online Free</image:title>
+      <image:loc>https://image.tmdb.org/t/p/w780/4LwvU9SZc8QQzW1X1FAPhNbXnEU.jpg</image:loc>
+      <image:title>Watch Minions &amp; Monsters Online Free</image:title>
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/movie/1275779</loc>
-    <lastmod>2026-06-10</lastmod>
+    <loc>https://streamflixbd.vercel.app/movie/1621552</loc>
+    <lastmod>2026-08-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/AnJ8IQJI23hNpYXVNaythu061Ru.jpg</image:loc>
-      <image:title>Disclosure Day</image:title>
+      <image:loc>https://image.tmdb.org/t/p/w780/alpf5v4UqSFawPmG9RX03Or4BDk.jpg</image:loc>
+      <image:title>Facing El Chapo</image:title>
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/movie/1275779/watch</loc>
-    <lastmod>2026-06-10</lastmod>
+    <loc>https://streamflixbd.vercel.app/movie/1621552/watch</loc>
+    <lastmod>2026-08-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/AnJ8IQJI23hNpYXVNaythu061Ru.jpg</image:loc>
-      <image:title>Watch Disclosure Day Online Free</image:title>
+      <image:loc>https://image.tmdb.org/t/p/w780/alpf5v4UqSFawPmG9RX03Or4BDk.jpg</image:loc>
+      <image:title>Watch Facing El Chapo Online Free</image:title>
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/movie/278</loc>
-    <lastmod>1994-09-23</lastmod>
+    <loc>https://streamflixbd.vercel.app/movie/1323244</loc>
+    <lastmod>2026-08-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/9cqNxx0GxF0bflZmeSMuL5tnGzr.jpg</image:loc>
-      <image:title>The Shawshank Redemption</image:title>
+      <image:loc>https://image.tmdb.org/t/p/w780/oLld47ZT1I3iecM3OWhIphohQUJ.jpg</image:loc>
+      <image:title>Rage of Stars</image:title>
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/movie/278/watch</loc>
-    <lastmod>1994-09-23</lastmod>
+    <loc>https://streamflixbd.vercel.app/movie/1323244/watch</loc>
+    <lastmod>2026-08-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/9cqNxx0GxF0bflZmeSMuL5tnGzr.jpg</image:loc>
-      <image:title>Watch The Shawshank Redemption Online Free</image:title>
+      <image:loc>https://image.tmdb.org/t/p/w780/oLld47ZT1I3iecM3OWhIphohQUJ.jpg</image:loc>
+      <image:title>Watch Rage of Stars Online Free</image:title>
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/movie/687163</loc>
-    <lastmod>2026-03-15</lastmod>
+    <loc>https://streamflixbd.vercel.app/movie/1494843</loc>
+    <lastmod>2026-09-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/yihdXomYb5kTeSivtFndMy5iDmf.jpg</image:loc>
-      <image:title>Project Hail Mary</image:title>
+      <image:loc>https://image.tmdb.org/t/p/w780/yw74ajOTn9SG1wbDao62IVf7VlW.jpg</image:loc>
+      <image:title>丫丫</image:title>
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/movie/687163/watch</loc>
-    <lastmod>2026-03-15</lastmod>
+    <loc>https://streamflixbd.vercel.app/movie/1494843/watch</loc>
+    <lastmod>2026-09-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/yihdXomYb5kTeSivtFndMy5iDmf.jpg</image:loc>
-      <image:title>Watch Project Hail Mary Online Free</image:title>
+      <image:loc>https://image.tmdb.org/t/p/w780/yw74ajOTn9SG1wbDao62IVf7VlW.jpg</image:loc>
+      <image:title>Watch 丫丫 Online Free</image:title>
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/movie/1284465</loc>
-    <lastmod>2026-06-18</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/13MmRwmG5NmaMfU8qNrtgGXisiD.jpg</image:loc>
-      <image:title>The Death of Robin Hood</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/movie/1284465/watch</loc>
-    <lastmod>2026-06-18</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/13MmRwmG5NmaMfU8qNrtgGXisiD.jpg</image:loc>
-      <image:title>Watch The Death of Robin Hood Online Free</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/movie/634649</loc>
-    <lastmod>2021-12-15</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/1g0dhYtq4irTY1GPXvft6k4YLjm.jpg</image:loc>
-      <image:title>Spider-Man: No Way Home</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/movie/634649/watch</loc>
-    <lastmod>2021-12-15</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/1g0dhYtq4irTY1GPXvft6k4YLjm.jpg</image:loc>
-      <image:title>Watch Spider-Man: No Way Home Online Free</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/movie/1273221</loc>
-    <lastmod>2026-06-03</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/znHT8peERZRWG1ME3r0Db0EV8k8.jpg</image:loc>
-      <image:title>Scary Movie</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/movie/1273221/watch</loc>
-    <lastmod>2026-06-03</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/znHT8peERZRWG1ME3r0Db0EV8k8.jpg</image:loc>
-      <image:title>Watch Scary Movie Online Free</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/movie/755898</loc>
-    <lastmod>2025-07-29</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/yvirUYrva23IudARHn3mMGVxWqM.jpg</image:loc>
-      <image:title>War of the Worlds</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/movie/755898/watch</loc>
-    <lastmod>2025-07-29</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/yvirUYrva23IudARHn3mMGVxWqM.jpg</image:loc>
-      <image:title>Watch War of the Worlds Online Free</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/movie/1228710</loc>
-    <lastmod>2026-05-20</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/cE9LAdexd9ju0yIkmCJBOKZg9JR.jpg</image:loc>
-      <image:title>The Mandalorian and Grogu</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/movie/1228710/watch</loc>
-    <lastmod>2026-05-20</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/cE9LAdexd9ju0yIkmCJBOKZg9JR.jpg</image:loc>
-      <image:title>Watch The Mandalorian and Grogu Online Free</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/movie/980431</loc>
-    <lastmod>2026-07-24</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/3sgnSfNT27Bx5O5ukr7B26mhEQq.jpg</image:loc>
-      <image:title>Avatar Aang: The Last Airbender</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/movie/980431/watch</loc>
-    <lastmod>2026-07-24</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/3sgnSfNT27Bx5O5ukr7B26mhEQq.jpg</image:loc>
-      <image:title>Watch Avatar Aang: The Last Airbender Online Free</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/movie/1599993</loc>
-    <lastmod>2026-02-05</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/9fbZdiOI9fRinl44mNm3CYgEtYR.jpg</image:loc>
-      <image:title>Animals</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/movie/1599993/watch</loc>
-    <lastmod>2026-02-05</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/9fbZdiOI9fRinl44mNm3CYgEtYR.jpg</image:loc>
-      <image:title>Watch Animals Online Free</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/movie/24428</loc>
-    <lastmod>2012-04-25</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/RYMX2wcKCBAr24UyPD7xwmjaTn.jpg</image:loc>
-      <image:title>The Avengers</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/movie/24428/watch</loc>
-    <lastmod>2012-04-25</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/RYMX2wcKCBAr24UyPD7xwmjaTn.jpg</image:loc>
-      <image:title>Watch The Avengers Online Free</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/movie/1432706</loc>
-    <lastmod>2026-03-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/yQ3GeVsebrhOPIBhIdoSslbndEv.jpg</image:loc>
-      <image:title>Bury the Devil</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/movie/1432706/watch</loc>
-    <lastmod>2026-03-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/yQ3GeVsebrhOPIBhIdoSslbndEv.jpg</image:loc>
-      <image:title>Watch Bury the Devil Online Free</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/movie/1127384</loc>
+    <loc>https://streamflixbd.vercel.app/movie/1127384</loc>
     <lastmod>2026-04-30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -1150,7 +990,7 @@
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/movie/1127384/watch</loc>
+    <loc>https://streamflixbd.vercel.app/movie/1127384/watch</loc>
     <lastmod>2026-04-30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -1160,27 +1000,207 @@
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/movie/1632181</loc>
-    <lastmod>2026-03-12</lastmod>
+    <loc>https://streamflixbd.vercel.app/movie/980431</loc>
+    <lastmod>2026-07-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/j0CIVzeR7hRAPBPGR54qDZoOQpp.jpg</image:loc>
-      <image:title>Accidental Partners</image:title>
+      <image:loc>https://image.tmdb.org/t/p/w780/3sgnSfNT27Bx5O5ukr7B26mhEQq.jpg</image:loc>
+      <image:title>Avatar Aang: The Last Airbender</image:title>
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/movie/1632181/watch</loc>
-    <lastmod>2026-03-12</lastmod>
+    <loc>https://streamflixbd.vercel.app/movie/980431/watch</loc>
+    <lastmod>2026-07-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/j0CIVzeR7hRAPBPGR54qDZoOQpp.jpg</image:loc>
-      <image:title>Watch Accidental Partners Online Free</image:title>
+      <image:loc>https://image.tmdb.org/t/p/w780/3sgnSfNT27Bx5O5ukr7B26mhEQq.jpg</image:loc>
+      <image:title>Watch Avatar Aang: The Last Airbender Online Free</image:title>
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/movie/1007757</loc>
+    <loc>https://streamflixbd.vercel.app/movie/1514682</loc>
+    <lastmod>2026-07-29</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/7bOuu1SRALGwsG2fLCTvRkCmQBj.jpg</image:loc>
+      <image:title>Above &amp; Below</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/movie/1514682/watch</loc>
+    <lastmod>2026-07-29</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/7bOuu1SRALGwsG2fLCTvRkCmQBj.jpg</image:loc>
+      <image:title>Watch Above &amp; Below Online Free</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/movie/218</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/qvktm0BHcnmDpul4Hz01GIazWPr.jpg</image:loc>
+      <image:title>The Terminator</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/movie/218/watch</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/qvktm0BHcnmDpul4Hz01GIazWPr.jpg</image:loc>
+      <image:title>Watch The Terminator Online Free</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/movie/687163</loc>
+    <lastmod>2026-03-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/yihdXomYb5kTeSivtFndMy5iDmf.jpg</image:loc>
+      <image:title>Project Hail Mary</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/movie/687163/watch</loc>
+    <lastmod>2026-03-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/yihdXomYb5kTeSivtFndMy5iDmf.jpg</image:loc>
+      <image:title>Watch Project Hail Mary Online Free</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/movie/1180894</loc>
+    <lastmod>2026-02-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/sk5DjLp7x9cmi0V1423YJmIVJbC.jpg</image:loc>
+      <image:title>Under Your Feet</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/movie/1180894/watch</loc>
+    <lastmod>2026-02-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/sk5DjLp7x9cmi0V1423YJmIVJbC.jpg</image:loc>
+      <image:title>Watch Under Your Feet Online Free</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/movie/755898</loc>
+    <lastmod>2025-07-29</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/yvirUYrva23IudARHn3mMGVxWqM.jpg</image:loc>
+      <image:title>War of the Worlds</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/movie/755898/watch</loc>
+    <lastmod>2025-07-29</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/yvirUYrva23IudARHn3mMGVxWqM.jpg</image:loc>
+      <image:title>Watch War of the Worlds Online Free</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/movie/1560520</loc>
+    <lastmod>2026-06-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/360qdtu2hLnqMu8SVHMywn420w1.jpg</image:loc>
+      <image:title>Batman: Knightfall Part 1: Knightfall</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/movie/1560520/watch</loc>
+    <lastmod>2026-06-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/360qdtu2hLnqMu8SVHMywn420w1.jpg</image:loc>
+      <image:title>Watch Batman: Knightfall Part 1: Knightfall Online Free</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/movie/1275779</loc>
+    <lastmod>2026-06-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/AnJ8IQJI23hNpYXVNaythu061Ru.jpg</image:loc>
+      <image:title>Disclosure Day</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/movie/1275779/watch</loc>
+    <lastmod>2026-06-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/AnJ8IQJI23hNpYXVNaythu061Ru.jpg</image:loc>
+      <image:title>Watch Disclosure Day Online Free</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/movie/1130948</loc>
+    <lastmod>2026-04-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/rsHEVjzxU8cxz1sm3vboj99daNv.jpg</image:loc>
+      <image:title>Rosebush Pruning</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/movie/1130948/watch</loc>
+    <lastmod>2026-04-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/rsHEVjzxU8cxz1sm3vboj99daNv.jpg</image:loc>
+      <image:title>Watch Rosebush Pruning Online Free</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/movie/860508</loc>
+    <lastmod>2026-08-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/ndRs5lADYm0PeVjuOxaMcInY0o2.jpg</image:loc>
+      <image:title>The Whisper Man</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/movie/860508/watch</loc>
+    <lastmod>2026-08-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/ndRs5lADYm0PeVjuOxaMcInY0o2.jpg</image:loc>
+      <image:title>Watch The Whisper Man Online Free</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/movie/1007757</loc>
     <lastmod>2026-05-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -1190,7 +1210,7 @@
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/movie/1007757/watch</loc>
+    <loc>https://streamflixbd.vercel.app/movie/1007757/watch</loc>
     <lastmod>2026-05-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -1200,7 +1220,27 @@
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/movie/1311031</loc>
+    <loc>https://streamflixbd.vercel.app/movie/1632181</loc>
+    <lastmod>2026-03-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/j0CIVzeR7hRAPBPGR54qDZoOQpp.jpg</image:loc>
+      <image:title>Accidental Partners</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/movie/1632181/watch</loc>
+    <lastmod>2026-03-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/j0CIVzeR7hRAPBPGR54qDZoOQpp.jpg</image:loc>
+      <image:title>Watch Accidental Partners Online Free</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/movie/1311031</loc>
     <lastmod>2025-07-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -1210,7 +1250,7 @@
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/movie/1311031/watch</loc>
+    <loc>https://streamflixbd.vercel.app/movie/1311031/watch</loc>
     <lastmod>2025-07-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -1220,8 +1260,28 @@
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/movie/238</loc>
-    <lastmod>1972-03-14</lastmod>
+    <loc>https://streamflixbd.vercel.app/movie/278</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/9cqNxx0GxF0bflZmeSMuL5tnGzr.jpg</image:loc>
+      <image:title>The Shawshank Redemption</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/movie/278/watch</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/9cqNxx0GxF0bflZmeSMuL5tnGzr.jpg</image:loc>
+      <image:title>Watch The Shawshank Redemption Online Free</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/movie/238</loc>
+    <lastmod>2026-09-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image>
@@ -1230,8 +1290,8 @@
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/movie/238/watch</loc>
-    <lastmod>1972-03-14</lastmod>
+    <loc>https://streamflixbd.vercel.app/movie/238/watch</loc>
+    <lastmod>2026-09-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image>
@@ -1240,7 +1300,7 @@
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/movie/936075</loc>
+    <loc>https://streamflixbd.vercel.app/movie/936075</loc>
     <lastmod>2026-04-22</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -1250,7 +1310,7 @@
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/movie/936075/watch</loc>
+    <loc>https://streamflixbd.vercel.app/movie/936075/watch</loc>
     <lastmod>2026-04-22</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -1260,67 +1320,7 @@
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/movie/240</loc>
-    <lastmod>1974-12-20</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/sSuQTCZwqKrNBNIsksO9IAUoWP9.jpg</image:loc>
-      <image:title>The Godfather Part II</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/movie/240/watch</loc>
-    <lastmod>1974-12-20</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/sSuQTCZwqKrNBNIsksO9IAUoWP9.jpg</image:loc>
-      <image:title>Watch The Godfather Part II Online Free</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/movie/389</loc>
-    <lastmod>1957-04-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/zhG3vKWyDRaZYoaww1UVAi29T9h.jpg</image:loc>
-      <image:title>12 Angry Men</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/movie/389/watch</loc>
-    <lastmod>1957-04-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/zhG3vKWyDRaZYoaww1UVAi29T9h.jpg</image:loc>
-      <image:title>Watch 12 Angry Men Online Free</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/movie/424</loc>
-    <lastmod>1993-12-15</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/sF1U4EUQS8YHUYjNl3pMGNIQyr0.jpg</image:loc>
-      <image:title>Schindler&apos;s List</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/movie/424/watch</loc>
-    <lastmod>1993-12-15</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/sF1U4EUQS8YHUYjNl3pMGNIQyr0.jpg</image:loc>
-      <image:title>Watch Schindler&apos;s List Online Free</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/movie/1232449</loc>
+    <loc>https://streamflixbd.vercel.app/movie/1232449</loc>
     <lastmod>2024-10-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -1330,7 +1330,7 @@
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/movie/1232449/watch</loc>
+    <loc>https://streamflixbd.vercel.app/movie/1232449/watch</loc>
     <lastmod>2024-10-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -1340,7 +1340,67 @@
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/movie/1218925</loc>
+    <loc>https://streamflixbd.vercel.app/movie/240</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/sSuQTCZwqKrNBNIsksO9IAUoWP9.jpg</image:loc>
+      <image:title>The Godfather Part II</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/movie/240/watch</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/sSuQTCZwqKrNBNIsksO9IAUoWP9.jpg</image:loc>
+      <image:title>Watch The Godfather Part II Online Free</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/movie/389</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/zhG3vKWyDRaZYoaww1UVAi29T9h.jpg</image:loc>
+      <image:title>12 Angry Men</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/movie/389/watch</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/zhG3vKWyDRaZYoaww1UVAi29T9h.jpg</image:loc>
+      <image:title>Watch 12 Angry Men Online Free</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/movie/424</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/sF1U4EUQS8YHUYjNl3pMGNIQyr0.jpg</image:loc>
+      <image:title>Schindler&apos;s List</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/movie/424/watch</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/sF1U4EUQS8YHUYjNl3pMGNIQyr0.jpg</image:loc>
+      <image:title>Watch Schindler&apos;s List Online Free</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/movie/1218925</loc>
     <lastmod>2025-09-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -1350,7 +1410,7 @@
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/movie/1218925/watch</loc>
+    <loc>https://streamflixbd.vercel.app/movie/1218925/watch</loc>
     <lastmod>2025-09-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -1360,8 +1420,8 @@
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/movie/155</loc>
-    <lastmod>2008-07-16</lastmod>
+    <loc>https://streamflixbd.vercel.app/movie/155</loc>
+    <lastmod>2026-09-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image>
@@ -1370,8 +1430,8 @@
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/movie/155/watch</loc>
-    <lastmod>2008-07-16</lastmod>
+    <loc>https://streamflixbd.vercel.app/movie/155/watch</loc>
+    <lastmod>2026-09-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image>
@@ -1380,8 +1440,8 @@
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/movie/129</loc>
-    <lastmod>2001-07-20</lastmod>
+    <loc>https://streamflixbd.vercel.app/movie/129</loc>
+    <lastmod>2026-09-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image>
@@ -1390,8 +1450,8 @@
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/movie/129/watch</loc>
-    <lastmod>2001-07-20</lastmod>
+    <loc>https://streamflixbd.vercel.app/movie/129/watch</loc>
+    <lastmod>2026-09-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image>
@@ -1400,28 +1460,8 @@
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/movie/122</loc>
-    <lastmod>2003-12-17</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/rCzpDGLbOoPwLjy3OAm5NUPOTrC.jpg</image:loc>
-      <image:title>The Lord of the Rings: The Return of the King</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/movie/122/watch</loc>
-    <lastmod>2003-12-17</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/rCzpDGLbOoPwLjy3OAm5NUPOTrC.jpg</image:loc>
-      <image:title>Watch The Lord of the Rings: The Return of the King Online Free</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/movie/497</loc>
-    <lastmod>1999-12-10</lastmod>
+    <loc>https://streamflixbd.vercel.app/movie/497</loc>
+    <lastmod>2026-09-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image>
@@ -1430,8 +1470,8 @@
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/movie/497/watch</loc>
-    <lastmod>1999-12-10</lastmod>
+    <loc>https://streamflixbd.vercel.app/movie/497/watch</loc>
+    <lastmod>2026-09-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image>
@@ -1440,8 +1480,28 @@
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/movie/19404</loc>
-    <lastmod>1995-10-20</lastmod>
+    <loc>https://streamflixbd.vercel.app/movie/122</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/rCzpDGLbOoPwLjy3OAm5NUPOTrC.jpg</image:loc>
+      <image:title>The Lord of the Rings: The Return of the King</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/movie/122/watch</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/rCzpDGLbOoPwLjy3OAm5NUPOTrC.jpg</image:loc>
+      <image:title>Watch The Lord of the Rings: The Return of the King Online Free</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/movie/19404</loc>
+    <lastmod>2026-09-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image>
@@ -1450,8 +1510,8 @@
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/movie/19404/watch</loc>
-    <lastmod>1995-10-20</lastmod>
+    <loc>https://streamflixbd.vercel.app/movie/19404/watch</loc>
+    <lastmod>2026-09-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image>
@@ -1460,207 +1520,247 @@
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/movie/496243</loc>
-    <lastmod>2019-05-30</lastmod>
+    <loc>https://streamflixbd.vercel.app/movie/299534</loc>
+    <lastmod>2026-09-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/7IiTTgloJzvGI1TAYymCfbfl3vT.jpg</image:loc>
-      <image:title>Parasite</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/movie/496243/watch</loc>
-    <lastmod>2019-05-30</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/7IiTTgloJzvGI1TAYymCfbfl3vT.jpg</image:loc>
-      <image:title>Watch Parasite Online Free</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/movie/299534</loc>
-    <lastmod>2019-04-24</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/or06FN3Dka5tukK1e9sl16pB3iy.jpg</image:loc>
+      <image:loc>https://image.tmdb.org/t/p/w780/ulzhLuWrPK07P1YkdWQLZnQh1JL.jpg</image:loc>
       <image:title>Avengers: Endgame</image:title>
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/movie/299534/watch</loc>
-    <lastmod>2019-04-24</lastmod>
+    <loc>https://streamflixbd.vercel.app/movie/299534/watch</loc>
+    <lastmod>2026-09-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/or06FN3Dka5tukK1e9sl16pB3iy.jpg</image:loc>
+      <image:loc>https://image.tmdb.org/t/p/w780/ulzhLuWrPK07P1YkdWQLZnQh1JL.jpg</image:loc>
       <image:title>Watch Avengers: Endgame Online Free</image:title>
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/movie/950028</loc>
-    <lastmod>2026-06-25</lastmod>
+    <loc>https://streamflixbd.vercel.app/movie/813418</loc>
+    <lastmod>2026-08-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/b7Dr8Chzse8VagexAporUu2RtLx.jpg</image:loc>
-      <image:title>The Invite</image:title>
+      <image:loc>https://image.tmdb.org/t/p/w780/42egzT6e4CIEdrEo4Xc31DKyGjA.jpg</image:loc>
+      <image:title>Hot Spot</image:title>
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/movie/950028/watch</loc>
-    <lastmod>2026-06-25</lastmod>
+    <loc>https://streamflixbd.vercel.app/movie/813418/watch</loc>
+    <lastmod>2026-08-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/b7Dr8Chzse8VagexAporUu2RtLx.jpg</image:loc>
-      <image:title>Watch The Invite Online Free</image:title>
+      <image:loc>https://image.tmdb.org/t/p/w780/42egzT6e4CIEdrEo4Xc31DKyGjA.jpg</image:loc>
+      <image:title>Watch Hot Spot Online Free</image:title>
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/movie/1122573</loc>
-    <lastmod>2026-05-13</lastmod>
+    <loc>https://streamflixbd.vercel.app/movie/1101412</loc>
+    <lastmod>2026-09-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/dQgIcW6Th08kMRf2HBoYWoFE6OD.jpg</image:loc>
-      <image:title>In the Grey</image:title>
+      <image:loc>https://image.tmdb.org/t/p/w780/fgSm5ylwiXbIHn8UbUXDjk9RRu4.jpg</image:loc>
+      <image:title>Fall 2: Deadpoint</image:title>
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/movie/1122573/watch</loc>
-    <lastmod>2026-05-13</lastmod>
+    <loc>https://streamflixbd.vercel.app/movie/1101412/watch</loc>
+    <lastmod>2026-09-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/dQgIcW6Th08kMRf2HBoYWoFE6OD.jpg</image:loc>
-      <image:title>Watch In the Grey Online Free</image:title>
+      <image:loc>https://image.tmdb.org/t/p/w780/fgSm5ylwiXbIHn8UbUXDjk9RRu4.jpg</image:loc>
+      <image:title>Watch Fall 2: Deadpoint Online Free</image:title>
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/movie/1032863</loc>
-    <lastmod>2026-09-23</lastmod>
+    <loc>https://streamflixbd.vercel.app/movie/1377237</loc>
+    <lastmod>2026-09-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/zUaTMxLOuW4wdaFYhRVJbO6W8Sy.jpg</image:loc>
-      <image:title>The Love Hypothesis</image:title>
+      <image:loc>https://image.tmdb.org/t/p/w780/yBKMAIj7clP42UkFejhGDBBoTpb.jpg</image:loc>
+      <image:title>Runner</image:title>
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/movie/1032863/watch</loc>
-    <lastmod>2026-09-23</lastmod>
+    <loc>https://streamflixbd.vercel.app/movie/1377237/watch</loc>
+    <lastmod>2026-09-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/zUaTMxLOuW4wdaFYhRVJbO6W8Sy.jpg</image:loc>
-      <image:title>Watch The Love Hypothesis Online Free</image:title>
+      <image:loc>https://image.tmdb.org/t/p/w780/yBKMAIj7clP42UkFejhGDBBoTpb.jpg</image:loc>
+      <image:title>Watch Runner Online Free</image:title>
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/movie/1413976</loc>
-    <lastmod>2026-06-19</lastmod>
+    <loc>https://streamflixbd.vercel.app/movie/1594914</loc>
+    <lastmod>2026-06-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/6LmJD3Wohe0g4U62wgi7RyJqfE4.jpg</image:loc>
-      <image:title>Citizen Vigilante</image:title>
+      <image:loc>https://image.tmdb.org/t/p/w780/7AEBdyGYXumXWmMFeynE8227KeZ.jpg</image:loc>
+      <image:title>Lucky Strike</image:title>
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/movie/1413976/watch</loc>
-    <lastmod>2026-06-19</lastmod>
+    <loc>https://streamflixbd.vercel.app/movie/1594914/watch</loc>
+    <lastmod>2026-06-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/6LmJD3Wohe0g4U62wgi7RyJqfE4.jpg</image:loc>
-      <image:title>Watch Citizen Vigilante Online Free</image:title>
+      <image:loc>https://image.tmdb.org/t/p/w780/7AEBdyGYXumXWmMFeynE8227KeZ.jpg</image:loc>
+      <image:title>Watch Lucky Strike Online Free</image:title>
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/movie/1325734</loc>
-    <lastmod>2026-04-01</lastmod>
+    <loc>https://streamflixbd.vercel.app/movie/1288059</loc>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/rnIOUhzwJDfgQakx8EjoNyItKgs.jpg</image:loc>
-      <image:title>The Drama</image:title>
+      <image:loc>https://image.tmdb.org/t/p/w780/pR7SIX3AwqdoD96OI44oLG98e7g.jpg</image:loc>
+      <image:title>I Want Your Sex</image:title>
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/movie/1325734/watch</loc>
-    <lastmod>2026-04-01</lastmod>
+    <loc>https://streamflixbd.vercel.app/movie/1288059/watch</loc>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/rnIOUhzwJDfgQakx8EjoNyItKgs.jpg</image:loc>
-      <image:title>Watch The Drama Online Free</image:title>
+      <image:loc>https://image.tmdb.org/t/p/w780/pR7SIX3AwqdoD96OI44oLG98e7g.jpg</image:loc>
+      <image:title>Watch I Want Your Sex Online Free</image:title>
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/movie/1058424</loc>
-    <lastmod>2026-07-15</lastmod>
+    <loc>https://streamflixbd.vercel.app/movie/1280738</loc>
+    <lastmod>2026-06-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/bcK5naYzzfY0JBCgrPrsrbV6NO1.jpg</image:loc>
-      <image:title>Hope</image:title>
+      <image:loc>https://image.tmdb.org/t/p/w780/zP19YO60jwEsfKd5Qf1UvA5uJu8.jpg</image:loc>
+      <image:title>The Furious</image:title>
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/movie/1058424/watch</loc>
-    <lastmod>2026-07-15</lastmod>
+    <loc>https://streamflixbd.vercel.app/movie/1280738/watch</loc>
+    <lastmod>2026-06-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/bcK5naYzzfY0JBCgrPrsrbV6NO1.jpg</image:loc>
-      <image:title>Watch Hope Online Free</image:title>
+      <image:loc>https://image.tmdb.org/t/p/w780/zP19YO60jwEsfKd5Qf1UvA5uJu8.jpg</image:loc>
+      <image:title>Watch The Furious Online Free</image:title>
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/movie/920</loc>
-    <lastmod>2006-06-08</lastmod>
+    <loc>https://streamflixbd.vercel.app/movie/1564614</loc>
+    <lastmod>2026-06-17</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/2Touk3m5gzsqr1VsvxypdyHY5ci.jpg</image:loc>
-      <image:title>Cars</image:title>
+      <image:loc>https://image.tmdb.org/t/p/w780/gnAsZvBygplNpp8PtjoTEYv3VPB.jpg</image:loc>
+      <image:title>Leviticus</image:title>
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/movie/920/watch</loc>
-    <lastmod>2006-06-08</lastmod>
+    <loc>https://streamflixbd.vercel.app/movie/1564614/watch</loc>
+    <lastmod>2026-06-17</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/2Touk3m5gzsqr1VsvxypdyHY5ci.jpg</image:loc>
-      <image:title>Watch Cars Online Free</image:title>
+      <image:loc>https://image.tmdb.org/t/p/w780/gnAsZvBygplNpp8PtjoTEYv3VPB.jpg</image:loc>
+      <image:title>Watch Leviticus Online Free</image:title>
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/tv/125988</loc>
-    <lastmod>2023-05-04</lastmod>
+    <loc>https://streamflixbd.vercel.app/movie/822653</loc>
+    <lastmod>2026-08-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/gMYZZvnkVNTqSVnVCphWbPXwWwb.jpg</image:loc>
-      <image:title>Silo</image:title>
+      <image:loc>https://image.tmdb.org/t/p/w780/g4kCd4rMuN7G3VQQDUT6mLbrBqQ.jpg</image:loc>
+      <image:title>Puella Magi Madoka Magica the Movie -Walpurgisnacht: Rising-</image:title>
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/tv/125988/watch</loc>
-    <lastmod>2023-05-04</lastmod>
+    <loc>https://streamflixbd.vercel.app/movie/822653/watch</loc>
+    <lastmod>2026-08-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/gMYZZvnkVNTqSVnVCphWbPXwWwb.jpg</image:loc>
-      <image:title>Watch Silo Online Free</image:title>
+      <image:loc>https://image.tmdb.org/t/p/w780/g4kCd4rMuN7G3VQQDUT6mLbrBqQ.jpg</image:loc>
+      <image:title>Watch Puella Magi Madoka Magica the Movie -Walpurgisnacht: Rising- Online Free</image:title>
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/tv/95350</loc>
+    <loc>https://streamflixbd.vercel.app/tv/273207</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/1m6CxPAuGv2oHc1ahERrcVWnk2J.jpg</image:loc>
+      <image:title>Neagley</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/tv/273207/watch</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/1m6CxPAuGv2oHc1ahERrcVWnk2J.jpg</image:loc>
+      <image:title>Watch Neagley Online Free</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/tv/108978</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/f1VCQIG2iCyOookdgOzwtUpwWC0.jpg</image:loc>
+      <image:title>Reacher</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/tv/108978/watch</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/f1VCQIG2iCyOookdgOzwtUpwWC0.jpg</image:loc>
+      <image:title>Watch Reacher Online Free</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/tv/95480</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/AdYr4DjOgXvDUMwu6vEhZy1Rnxk.jpg</image:loc>
+      <image:title>Slow Horses</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/tv/95480/watch</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/AdYr4DjOgXvDUMwu6vEhZy1Rnxk.jpg</image:loc>
+      <image:title>Watch Slow Horses Online Free</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/tv/95350</loc>
     <lastmod>2026-08-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -1670,7 +1770,7 @@
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/tv/95350/watch</loc>
+    <loc>https://streamflixbd.vercel.app/tv/95350/watch</loc>
     <lastmod>2026-08-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -1680,7 +1780,167 @@
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/tv/236235</loc>
+    <loc>https://streamflixbd.vercel.app/tv/332401</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/Njr0Rlb4CobAfrGE8NVffYDGqx.jpg</image:loc>
+      <image:title>City of Blood</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/tv/332401/watch</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/Njr0Rlb4CobAfrGE8NVffYDGqx.jpg</image:loc>
+      <image:title>Watch City of Blood Online Free</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/tv/97546</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/uRHsiw1wLxPHFXkkv4Ix1s0O6f4.jpg</image:loc>
+      <image:title>Ted Lasso</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/tv/97546/watch</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/uRHsiw1wLxPHFXkkv4Ix1s0O6f4.jpg</image:loc>
+      <image:title>Watch Ted Lasso Online Free</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/tv/258230</loc>
+    <lastmod>2026-09-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/vozJZjHv0Yyv4PjoOxF5tVMUGFI.jpg</image:loc>
+      <image:title>Last Seen</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/tv/258230/watch</loc>
+    <lastmod>2026-09-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/vozJZjHv0Yyv4PjoOxF5tVMUGFI.jpg</image:loc>
+      <image:title>Watch Last Seen Online Free</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/tv/246473</loc>
+    <lastmod>2025-12-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/cyBg9FJ2AmTWEGktA43gMo4t0Vj.jpg</image:loc>
+      <image:title>Made in Korea</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/tv/246473/watch</loc>
+    <lastmod>2025-12-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/cyBg9FJ2AmTWEGktA43gMo4t0Vj.jpg</image:loc>
+      <image:title>Watch Made in Korea Online Free</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/tv/125988</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/gMYZZvnkVNTqSVnVCphWbPXwWwb.jpg</image:loc>
+      <image:title>Silo</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/tv/125988/watch</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/gMYZZvnkVNTqSVnVCphWbPXwWwb.jpg</image:loc>
+      <image:title>Watch Silo Online Free</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/tv/37854</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/dB4EDhre2dsC2kxYDavyKWqLQwi.jpg</image:loc>
+      <image:title>One Piece</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/tv/37854/watch</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/dB4EDhre2dsC2kxYDavyKWqLQwi.jpg</image:loc>
+      <image:title>Watch One Piece Online Free</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/tv/30984</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/2EewmxXe72ogD0EaWM8gqa0ccIw.jpg</image:loc>
+      <image:title>Bleach</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/tv/30984/watch</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/2EewmxXe72ogD0EaWM8gqa0ccIw.jpg</image:loc>
+      <image:title>Watch Bleach Online Free</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/tv/113962</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/rzpHPSEgPTpRs8EHbygwsOw7jC0.jpg</image:loc>
+      <image:title>Lioness</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/tv/113962/watch</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/rzpHPSEgPTpRs8EHbygwsOw7jC0.jpg</image:loc>
+      <image:title>Watch Lioness Online Free</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/tv/236235</loc>
     <lastmod>2024-03-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -1690,7 +1950,7 @@
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/tv/236235/watch</loc>
+    <loc>https://streamflixbd.vercel.app/tv/236235/watch</loc>
     <lastmod>2024-03-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -1700,288 +1960,8 @@
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/tv/108978</loc>
-    <lastmod>2022-02-03</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/f1VCQIG2iCyOookdgOzwtUpwWC0.jpg</image:loc>
-      <image:title>Reacher</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/tv/108978/watch</loc>
-    <lastmod>2022-02-03</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/f1VCQIG2iCyOookdgOzwtUpwWC0.jpg</image:loc>
-      <image:title>Watch Reacher Online Free</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/tv/30984</loc>
-    <lastmod>2004-10-05</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/2EewmxXe72ogD0EaWM8gqa0ccIw.jpg</image:loc>
-      <image:title>Bleach</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/tv/30984/watch</loc>
-    <lastmod>2004-10-05</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/2EewmxXe72ogD0EaWM8gqa0ccIw.jpg</image:loc>
-      <image:title>Watch Bleach Online Free</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/tv/37854</loc>
-    <lastmod>1999-10-20</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/dB4EDhre2dsC2kxYDavyKWqLQwi.jpg</image:loc>
-      <image:title>One Piece</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/tv/37854/watch</loc>
-    <lastmod>1999-10-20</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/dB4EDhre2dsC2kxYDavyKWqLQwi.jpg</image:loc>
-      <image:title>Watch One Piece Online Free</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/tv/113962</loc>
-    <lastmod>2023-07-23</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/rzpHPSEgPTpRs8EHbygwsOw7jC0.jpg</image:loc>
-      <image:title>Lioness</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/tv/113962/watch</loc>
-    <lastmod>2023-07-23</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/rzpHPSEgPTpRs8EHbygwsOw7jC0.jpg</image:loc>
-      <image:title>Watch Lioness Online Free</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/tv/196322</loc>
-    <lastmod>2024-05-07</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/2DPmTlv8F0V1TQBPmlsGOVOhtWk.jpg</image:loc>
-      <image:title>Dark Matter</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/tv/196322/watch</loc>
-    <lastmod>2024-05-07</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/2DPmTlv8F0V1TQBPmlsGOVOhtWk.jpg</image:loc>
-      <image:title>Watch Dark Matter Online Free</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/tv/615</loc>
-    <lastmod>1999-03-28</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/eM8bbTn8C8vUwwS6upzzm7gX31u.jpg</image:loc>
-      <image:title>Futurama</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/tv/615/watch</loc>
-    <lastmod>1999-03-28</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/eM8bbTn8C8vUwwS6upzzm7gX31u.jpg</image:loc>
-      <image:title>Watch Futurama Online Free</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/tv/329471</loc>
-    <lastmod>2026-09-04</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/kq6XB6xmD86txW4UR32tT2JUiN9.jpg</image:loc>
-      <image:title>The Grand Tour</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/tv/329471/watch</loc>
-    <lastmod>2026-09-04</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/kq6XB6xmD86txW4UR32tT2JUiN9.jpg</image:loc>
-      <image:title>Watch The Grand Tour Online Free</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/tv/287238</loc>
-    <lastmod>2026-07-27</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/xnxxrEKtBaIcI1ewq50pLkOMU6u.jpg</image:loc>
-      <image:title>Furious</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/tv/287238/watch</loc>
-    <lastmod>2026-07-27</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/xnxxrEKtBaIcI1ewq50pLkOMU6u.jpg</image:loc>
-      <image:title>Watch Furious Online Free</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/tv/247168</loc>
-    <lastmod>2025-09-30</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/aXetUcD4wfalCj90QmT6kSvwO6D.jpg</image:loc>
-      <image:title>Chad Powers</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/tv/247168/watch</loc>
-    <lastmod>2025-09-30</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/aXetUcD4wfalCj90QmT6kSvwO6D.jpg</image:loc>
-      <image:title>Watch Chad Powers Online Free</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/tv/299952</loc>
-    <lastmod>2026-08-26</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/yiAzR6wGqjyAotZ4DvFvFeo8QS0.jpg</image:loc>
-      <image:title>The Early Spring</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/tv/299952/watch</loc>
-    <lastmod>2026-08-26</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/yiAzR6wGqjyAotZ4DvFvFeo8QS0.jpg</image:loc>
-      <image:title>Watch The Early Spring Online Free</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/tv/97546</loc>
-    <lastmod>2020-08-14</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/uRHsiw1wLxPHFXkkv4Ix1s0O6f4.jpg</image:loc>
-      <image:title>Ted Lasso</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/tv/97546/watch</loc>
-    <lastmod>2020-08-14</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/uRHsiw1wLxPHFXkkv4Ix1s0O6f4.jpg</image:loc>
-      <image:title>Watch Ted Lasso Online Free</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/tv/290193</loc>
-    <lastmod>2026-08-28</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/2mwgHfOyrFrmvozjFoEXHRdfGhv.jpg</image:loc>
-      <image:title>Mousetrap</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/tv/290193/watch</loc>
-    <lastmod>2026-08-28</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/2mwgHfOyrFrmvozjFoEXHRdfGhv.jpg</image:loc>
-      <image:title>Watch Mousetrap Online Free</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/tv/94997</loc>
-    <lastmod>2022-08-21</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/7V0Ebks0GgpKvQ7QbLAIdX5dos4.jpg</image:loc>
-      <image:title>House of the Dragon</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/tv/94997/watch</loc>
-    <lastmod>2022-08-21</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/7V0Ebks0GgpKvQ7QbLAIdX5dos4.jpg</image:loc>
-      <image:title>Watch House of the Dragon Online Free</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/tv/94664</loc>
-    <lastmod>2021-01-11</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/gLKOYIMyKlUHW0SVdskhgf9C0yy.jpg</image:loc>
-      <image:title>Mushoku Tensei: Jobless Reincarnation</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/tv/94664/watch</loc>
-    <lastmod>2021-01-11</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/gLKOYIMyKlUHW0SVdskhgf9C0yy.jpg</image:loc>
-      <image:title>Watch Mushoku Tensei: Jobless Reincarnation Online Free</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/tv/65942</loc>
-    <lastmod>2016-04-04</lastmod>
+    <loc>https://streamflixbd.vercel.app/tv/65942</loc>
+    <lastmod>2026-09-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image>
@@ -1990,8 +1970,8 @@
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/tv/65942/watch</loc>
-    <lastmod>2016-04-04</lastmod>
+    <loc>https://streamflixbd.vercel.app/tv/65942/watch</loc>
+    <lastmod>2026-09-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image>
@@ -2000,128 +1980,148 @@
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/tv/290234</loc>
-    <lastmod>2026-09-02</lastmod>
+    <loc>https://streamflixbd.vercel.app/tv/332657</loc>
+    <lastmod>2026-09-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/91s80WxRqIirFSpGVtiXJoS1GA5.jpg</image:loc>
-      <image:title>Lovesick</image:title>
+      <image:loc>https://image.tmdb.org/t/p/w780/yfP9A3IaKE00U1ap1y7wAoZRzeC.jpg</image:loc>
+      <image:title>Route 187</image:title>
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/tv/290234/watch</loc>
-    <lastmod>2026-09-02</lastmod>
+    <loc>https://streamflixbd.vercel.app/tv/332657/watch</loc>
+    <lastmod>2026-09-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/91s80WxRqIirFSpGVtiXJoS1GA5.jpg</image:loc>
-      <image:title>Watch Lovesick Online Free</image:title>
+      <image:loc>https://image.tmdb.org/t/p/w780/yfP9A3IaKE00U1ap1y7wAoZRzeC.jpg</image:loc>
+      <image:title>Watch Route 187 Online Free</image:title>
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/tv/301626</loc>
-    <lastmod>2026-09-06</lastmod>
+    <loc>https://streamflixbd.vercel.app/tv/300507</loc>
+    <lastmod>2026-09-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/ht3OVVRBTrTeVtUVQiKSekjIFVH.jpg</image:loc>
-      <image:title>A Tale of Two Cities</image:title>
+      <image:loc>https://image.tmdb.org/t/p/w780/jkPZW1iHNvlI6077NxSxwITa1tj.jpg</image:loc>
+      <image:title>Crew Girl</image:title>
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/tv/301626/watch</loc>
-    <lastmod>2026-09-06</lastmod>
+    <loc>https://streamflixbd.vercel.app/tv/300507/watch</loc>
+    <lastmod>2026-09-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/ht3OVVRBTrTeVtUVQiKSekjIFVH.jpg</image:loc>
-      <image:title>Watch A Tale of Two Cities Online Free</image:title>
+      <image:loc>https://image.tmdb.org/t/p/w780/jkPZW1iHNvlI6077NxSxwITa1tj.jpg</image:loc>
+      <image:title>Watch Crew Girl Online Free</image:title>
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/tv/22980</loc>
-    <lastmod>2009-07-16</lastmod>
+    <loc>https://streamflixbd.vercel.app/tv/232018</loc>
+    <lastmod>2024-09-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/onSD9UXfJwrMXWhq7UY7hGF2S1h.jpg</image:loc>
-      <image:title>Watch What Happens Live with Andy Cohen</image:title>
+      <image:loc>https://image.tmdb.org/t/p/w780/eyK6fy2NWfjmyBjUvRAR14FynPK.jpg</image:loc>
+      <image:title>Has Fallen</image:title>
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/tv/22980/watch</loc>
-    <lastmod>2009-07-16</lastmod>
+    <loc>https://streamflixbd.vercel.app/tv/232018/watch</loc>
+    <lastmod>2024-09-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/onSD9UXfJwrMXWhq7UY7hGF2S1h.jpg</image:loc>
-      <image:title>Watch Watch What Happens Live with Andy Cohen Online Free</image:title>
+      <image:loc>https://image.tmdb.org/t/p/w780/eyK6fy2NWfjmyBjUvRAR14FynPK.jpg</image:loc>
+      <image:title>Watch Has Fallen Online Free</image:title>
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/tv/5920</loc>
-    <lastmod>2008-09-23</lastmod>
+    <loc>https://streamflixbd.vercel.app/tv/194583</loc>
+    <lastmod>2026-09-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/acYXu4KaDj1NIkMgObnhe4C4a0T.jpg</image:loc>
-      <image:title>The Mentalist</image:title>
+      <image:loc>https://image.tmdb.org/t/p/w780/wq3vuQzQgbS83zX3malAFWMsSwX.jpg</image:loc>
+      <image:title>The Walking Dead: Dead City</image:title>
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/tv/5920/watch</loc>
-    <lastmod>2008-09-23</lastmod>
+    <loc>https://streamflixbd.vercel.app/tv/194583/watch</loc>
+    <lastmod>2026-09-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/acYXu4KaDj1NIkMgObnhe4C4a0T.jpg</image:loc>
-      <image:title>Watch The Mentalist Online Free</image:title>
+      <image:loc>https://image.tmdb.org/t/p/w780/wq3vuQzQgbS83zX3malAFWMsSwX.jpg</image:loc>
+      <image:title>Watch The Walking Dead: Dead City Online Free</image:title>
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/tv/117217</loc>
-    <lastmod>2005-01-03</lastmod>
+    <loc>https://streamflixbd.vercel.app/tv/270476</loc>
+    <lastmod>2026-04-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/AaOxyfJdXcb1FnKeoj87FiHUs0w.jpg</image:loc>
-      <image:title>El conquistador</image:title>
+      <image:loc>https://image.tmdb.org/t/p/w780/vKq8XEJKxQTHd2Bm5zZMFPUrke7.jpg</image:loc>
+      <image:title>Widow&apos;s Bay</image:title>
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/tv/117217/watch</loc>
-    <lastmod>2005-01-03</lastmod>
+    <loc>https://streamflixbd.vercel.app/tv/270476/watch</loc>
+    <lastmod>2026-04-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/AaOxyfJdXcb1FnKeoj87FiHUs0w.jpg</image:loc>
-      <image:title>Watch El conquistador Online Free</image:title>
+      <image:loc>https://image.tmdb.org/t/p/w780/vKq8XEJKxQTHd2Bm5zZMFPUrke7.jpg</image:loc>
+      <image:title>Watch Widow&apos;s Bay Online Free</image:title>
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/tv/94722</loc>
-    <lastmod>1952-12-26</lastmod>
+    <loc>https://streamflixbd.vercel.app/tv/103516</loc>
+    <lastmod>2026-09-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/7dFZJ2ZJJdcmkp05B9NWlqTJ5tq.jpg</image:loc>
-      <image:title>Tagesschau</image:title>
+      <image:loc>https://image.tmdb.org/t/p/w780/97TTJuqiSMfU0DuXx1B4NG5QNP7.jpg</image:loc>
+      <image:title>Star Trek: Strange New Worlds</image:title>
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/tv/94722/watch</loc>
-    <lastmod>1952-12-26</lastmod>
+    <loc>https://streamflixbd.vercel.app/tv/103516/watch</loc>
+    <lastmod>2026-09-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/7dFZJ2ZJJdcmkp05B9NWlqTJ5tq.jpg</image:loc>
-      <image:title>Watch Tagesschau Online Free</image:title>
+      <image:loc>https://image.tmdb.org/t/p/w780/97TTJuqiSMfU0DuXx1B4NG5QNP7.jpg</image:loc>
+      <image:title>Watch Star Trek: Strange New Worlds Online Free</image:title>
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/tv/91759</loc>
-    <lastmod>2017-02-20</lastmod>
+    <loc>https://streamflixbd.vercel.app/tv/51025</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/ycSBcACecVR0zSnP2ZF83k5f7he.jpg</image:loc>
+      <image:title>Paradise Hotel</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/tv/51025/watch</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/ycSBcACecVR0zSnP2ZF83k5f7he.jpg</image:loc>
+      <image:title>Watch Paradise Hotel Online Free</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/tv/91759</loc>
+    <lastmod>2026-09-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image>
@@ -2130,8 +2130,8 @@
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/tv/91759/watch</loc>
-    <lastmod>2017-02-20</lastmod>
+    <loc>https://streamflixbd.vercel.app/tv/91759/watch</loc>
+    <lastmod>2026-09-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image>
@@ -2140,548 +2140,28 @@
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/tv/2734</loc>
-    <lastmod>1999-09-20</lastmod>
+    <loc>https://streamflixbd.vercel.app/tv/22980</loc>
+    <lastmod>2026-09-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/iofokHZoUB4Qhik4PflvJl8TT6a.jpg</image:loc>
-      <image:title>Law &amp; Order: Special Victims Unit</image:title>
+      <image:loc>https://image.tmdb.org/t/p/w780/onSD9UXfJwrMXWhq7UY7hGF2S1h.jpg</image:loc>
+      <image:title>Watch What Happens Live with Andy Cohen</image:title>
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/tv/2734/watch</loc>
-    <lastmod>1999-09-20</lastmod>
+    <loc>https://streamflixbd.vercel.app/tv/22980/watch</loc>
+    <lastmod>2026-09-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/iofokHZoUB4Qhik4PflvJl8TT6a.jpg</image:loc>
-      <image:title>Watch Law &amp; Order: Special Victims Unit Online Free</image:title>
+      <image:loc>https://image.tmdb.org/t/p/w780/onSD9UXfJwrMXWhq7UY7hGF2S1h.jpg</image:loc>
+      <image:title>Watch Watch What Happens Live with Andy Cohen Online Free</image:title>
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/tv/456</loc>
-    <lastmod>1989-12-17</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/uWpG7GqfKGQqX4YMAo3nv5OrglV.jpg</image:loc>
-      <image:title>The Simpsons</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/tv/456/watch</loc>
-    <lastmod>1989-12-17</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/uWpG7GqfKGQqX4YMAo3nv5OrglV.jpg</image:loc>
-      <image:title>Watch The Simpsons Online Free</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/tv/79744</loc>
-    <lastmod>2018-10-16</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/70kTz0OmjjZe7zHvIDrq2iKW7PJ.jpg</image:loc>
-      <image:title>The Rookie</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/tv/79744/watch</loc>
-    <lastmod>2018-10-16</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/70kTz0OmjjZe7zHvIDrq2iKW7PJ.jpg</image:loc>
-      <image:title>Watch The Rookie Online Free</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/tv/51025</loc>
-    <lastmod>2005-09-14</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/ycSBcACecVR0zSnP2ZF83k5f7he.jpg</image:loc>
-      <image:title>Paradise Hotel</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/tv/51025/watch</loc>
-    <lastmod>2005-09-14</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/ycSBcACecVR0zSnP2ZF83k5f7he.jpg</image:loc>
-      <image:title>Watch Paradise Hotel Online Free</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/tv/59941</loc>
-    <lastmod>2014-02-17</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/1N4o5PmmqhlVDrcdJ2RlCFWbLGX.jpg</image:loc>
-      <image:title>The Tonight Show Starring Jimmy Fallon</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/tv/59941/watch</loc>
-    <lastmod>2014-02-17</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/1N4o5PmmqhlVDrcdJ2RlCFWbLGX.jpg</image:loc>
-      <image:title>Watch The Tonight Show Starring Jimmy Fallon Online Free</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/tv/291</loc>
-    <lastmod>1960-12-09</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/5x1HXqYqPyYw7oc7Isu1lvVmwRP.jpg</image:loc>
-      <image:title>Coronation Street</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/tv/291/watch</loc>
-    <lastmod>1960-12-09</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/5x1HXqYqPyYw7oc7Isu1lvVmwRP.jpg</image:loc>
-      <image:title>Watch Coronation Street Online Free</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/tv/45857</loc>
-    <lastmod>2006-10-07</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/ewYjHmmyxIaM3heRO0eZaOA6xo2.jpg</image:loc>
-      <image:title>REBORN!</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/tv/45857/watch</loc>
-    <lastmod>2006-10-07</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/ewYjHmmyxIaM3heRO0eZaOA6xo2.jpg</image:loc>
-      <image:title>Watch REBORN! Online Free</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/tv/37528</loc>
-    <lastmod>2001-03-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/snIRCY6Qhei08YUNQjjZI2gc4CK.jpg</image:loc>
-      <image:title>Gran hermano</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/tv/37528/watch</loc>
-    <lastmod>2001-03-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/snIRCY6Qhei08YUNQjjZI2gc4CK.jpg</image:loc>
-      <image:title>Watch Gran hermano Online Free</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/tv/4614</loc>
-    <lastmod>2003-09-23</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/mBcu8d6x6zB1el3MPNl7cZQEQ31.jpg</image:loc>
-      <image:title>NCIS</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/tv/4614/watch</loc>
-    <lastmod>2003-09-23</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/mBcu8d6x6zB1el3MPNl7cZQEQ31.jpg</image:loc>
-      <image:title>Watch NCIS Online Free</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/tv/549</loc>
-    <lastmod>1990-09-13</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/haJ9eHytVO3H3JooMJG1DiWwDNm.jpg</image:loc>
-      <image:title>Law &amp; Order</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/tv/549/watch</loc>
-    <lastmod>1990-09-13</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/haJ9eHytVO3H3JooMJG1DiWwDNm.jpg</image:loc>
-      <image:title>Watch Law &amp; Order Online Free</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/tv/1416</loc>
-    <lastmod>2005-03-27</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/hjJkrLXhWvGHpLeLBDFznpBTY1S.jpg</image:loc>
-      <image:title>Grey&apos;s Anatomy</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/tv/1416/watch</loc>
-    <lastmod>2005-03-27</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/hjJkrLXhWvGHpLeLBDFznpBTY1S.jpg</image:loc>
-      <image:title>Watch Grey&apos;s Anatomy Online Free</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/tv/4057</loc>
-    <lastmod>2005-09-22</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/hWSb4UnIjlTvnvrP98NbFSO60HA.jpg</image:loc>
-      <image:title>Criminal Minds</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/tv/4057/watch</loc>
-    <lastmod>2005-09-22</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/hWSb4UnIjlTvnvrP98NbFSO60HA.jpg</image:loc>
-      <image:title>Watch Criminal Minds Online Free</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/tv/36109</loc>
-    <lastmod>2009-03-09</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/k6KhQBpW4gdcoSp9JQvQFq14lFI.jpg</image:loc>
-      <image:title>Paradise Hotel</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/tv/36109/watch</loc>
-    <lastmod>2009-03-09</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/k6KhQBpW4gdcoSp9JQvQFq14lFI.jpg</image:loc>
-      <image:title>Watch Paradise Hotel Online Free</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/tv/63770</loc>
-    <lastmod>2015-09-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/9jkThAGYj2yp8jsS6Nriy5mzKFT.jpg</image:loc>
-      <image:title>The Late Show with Stephen Colbert</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/tv/63770/watch</loc>
-    <lastmod>2015-09-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/9jkThAGYj2yp8jsS6Nriy5mzKFT.jpg</image:loc>
-      <image:title>Watch The Late Show with Stephen Colbert Online Free</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/tv/1622</loc>
-    <lastmod>2005-09-13</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/8iixmfGx5EIFPdpNvB2JvI3VIqX.jpg</image:loc>
-      <image:title>Supernatural</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/tv/1622/watch</loc>
-    <lastmod>2005-09-13</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/8iixmfGx5EIFPdpNvB2JvI3VIqX.jpg</image:loc>
-      <image:title>Watch Supernatural Online Free</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/tv/50821</loc>
-    <lastmod>1998-10-26</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/kBBbSgNchtMvsgD6z1oI1RRluHP.jpg</image:loc>
-      <image:title>Among Friends</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/tv/50821/watch</loc>
-    <lastmod>1998-10-26</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/kBBbSgNchtMvsgD6z1oI1RRluHP.jpg</image:loc>
-      <image:title>Watch Among Friends Online Free</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/tv/1434</loc>
-    <lastmod>1999-01-31</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/3PFsEuAiyLkWsP4GG6dIV37Q6gu.jpg</image:loc>
-      <image:title>Family Guy</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/tv/1434/watch</loc>
-    <lastmod>1999-01-31</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/3PFsEuAiyLkWsP4GG6dIV37Q6gu.jpg</image:loc>
-      <image:title>Watch Family Guy Online Free</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/tv/2661</loc>
-    <lastmod>1971-04-03</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/2DIBDFHiKQawz4WPsYekl9DHwyA.jpg</image:loc>
-      <image:title>Kamen Rider</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/tv/2661/watch</loc>
-    <lastmod>1971-04-03</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/2DIBDFHiKQawz4WPsYekl9DHwyA.jpg</image:loc>
-      <image:title>Watch Kamen Rider Online Free</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/tv/2261</loc>
-    <lastmod>1962-10-01</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/uSvET5YUvHNDIeoCpErrbSmasFb.jpg</image:loc>
-      <image:title>The Tonight Show Starring Johnny Carson</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/tv/2261/watch</loc>
-    <lastmod>1962-10-01</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/uSvET5YUvHNDIeoCpErrbSmasFb.jpg</image:loc>
-      <image:title>Watch The Tonight Show Starring Johnny Carson Online Free</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/tv/1433</loc>
-    <lastmod>2005-02-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/eb9sH2am9IUSQ8GhXTNAVoujk8W.jpg</image:loc>
-      <image:title>American Dad!</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/tv/1433/watch</loc>
-    <lastmod>2005-02-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/eb9sH2am9IUSQ8GhXTNAVoujk8W.jpg</image:loc>
-      <image:title>Watch American Dad! Online Free</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/tv/1399</loc>
-    <lastmod>2011-04-17</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/1XS1oqL89opfnbLl8WnZY1O1uJx.jpg</image:loc>
-      <image:title>Game of Thrones</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/tv/1399/watch</loc>
-    <lastmod>2011-04-17</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/1XS1oqL89opfnbLl8WnZY1O1uJx.jpg</image:loc>
-      <image:title>Watch Game of Thrones Online Free</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/tv/764</loc>
-    <lastmod>1997-03-23</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/pz7tsWxe0TTdfJnWPjZAEnrSl5M.jpg</image:loc>
-      <image:title>Midsomer Murders</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/tv/764/watch</loc>
-    <lastmod>1997-03-23</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/pz7tsWxe0TTdfJnWPjZAEnrSl5M.jpg</image:loc>
-      <image:title>Watch Midsomer Murders Online Free</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/tv/1431</loc>
-    <lastmod>2000-10-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/i5hmoRjHNWady4AtAGICTUXknKH.jpg</image:loc>
-      <image:title>CSI: Crime Scene Investigation</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/tv/1431/watch</loc>
-    <lastmod>2000-10-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/i5hmoRjHNWady4AtAGICTUXknKH.jpg</image:loc>
-      <image:title>Watch CSI: Crime Scene Investigation Online Free</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/tv/65282</loc>
-    <lastmod>2013-03-22</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/1hqGagr94soBq70Lq7tPHvNmmxy.jpg</image:loc>
-      <image:title>Home Alone</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/tv/65282/watch</loc>
-    <lastmod>2013-03-22</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/1hqGagr94soBq70Lq7tPHvNmmxy.jpg</image:loc>
-      <image:title>Watch Home Alone Online Free</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/tv/498</loc>
-    <lastmod>1993-08-30</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/fTBC5EpsgKmli9VQcJMtqQ08Qj4.jpg</image:loc>
-      <image:title>Late Show with David Letterman</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/tv/498/watch</loc>
-    <lastmod>1993-08-30</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/fTBC5EpsgKmli9VQcJMtqQ08Qj4.jpg</image:loc>
-      <image:title>Watch Late Show with David Letterman Online Free</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/tv/34307</loc>
-    <lastmod>2011-01-09</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/ifo31fMWLmyOVpdak9K0kY4jldQ.jpg</image:loc>
-      <image:title>Shameless</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/tv/34307/watch</loc>
-    <lastmod>2011-01-09</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/ifo31fMWLmyOVpdak9K0kY4jldQ.jpg</image:loc>
-      <image:title>Watch Shameless Online Free</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/tv/13945</loc>
-    <lastmod>1992-05-11</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/qujVFLAlBnPU9mZElV4NZgL8iXT.jpg</image:loc>
-      <image:title>Gute Zeiten, schlechte Zeiten</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/tv/13945/watch</loc>
-    <lastmod>1992-05-11</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/qujVFLAlBnPU9mZElV4NZgL8iXT.jpg</image:loc>
-      <image:title>Watch Gute Zeiten, schlechte Zeiten Online Free</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/tv/502</loc>
-    <lastmod>1969-11-10</lastmod>
+    <loc>https://streamflixbd.vercel.app/tv/502</loc>
+    <lastmod>2026-09-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image>
@@ -2690,8 +2170,8 @@
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/tv/502/watch</loc>
-    <lastmod>1969-11-10</lastmod>
+    <loc>https://streamflixbd.vercel.app/tv/502/watch</loc>
+    <lastmod>2026-09-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image>
@@ -2700,27 +2180,619 @@
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/tv/2316</loc>
-    <lastmod>2005-03-24</lastmod>
+    <loc>https://streamflixbd.vercel.app/tv/30801</loc>
+    <lastmod>2026-09-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/7DJKHzAi83BmQrWLrYYOqcoKfhR.jpg</image:loc>
-      <image:title>The Office</image:title>
+      <image:loc>https://image.tmdb.org/t/p/w780/qezeCEkIKHQM5iwyVeYBuXmYA2h.jpg</image:loc>
+      <image:title>2 Days and 1 Night</image:title>
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/tv/2316/watch</loc>
-    <lastmod>2005-03-24</lastmod>
+    <loc>https://streamflixbd.vercel.app/tv/30801/watch</loc>
+    <lastmod>2026-09-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/7DJKHzAi83BmQrWLrYYOqcoKfhR.jpg</image:loc>
-      <image:title>Watch The Office Online Free</image:title>
+      <image:loc>https://image.tmdb.org/t/p/w780/qezeCEkIKHQM5iwyVeYBuXmYA2h.jpg</image:loc>
+      <image:title>Watch 2 Days and 1 Night Online Free</image:title>
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/tv/276161</loc>
+    <loc>https://streamflixbd.vercel.app/tv/36109</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/k6KhQBpW4gdcoSp9JQvQFq14lFI.jpg</image:loc>
+      <image:title>Paradise Hotel</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/tv/36109/watch</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/k6KhQBpW4gdcoSp9JQvQFq14lFI.jpg</image:loc>
+      <image:title>Watch Paradise Hotel Online Free</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/tv/45857</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/ewYjHmmyxIaM3heRO0eZaOA6xo2.jpg</image:loc>
+      <image:title>REBORN!</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/tv/45857/watch</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/ewYjHmmyxIaM3heRO0eZaOA6xo2.jpg</image:loc>
+      <image:title>Watch REBORN! Online Free</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/tv/31472</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/2rTGn2CBavgioMVorVdZHgmdA2n.jpg</image:loc>
+      <image:title>Pelotón</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/tv/31472/watch</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/2rTGn2CBavgioMVorVdZHgmdA2n.jpg</image:loc>
+      <image:title>Watch Pelotón Online Free</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/tv/5920</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/acYXu4KaDj1NIkMgObnhe4C4a0T.jpg</image:loc>
+      <image:title>The Mentalist</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/tv/5920/watch</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/acYXu4KaDj1NIkMgObnhe4C4a0T.jpg</image:loc>
+      <image:title>Watch The Mentalist Online Free</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/tv/65270</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/uRUZDsvUfIP3JUEgOC8ReBlQQUU.jpg</image:loc>
+      <image:title>Radio Star</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/tv/65270/watch</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/uRUZDsvUfIP3JUEgOC8ReBlQQUU.jpg</image:loc>
+      <image:title>Watch Radio Star Online Free</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/tv/70672</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/2jIi55JtYKJTL1km8qHMuUilOWo.jpg</image:loc>
+      <image:title>Men on a Mission</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/tv/70672/watch</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/2jIi55JtYKJTL1km8qHMuUilOWo.jpg</image:loc>
+      <image:title>Watch Men on a Mission Online Free</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/tv/2661</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/2DIBDFHiKQawz4WPsYekl9DHwyA.jpg</image:loc>
+      <image:title>Kamen Rider</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/tv/2661/watch</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/2DIBDFHiKQawz4WPsYekl9DHwyA.jpg</image:loc>
+      <image:title>Watch Kamen Rider Online Free</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/tv/72879</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/7BjipkA48xXLauTg45QKiOb144a.jpg</image:loc>
+      <image:title>Tomorrow Is Ours</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/tv/72879/watch</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/7BjipkA48xXLauTg45QKiOb144a.jpg</image:loc>
+      <image:title>Watch Tomorrow Is Ours Online Free</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/tv/1396</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/anFx9aTOOYqgS3v7x3R84Kz67ly.jpg</image:loc>
+      <image:title>Breaking Bad</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/tv/1396/watch</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/anFx9aTOOYqgS3v7x3R84Kz67ly.jpg</image:loc>
+      <image:title>Watch Breaking Bad Online Free</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/tv/94722</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/7dFZJ2ZJJdcmkp05B9NWlqTJ5tq.jpg</image:loc>
+      <image:title>Tagesschau</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/tv/94722/watch</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/7dFZJ2ZJJdcmkp05B9NWlqTJ5tq.jpg</image:loc>
+      <image:title>Watch Tagesschau Online Free</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/tv/59941</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/1N4o5PmmqhlVDrcdJ2RlCFWbLGX.jpg</image:loc>
+      <image:title>The Tonight Show Starring Jimmy Fallon</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/tv/59941/watch</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/1N4o5PmmqhlVDrcdJ2RlCFWbLGX.jpg</image:loc>
+      <image:title>Watch The Tonight Show Starring Jimmy Fallon Online Free</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/tv/291</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/5x1HXqYqPyYw7oc7Isu1lvVmwRP.jpg</image:loc>
+      <image:title>Coronation Street</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/tv/291/watch</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/5x1HXqYqPyYw7oc7Isu1lvVmwRP.jpg</image:loc>
+      <image:title>Watch Coronation Street Online Free</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/tv/49847</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/JTzASS9kdvmeIPZgK27dl6DdQw.jpg</image:loc>
+      <image:title>House Rules</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/tv/49847/watch</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/JTzASS9kdvmeIPZgK27dl6DdQw.jpg</image:loc>
+      <image:title>Watch House Rules Online Free</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/tv/35007</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/h2HFhwgU7xcIEpgDuuPHfh5NOVZ.jpg</image:loc>
+      <image:title>The Daily Fable</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/tv/35007/watch</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/h2HFhwgU7xcIEpgDuuPHfh5NOVZ.jpg</image:loc>
+      <image:title>Watch The Daily Fable Online Free</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/tv/50821</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/kBBbSgNchtMvsgD6z1oI1RRluHP.jpg</image:loc>
+      <image:title>Among Friends</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/tv/50821/watch</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/kBBbSgNchtMvsgD6z1oI1RRluHP.jpg</image:loc>
+      <image:title>Watch Among Friends Online Free</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/tv/45789</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/jfFNydakwvbeACEwSd2Gh8UWtba.jpg</image:loc>
+      <image:title>Storm of Love</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/tv/45789/watch</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/jfFNydakwvbeACEwSd2Gh8UWtba.jpg</image:loc>
+      <image:title>Watch Storm of Love Online Free</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/tv/2734</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/iofokHZoUB4Qhik4PflvJl8TT6a.jpg</image:loc>
+      <image:title>Law &amp; Order: Special Victims Unit</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/tv/2734/watch</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/iofokHZoUB4Qhik4PflvJl8TT6a.jpg</image:loc>
+      <image:title>Watch Law &amp; Order: Special Victims Unit Online Free</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/tv/206693</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/d00uWx8T84ZRsguQTqITl3HnFJO.jpg</image:loc>
+      <image:title>My Dearest</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/tv/206693/watch</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/d00uWx8T84ZRsguQTqITl3HnFJO.jpg</image:loc>
+      <image:title>Watch My Dearest Online Free</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/tv/2527</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/4elMyMe6W782VxXr5R1BmWDoqSg.jpg</image:loc>
+      <image:title>Emmerdale</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/tv/2527/watch</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/4elMyMe6W782VxXr5R1BmWDoqSg.jpg</image:loc>
+      <image:title>Watch Emmerdale Online Free</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/tv/65733</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/9ZN1P32SHviL3SV51qLivxycvcx.jpg</image:loc>
+      <image:title>Doraemon</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/tv/65733/watch</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/9ZN1P32SHviL3SV51qLivxycvcx.jpg</image:loc>
+      <image:title>Watch Doraemon Online Free</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/tv/456</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/uWpG7GqfKGQqX4YMAo3nv5OrglV.jpg</image:loc>
+      <image:title>The Simpsons</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/tv/456/watch</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/uWpG7GqfKGQqX4YMAo3nv5OrglV.jpg</image:loc>
+      <image:title>Watch The Simpsons Online Free</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/tv/2261</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/uSvET5YUvHNDIeoCpErrbSmasFb.jpg</image:loc>
+      <image:title>The Tonight Show Starring Johnny Carson</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/tv/2261/watch</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/uSvET5YUvHNDIeoCpErrbSmasFb.jpg</image:loc>
+      <image:title>Watch The Tonight Show Starring Johnny Carson Online Free</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/tv/18165</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/b3vl6wV1W8PBezFfntKTrhrehCY.jpg</image:loc>
+      <image:title>The Vampire Diaries</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/tv/18165/watch</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/b3vl6wV1W8PBezFfntKTrhrehCY.jpg</image:loc>
+      <image:title>Watch The Vampire Diaries Online Free</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/tv/2224</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/ixcfyK7it6FjRM36Te4OdblAq4X.jpg</image:loc>
+      <image:title>The Daily Show</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/tv/2224/watch</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/ixcfyK7it6FjRM36Te4OdblAq4X.jpg</image:loc>
+      <image:title>Watch The Daily Show Online Free</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/tv/209992</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/tv/209992/watch</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/tv/1434</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/3PFsEuAiyLkWsP4GG6dIV37Q6gu.jpg</image:loc>
+      <image:title>Family Guy</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/tv/1434/watch</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/3PFsEuAiyLkWsP4GG6dIV37Q6gu.jpg</image:loc>
+      <image:title>Watch Family Guy Online Free</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/tv/13945</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/qujVFLAlBnPU9mZElV4NZgL8iXT.jpg</image:loc>
+      <image:title>Gute Zeiten, schlechte Zeiten</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/tv/13945/watch</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/qujVFLAlBnPU9mZElV4NZgL8iXT.jpg</image:loc>
+      <image:title>Watch Gute Zeiten, schlechte Zeiten Online Free</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/tv/51817</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/n0DN6kJf0kGeuNFUYLT6eZe5ERR.jpg</image:loc>
+      <image:title>Teenage Mutant Ninja Turtles</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/tv/51817/watch</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/n0DN6kJf0kGeuNFUYLT6eZe5ERR.jpg</image:loc>
+      <image:title>Watch Teenage Mutant Ninja Turtles Online Free</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/tv/78648</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/nEwybsfZBSPjcZamPpKDTaTI5g.jpg</image:loc>
+      <image:title>Amazing Saturday</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/tv/78648/watch</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/nEwybsfZBSPjcZamPpKDTaTI5g.jpg</image:loc>
+      <image:title>Watch Amazing Saturday Online Free</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/tv/45768</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/d53oOa5dHSu7e7kobxdLyr8ZFdU.jpg</image:loc>
+      <image:title>Mais Você</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/tv/45768/watch</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/d53oOa5dHSu7e7kobxdLyr8ZFdU.jpg</image:loc>
+      <image:title>Watch Mais Você Online Free</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/tv/276161</loc>
     <lastmod>2026-06-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -2730,7 +2802,7 @@
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/tv/276161/watch</loc>
+    <loc>https://streamflixbd.vercel.app/tv/276161/watch</loc>
     <lastmod>2026-06-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -2740,7 +2812,7 @@
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/tv/299167</loc>
+    <loc>https://streamflixbd.vercel.app/tv/299167</loc>
     <lastmod>2026-05-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -2750,7 +2822,7 @@
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/tv/299167/watch</loc>
+    <loc>https://streamflixbd.vercel.app/tv/299167/watch</loc>
     <lastmod>2026-05-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -2760,7 +2832,7 @@
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/tv/278573</loc>
+    <loc>https://streamflixbd.vercel.app/tv/278573</loc>
     <lastmod>2026-04-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -2770,7 +2842,7 @@
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/tv/278573/watch</loc>
+    <loc>https://streamflixbd.vercel.app/tv/278573/watch</loc>
     <lastmod>2026-04-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -2780,27 +2852,7 @@
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/tv/1396</loc>
-    <lastmod>2008-01-20</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/anFx9aTOOYqgS3v7x3R84Kz67ly.jpg</image:loc>
-      <image:title>Breaking Bad</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/tv/1396/watch</loc>
-    <lastmod>2008-01-20</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/anFx9aTOOYqgS3v7x3R84Kz67ly.jpg</image:loc>
-      <image:title>Watch Breaking Bad Online Free</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/tv/273240</loc>
+    <loc>https://streamflixbd.vercel.app/tv/273240</loc>
     <lastmod>2026-05-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -2810,7 +2862,7 @@
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/tv/273240/watch</loc>
+    <loc>https://streamflixbd.vercel.app/tv/273240/watch</loc>
     <lastmod>2026-05-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -2820,7 +2872,27 @@
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/tv/259837</loc>
+    <loc>https://streamflixbd.vercel.app/tv/322430</loc>
+    <lastmod>2026-06-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/vamznpYBCI9n7VhrI3mxuzff7XP.jpg</image:loc>
+      <image:title>The Polygamist</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/tv/322430/watch</loc>
+    <lastmod>2026-06-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/vamznpYBCI9n7VhrI3mxuzff7XP.jpg</image:loc>
+      <image:title>Watch The Polygamist Online Free</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/tv/259837</loc>
     <lastmod>2026-05-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -2830,7 +2902,7 @@
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/tv/259837/watch</loc>
+    <loc>https://streamflixbd.vercel.app/tv/259837/watch</loc>
     <lastmod>2026-05-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -2840,7 +2912,7 @@
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/tv/245026</loc>
+    <loc>https://streamflixbd.vercel.app/tv/245026</loc>
     <lastmod>2024-10-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -2850,7 +2922,7 @@
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/tv/245026/watch</loc>
+    <loc>https://streamflixbd.vercel.app/tv/245026/watch</loc>
     <lastmod>2024-10-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -2860,8 +2932,48 @@
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/tv/209867</loc>
-    <lastmod>2023-09-29</lastmod>
+    <loc>https://streamflixbd.vercel.app/tv/284445</loc>
+    <lastmod>2025-06-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/xPXDVhVKt0XM34ihoUVMHtLYTw8.jpg</image:loc>
+      <image:title>Takopi&apos;s Original Sin</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/tv/284445/watch</loc>
+    <lastmod>2025-06-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/xPXDVhVKt0XM34ihoUVMHtLYTw8.jpg</image:loc>
+      <image:title>Watch Takopi&apos;s Original Sin Online Free</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/tv/219246</loc>
+    <lastmod>2025-03-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/1VC3sEFxYXYDqQUCAnvWfUsYg1s.jpg</image:loc>
+      <image:title>When Life Gives You Tangerines</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/tv/219246/watch</loc>
+    <lastmod>2025-03-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://image.tmdb.org/t/p/w780/1VC3sEFxYXYDqQUCAnvWfUsYg1s.jpg</image:loc>
+      <image:title>Watch When Life Gives You Tangerines Online Free</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://streamflixbd.vercel.app/tv/209867</loc>
+    <lastmod>2026-09-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image>
@@ -2870,8 +2982,8 @@
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/tv/209867/watch</loc>
-    <lastmod>2023-09-29</lastmod>
+    <loc>https://streamflixbd.vercel.app/tv/209867/watch</loc>
+    <lastmod>2026-09-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image>
@@ -2880,8 +2992,8 @@
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/tv/85077</loc>
-    <lastmod>2019-04-21</lastmod>
+    <loc>https://streamflixbd.vercel.app/tv/85077</loc>
+    <lastmod>2026-09-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image>
@@ -2890,8 +3002,8 @@
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/tv/85077/watch</loc>
-    <lastmod>2019-04-21</lastmod>
+    <loc>https://streamflixbd.vercel.app/tv/85077/watch</loc>
+    <lastmod>2026-09-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image>
@@ -2900,28 +3012,8 @@
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/tv/219246</loc>
-    <lastmod>2025-03-07</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/Afrz3QAcQcsT6w4S5wrKUxmYPWM.jpg</image:loc>
-      <image:title>When Life Gives You Tangerines</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/tv/219246/watch</loc>
-    <lastmod>2025-03-07</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/Afrz3QAcQcsT6w4S5wrKUxmYPWM.jpg</image:loc>
-      <image:title>Watch When Life Gives You Tangerines Online Free</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/tv/246</loc>
-    <lastmod>2005-02-21</lastmod>
+    <loc>https://streamflixbd.vercel.app/tv/246</loc>
+    <lastmod>2026-09-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image>
@@ -2930,8 +3022,8 @@
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/tv/246/watch</loc>
-    <lastmod>2005-02-21</lastmod>
+    <loc>https://streamflixbd.vercel.app/tv/246/watch</loc>
+    <lastmod>2026-09-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image>
@@ -2940,7 +3032,7 @@
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/tv/259666</loc>
+    <loc>https://streamflixbd.vercel.app/tv/259666</loc>
     <lastmod>2024-08-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -2950,7 +3042,7 @@
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/tv/259666/watch</loc>
+    <loc>https://streamflixbd.vercel.app/tv/259666/watch</loc>
     <lastmod>2024-08-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -2960,8 +3052,8 @@
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/tv/64010</loc>
-    <lastmod>2015-11-06</lastmod>
+    <loc>https://streamflixbd.vercel.app/tv/64010</loc>
+    <lastmod>2026-09-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image>
@@ -2970,8 +3062,8 @@
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/tv/64010/watch</loc>
-    <lastmod>2015-11-06</lastmod>
+    <loc>https://streamflixbd.vercel.app/tv/64010/watch</loc>
+    <lastmod>2026-09-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image>
@@ -2980,8 +3072,8 @@
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/tv/94605</loc>
-    <lastmod>2021-11-06</lastmod>
+    <loc>https://streamflixbd.vercel.app/tv/94605</loc>
+    <lastmod>2026-09-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image>
@@ -2990,8 +3082,8 @@
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/tv/94605/watch</loc>
-    <lastmod>2021-11-06</lastmod>
+    <loc>https://streamflixbd.vercel.app/tv/94605/watch</loc>
+    <lastmod>2026-09-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image>
@@ -3000,7 +3092,7 @@
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/tv/301507</loc>
+    <loc>https://streamflixbd.vercel.app/tv/301507</loc>
     <lastmod>2025-11-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -3010,7 +3102,7 @@
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/tv/301507/watch</loc>
+    <loc>https://streamflixbd.vercel.app/tv/301507/watch</loc>
     <lastmod>2025-11-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -3020,7 +3112,7 @@
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/tv/250307</loc>
+    <loc>https://streamflixbd.vercel.app/tv/250307</loc>
     <lastmod>2025-01-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -3030,7 +3122,7 @@
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/tv/250307/watch</loc>
+    <loc>https://streamflixbd.vercel.app/tv/250307/watch</loc>
     <lastmod>2025-01-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -3040,8 +3132,8 @@
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/tv/87108</loc>
-    <lastmod>2019-05-06</lastmod>
+    <loc>https://streamflixbd.vercel.app/tv/87108</loc>
+    <lastmod>2026-09-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image>
@@ -3050,53 +3142,13 @@
     </image:image>
   </url>
   <url>
-    <loc>https://ott.akibhasan.online/tv/87108/watch</loc>
-    <lastmod>2019-05-06</lastmod>
+    <loc>https://streamflixbd.vercel.app/tv/87108/watch</loc>
+    <lastmod>2026-09-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://image.tmdb.org/t/p/w780/hlLXt2tOPT6RRnjiUmoxyG1LTFi.jpg</image:loc>
       <image:title>Watch Chernobyl Online Free</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/tv/31911</loc>
-    <lastmod>2009-04-05</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/5ZFUEOULaVml7pQuXxhpR2SmVUw.jpg</image:loc>
-      <image:title>Fullmetal Alchemist: Brotherhood</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/tv/31911/watch</loc>
-    <lastmod>2009-04-05</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/5ZFUEOULaVml7pQuXxhpR2SmVUw.jpg</image:loc>
-      <image:title>Watch Fullmetal Alchemist: Brotherhood Online Free</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/tv/60059</loc>
-    <lastmod>2015-02-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/zjg4jpK1Wp2kiRvtt5ND0kznako.jpg</image:loc>
-      <image:title>Better Call Saul</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://ott.akibhasan.online/tv/60059/watch</loc>
-    <lastmod>2015-02-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w780/zjg4jpK1Wp2kiRvtt5ND0kznako.jpg</image:loc>
-      <image:title>Watch Better Call Saul Online Free</image:title>
     </image:image>
   </url>
 </urlset>

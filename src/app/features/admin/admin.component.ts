@@ -99,14 +99,77 @@ export class AdminComponent {
     map(users => users.filter(u => u.role === 'admin').length)
   );
 
+  readonly sortColumn$ = new BehaviorSubject<'time' | 'ip' | 'location' | 'device' | 'visits'>('time');
+  readonly sortDirection$ = new BehaviorSubject<'asc' | 'desc'>('desc');
+
+  get sortColumn(): 'time' | 'ip' | 'location' | 'device' | 'visits' {
+    return this.sortColumn$.value;
+  }
+
+  get sortDirection(): 'asc' | 'desc' {
+    return this.sortDirection$.value;
+  }
+
+  toggleSort(col: 'time' | 'ip' | 'location' | 'device' | 'visits'): void {
+    if (this.sortColumn$.value === col) {
+      this.sortDirection$.next(this.sortDirection$.value === 'asc' ? 'desc' : 'asc');
+    } else {
+      this.sortColumn$.next(col);
+      this.sortDirection$.next(col === 'time' || col === 'visits' ? 'desc' : 'asc');
+    }
+  }
+
+  getSortIcon(col: 'time' | 'ip' | 'location' | 'device' | 'visits'): string {
+    if (this.sortColumn$.value !== col) return '↕';
+    return this.sortDirection$.value === 'asc' ? '▲' : '▼';
+  }
+
   readonly logGroups$: Observable<IpLogGroup[]> = combineLatest([
     this.visitorService.getRecentLogs().pipe(catchError(() => of([]))),
-    this.searchQuery$
+    this.searchQuery$,
+    this.sortColumn$,
+    this.sortDirection$
   ]).pipe(
-    map(([logs, query]) => {
+    map(([logs, query, sortCol, sortDir]) => {
       const q = (query || '').toLowerCase().trim();
       const filtered = q ? logs.filter(l => this.matchesQuery(l, q)) : logs;
       const groups = this.groupLogsByIp(filtered);
+
+      // Sort unique IP groups based on the selected column and direction
+      groups.sort((a, b) => {
+        let cmp = 0;
+        switch (sortCol) {
+          case 'time':
+            cmp = (a.lastSeen || 0) - (b.lastSeen || 0);
+            break;
+          case 'ip':
+            cmp = a.ip.localeCompare(b.ip, undefined, { numeric: true });
+            break;
+          case 'location': {
+            const locA = `${a.country || ''} ${a.city || ''}`.trim();
+            const locB = `${b.country || ''} ${b.city || ''}`.trim();
+            cmp = locA.localeCompare(locB);
+            break;
+          }
+          case 'device':
+            cmp = (a.devicesLabel || '').localeCompare(b.devicesLabel || '');
+            break;
+          case 'visits':
+            cmp = (a.count || 0) - (b.count || 0);
+            break;
+        }
+        return sortDir === 'asc' ? cmp : -cmp;
+      });
+
+      // Synchronize child log sort order within groups
+      for (const g of groups) {
+        g.logs.sort((a, b) => {
+          const tA = a.timestamp || 0;
+          const tB = b.timestamp || 0;
+          return sortDir === 'asc' ? tA - tB : tB - tA;
+        });
+      }
+
       return groups;
     }),
     tap(groups => this.currentGroups.set(groups))
