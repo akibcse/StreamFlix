@@ -46,6 +46,7 @@ export interface VisitorLog {
   // User Identity & Session
   userId?: string | null;
   userEmail?: string | null;
+  visitorId?: string;
   userAgent?: string;
   referrer?: string;
 }

@@ -553,6 +553,7 @@ export class VisitorLogService {
         // User & Session Identity
         userId: user?.uid || null,
         userEmail: user?.email || 'Anonymous Visitor',
+        visitorId: this.getVisitorId(),
         userAgent: dev.userAgent || '',
         referrer: document.referrer || ''
       };
@@ -666,6 +667,27 @@ export class VisitorLogService {
 
       return () => off(logsRef, 'value', listener);
     });
+  }
+
+  getCurrentIp(): string | null {
+    if (this.cachedGeo && this.cachedGeo.ip && this.cachedGeo.ip !== 'Detecting...' && this.cachedGeo.ip !== 'Unknown IP') {
+      return this.cachedGeo.ip;
+    }
+    return null;
+  }
+
+  getVisitorId(): string {
+    if (typeof window === 'undefined') return 'srv';
+    try {
+      let vid = localStorage.getItem('streamflix_visitor_id');
+      if (!vid) {
+        vid = 'v_' + Math.random().toString(36).substring(2, 11) + '_' + Date.now().toString(36);
+        localStorage.setItem('streamflix_visitor_id', vid);
+      }
+      return vid;
+    } catch {
+      return 'v_anon';
+    }
   }
 
   async clearLogs(): Promise<void> {

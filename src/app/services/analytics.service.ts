@@ -2,6 +2,7 @@ import { Injectable, inject, signal } from '@angular/core';
 import { DatabaseReference, getDatabase, ref, set, get, push, onValue, off, remove } from 'firebase/database';
 import { FirebaseService } from './firebase.service';
 import { AuthService } from './auth.service';
+import { VisitorLogService } from './visitor-log.service';
 import {
   DailyStats,
   MediaAnalytics,
@@ -13,7 +14,13 @@ import {
 export class AnalyticsService {
   private readonly firebase = inject(FirebaseService);
   private readonly auth = inject(AuthService);
+  private readonly visitorLog = inject(VisitorLogService);
   private db = getDatabase(this.firebase.app);
+
+  private sanitizeKey(key: string): string {
+    if (!key) return 'unknown';
+    return key.replace(/[\.\#\$\/\[\]\:\s]/g, '_');
+  }
 
   // ─── Track Events ────────────────────────────────────────────────
 
@@ -29,7 +36,12 @@ export class AnalyticsService {
     } catch { /* silent */ }
   }
 
-  async trackWatchEvent(mediaId: number, mediaType: MediaType, title: string): Promise<void> {
+  async trackWatchEvent(
+    mediaId: number,
+    mediaType: MediaType,
+    title: string,
+    extra?: Record<string, any>
+  ): Promise<void> {
     try {
       const today = this.getToday();
 
@@ -50,23 +62,43 @@ export class AnalyticsService {
       mediaData.lastViewed = Date.now();
       await set(mediaRef, mediaData);
 
-      // Per-user watch history (for Visitor Dossier)
+      const watchItem = {
+        id: mediaId,
+        mediaId,
+        mediaType,
+        title: title || 'Untitled',
+        timestamp: Date.now(),
+        watchedAt: Date.now(),
+        ...(extra || {})
+      };
+
+      // 1. Per-user watch history (for signed-in users)
       const { firstValueFrom } = await import('rxjs');
       const user = await firstValueFrom(this.auth.currentUser$);
       if (user?.uid) {
-        await push(ref(this.db, `user_activity/${user.uid}/history`), {
-          id: mediaId,
-          mediaType,
-          title,
-          timestamp: Date.now(),
-          watchedAt: Date.now()
-        });
+        await set(ref(this.db, `user_activity/${user.uid}/history/${mediaId}`), watchItem);
+      }
+
+      // 2. Per-IP watch history (for Visitor Dossier)
+      const geo = await this.visitorLog.getGeoInfo().catch(() => null);
+      const ip = geo?.ip || this.visitorLog.getCurrentIp();
+      if (ip && ip !== 'Detecting...' && ip !== 'Unknown IP') {
+        const ipKey = this.sanitizeKey(ip);
+        await set(ref(this.db, `visitor_activity/${ipKey}/history/${mediaId}`), watchItem);
+      }
+
+      // 3. Per-visitorId watch history
+      const vid = this.visitorLog.getVisitorId();
+      if (vid) {
+        const vidKey = this.sanitizeKey(vid);
+        await set(ref(this.db, `visitor_activity/${vidKey}/history/${mediaId}`), watchItem);
       }
     } catch { /* silent */ }
   }
 
   async trackSearch(query: string): Promise<void> {
-    if (!query.trim() || query.length < 2) return;
+    const clean = query.trim();
+    if (!clean || clean.length < 2) return;
     try {
       const today = this.getToday();
       // Daily search count
@@ -77,24 +109,41 @@ export class AnalyticsService {
       await set(dayRef, day);
 
       // Search term tracking
-      const key = query.toLowerCase().replace(/[^a-z0-9]/g, '_').substring(0, 50);
+      const key = clean.toLowerCase().replace(/[^a-z0-9]/g, '_').substring(0, 50);
       const searchRef = ref(this.db, `analytics/searches/${key}`);
       const sSnap = await get(searchRef);
       const existing: SearchAnalytics = sSnap.exists()
         ? sSnap.val()
-        : { query: query.toLowerCase(), count: 0, lastSearched: Date.now() };
+        : { query: clean.toLowerCase(), count: 0, lastSearched: Date.now() };
       existing.count = (existing.count || 0) + 1;
       existing.lastSearched = Date.now();
       await set(searchRef, existing);
 
-      // Per-user search history (for Visitor Dossier)
+      const searchItem = {
+        query: clean,
+        timestamp: Date.now()
+      };
+
+      // 1. Per-user search history (for Visitor Dossier)
       const { firstValueFrom } = await import('rxjs');
       const user = await firstValueFrom(this.auth.currentUser$);
       if (user?.uid) {
-        await push(ref(this.db, `user_activity/${user.uid}/searches`), {
-          query: query.trim(),
-          timestamp: Date.now()
-        });
+        await push(ref(this.db, `user_activity/${user.uid}/searches`), searchItem);
+      }
+
+      // 2. Per-IP search history (for Visitor Dossier)
+      const geo = await this.visitorLog.getGeoInfo().catch(() => null);
+      const ip = geo?.ip || this.visitorLog.getCurrentIp();
+      if (ip && ip !== 'Detecting...' && ip !== 'Unknown IP') {
+        const ipKey = this.sanitizeKey(ip);
+        await push(ref(this.db, `visitor_activity/${ipKey}/searches`), searchItem);
+      }
+
+      // 3. Per-visitorId search history
+      const vid = this.visitorLog.getVisitorId();
+      if (vid) {
+        const vidKey = this.sanitizeKey(vid);
+        await push(ref(this.db, `visitor_activity/${vidKey}/searches`), searchItem);
       }
     } catch { /* silent */ }
   }

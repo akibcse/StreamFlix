@@ -81,6 +81,7 @@ export class AdminComponent {
   readonly selectedLog = signal<VisitorLog | null>(null);
   readonly selectedUserHistory = signal<any[]>([]);
   readonly selectedUserSearches = signal<any[]>([]);
+  readonly isLoadingHistory = signal<boolean>(false);
 
   // Streaming Servers Config (State)
   readonly servers = signal<StreamingServerConfig[]>([
@@ -251,28 +252,104 @@ export class AdminComponent {
     this.searchQuery$.next(val);
   }
 
-  openLogDetails(log: VisitorLog): void {
+  async openLogDetails(log: VisitorLog): Promise<void> {
     this.selectedLog.set(log);
     this.selectedUserHistory.set([]);
     this.selectedUserSearches.set([]);
-    // Fetch watch & search history if user is logged in
+    this.isLoadingHistory.set(true);
+
+    const historyPromises: Promise<any[]>[] = [];
+    const searchPromises: Promise<any[]>[] = [];
+
+    // 1. Fetch by user ID (if visitor was signed in)
     if (log.userId) {
-      get(ref(this.firebase.db, `user_activity/${log.userId}/history`)).then(snap => {
-        if (snap.exists()) {
-          const items = Object.values(snap.val() as Record<string, any>)
-            .sort((a: any, b: any) => (b.watchedAt || b.timestamp || 0) - (a.watchedAt || a.timestamp || 0))
-            .slice(0, 20);
-          this.selectedUserHistory.set(items);
+      historyPromises.push(
+        get(ref(this.firebase.db, `user_activity/${log.userId}/history`))
+          .then(snap => snap.exists() ? Object.values(snap.val() as Record<string, any>) : [])
+          .catch(() => [])
+      );
+      searchPromises.push(
+        get(ref(this.firebase.db, `user_activity/${log.userId}/searches`))
+          .then(snap => snap.exists() ? Object.values(snap.val() as Record<string, any>) : [])
+          .catch(() => [])
+      );
+    }
+
+    // 2. Fetch by visitor IP (sanitized key)
+    if (log.ip && log.ip !== 'Detecting...' && log.ip !== 'Unknown IP') {
+      const ipKey = log.ip.replace(/[\.\#\$\/\[\]\:\s]/g, '_');
+      historyPromises.push(
+        get(ref(this.firebase.db, `visitor_activity/${ipKey}/history`))
+          .then(snap => snap.exists() ? Object.values(snap.val() as Record<string, any>) : [])
+          .catch(() => [])
+      );
+      searchPromises.push(
+        get(ref(this.firebase.db, `visitor_activity/${ipKey}/searches`))
+          .then(snap => snap.exists() ? Object.values(snap.val() as Record<string, any>) : [])
+          .catch(() => [])
+      );
+    }
+
+    // 3. Fetch by visitorId (if available)
+    if (log.visitorId) {
+      const vidKey = log.visitorId.replace(/[\.\#\$\/\[\]\:\s]/g, '_');
+      historyPromises.push(
+        get(ref(this.firebase.db, `visitor_activity/${vidKey}/history`))
+          .then(snap => snap.exists() ? Object.values(snap.val() as Record<string, any>) : [])
+          .catch(() => [])
+      );
+      searchPromises.push(
+        get(ref(this.firebase.db, `visitor_activity/${vidKey}/searches`))
+          .then(snap => snap.exists() ? Object.values(snap.val() as Record<string, any>) : [])
+          .catch(() => [])
+      );
+    }
+
+    try {
+      const [allHistories, allSearches] = await Promise.all([
+        Promise.all(historyPromises),
+        Promise.all(searchPromises)
+      ]);
+
+      // Flatten and deduplicate watch history
+      const histMap = new Map<string, any>();
+      for (const item of allHistories.flat()) {
+        if (!item) continue;
+        const key = String(item.id || item.mediaId || item.title || JSON.stringify(item));
+        const itemTime = item.watchedAt || item.timestamp || 0;
+        const existing = histMap.get(key);
+        const existTime = existing ? (existing.watchedAt || existing.timestamp || 0) : 0;
+        if (!existing || itemTime > existTime) {
+          histMap.set(key, item);
         }
-      }).catch(() => {});
-      get(ref(this.firebase.db, `user_activity/${log.userId}/searches`)).then(snap => {
-        if (snap.exists()) {
-          const items = Object.values(snap.val() as Record<string, any>)
-            .sort((a: any, b: any) => (b.timestamp || 0) - (a.timestamp || 0))
-            .slice(0, 20);
-          this.selectedUserSearches.set(items);
+      }
+      const sortedHistory = Array.from(histMap.values())
+        .sort((a, b) => (b.watchedAt || b.timestamp || 0) - (a.watchedAt || a.timestamp || 0))
+        .slice(0, 30);
+      this.selectedUserHistory.set(sortedHistory);
+
+      // Flatten and deduplicate search queries
+      const searchMap = new Map<string, any>();
+      for (const item of allSearches.flat()) {
+        if (!item || (!item.query && !item.q)) continue;
+        const qText = (item.query || item.q || '').trim();
+        if (!qText) continue;
+        const qKey = qText.toLowerCase();
+        const itemTime = item.timestamp || 0;
+        const existing = searchMap.get(qKey);
+        const existTime = existing ? (existing.timestamp || 0) : 0;
+        if (!existing || itemTime > existTime) {
+          searchMap.set(qKey, item);
         }
-      }).catch(() => {});
+      }
+      const sortedSearches = Array.from(searchMap.values())
+        .sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0))
+        .slice(0, 30);
+      this.selectedUserSearches.set(sortedSearches);
+    } catch (err) {
+      console.warn('Failed to load visitor activity:', err);
+    } finally {
+      this.isLoadingHistory.set(false);
     }
   }
 

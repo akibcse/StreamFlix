@@ -225,8 +225,14 @@ export class MoviePlayerComponent implements OnInit {
         watchedAt: Date.now()
       });
 
-      // Track watch event for Top Watched Content analytics
-      this.analytics.trackWatchEvent(media.id, type, mediaTitle).catch(() => {});
+      // Track watch event for Top Watched Content analytics + visitor dossier
+      this.analytics.trackWatchEvent(media.id, type, mediaTitle, {
+        poster_path: media.poster_path || null,
+        vote_average: media.vote_average || 0,
+        release_date: media.release_date || media.first_air_date || '',
+        season: isTv ? s : undefined,
+        episode: isTv ? e : undefined
+      }).catch(() => {});
     }
 
     return this.currentSafeUrl;

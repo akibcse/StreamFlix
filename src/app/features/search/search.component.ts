@@ -1,8 +1,8 @@
-import { Component, ChangeDetectionStrategy, inject, signal } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, signal, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, RouterModule } from '@angular/router';
+import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { BehaviorSubject, combineLatest, debounceTime, distinctUntilChanged, switchMap, of, map, Observable } from 'rxjs';
+import { BehaviorSubject, combineLatest, debounceTime, distinctUntilChanged, switchMap, of, map, Observable, take } from 'rxjs';
 import { MovieService } from '../../services/movie.service';
 import { AnalyticsService } from '../../services/analytics.service';
 import { MediaItem } from '../../models/media.model';
@@ -351,13 +351,23 @@ import { MediaItem } from '../../models/media.model';
   `],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SearchComponent {
+export class SearchComponent implements OnInit {
   private readonly movieService = inject(MovieService);
   private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
   private readonly analytics = inject(AnalyticsService);
 
   readonly query = signal<string>('');
   readonly filterType = signal<'all' | 'movie' | 'tv'>('all');
+
+  ngOnInit(): void {
+    this.route.queryParamMap.pipe(take(1)).subscribe(params => {
+      const q = params.get('q');
+      if (q) {
+        this.onQueryChange(q);
+      }
+    });
+  }
 
   readonly trendingKeywords = [
     'Avatar',

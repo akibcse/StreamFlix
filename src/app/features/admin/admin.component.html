@@ -194,8 +194,18 @@
                       </div>
                     </div>
                   </td>
-                  <td class="group-chevron-cell">
-                    <span class="group-chevron">{{ isGroupExpanded(group.ip) ? '▾' : '▸' }}</span>
+                  <td class="group-chevron-cell" style="text-align: center;">
+                    <div class="group-actions-wrap">
+                      <button
+                        type="button"
+                        class="btn-inspect-mini"
+                        (click)="openLogDetails(group.logs[0]); $event.stopPropagation()"
+                        title="Inspect Visitor Telemetry Dossier"
+                      >
+                        🔍 Inspect
+                      </button>
+                      <span class="group-chevron">{{ isGroupExpanded(group.ip) ? '▾' : '▸' }}</span>
+                    </div>
                   </td>
                 </tr>
                 <ng-container *ngIf="isGroupExpanded(group.ip)">
@@ -754,10 +764,11 @@
         </div>
 
         <!-- 5. Watch History -->
-        <div class="dossier-section dossier-history-section" *ngIf="log.userId">
+        <div class="dossier-section dossier-history-section">
           <div class="section-title-row">
             <span class="section-icon">🎬</span>
             <h3>Watch History <span class="hist-count">({{ selectedUserHistory().length }})</span></h3>
+            <span class="hist-loading-badge" *ngIf="isLoadingHistory()">⏳ Fetching...</span>
           </div>
           <div *ngIf="selectedUserHistory().length > 0; else noHistory" class="history-list">
             <div *ngFor="let h of selectedUserHistory()" class="hist-item">
@@ -769,24 +780,25 @@
             </div>
           </div>
           <ng-template #noHistory>
-            <div class="hist-empty">No watch history recorded for this user.</div>
+            <div class="hist-empty" *ngIf="!isLoadingHistory()">No watch history recorded for this visitor.</div>
           </ng-template>
         </div>
 
         <!-- 6. Search History -->
-        <div class="dossier-section dossier-history-section" *ngIf="log.userId">
+        <div class="dossier-section dossier-history-section">
           <div class="section-title-row">
             <span class="section-icon">🔍</span>
             <h3>Search History <span class="hist-count">({{ selectedUserSearches().length }})</span></h3>
+            <span class="hist-loading-badge" *ngIf="isLoadingHistory()">⏳ Fetching...</span>
           </div>
           <div *ngIf="selectedUserSearches().length > 0; else noSearches" class="history-list">
             <div *ngFor="let s of selectedUserSearches()" class="hist-item search-item">
-              <span class="search-q-tag">{{ s.query || s.q || 'Unknown' }}</span>
+              <span class="search-q-tag">🔍 {{ s.query || s.q || 'Unknown' }}</span>
               <span class="hist-time" *ngIf="s.timestamp">{{ s.timestamp | date:'dd MMM, HH:mm' }}</span>
             </div>
           </div>
           <ng-template #noSearches>
-            <div class="hist-empty">No search history recorded for this user.</div>
+            <div class="hist-empty" *ngIf="!isLoadingHistory()">No search history recorded for this visitor.</div>
           </ng-template>
         </div>
       </div>
